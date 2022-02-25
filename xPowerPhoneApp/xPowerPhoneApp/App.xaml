@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="xPowerPhoneApp.App">
+    <Application.Resources>
+
+
+        <Thickness x:Key="PageMargin">20</Thickness>
+
+        <!-- Colors -->
+        <Color x:Key="AppPrimaryColor">#6fa8dc</Color>
+        <Color x:Key="LightPrimaryColor">#e6e9ea</Color>
+        <Color x:Key="DarkPrimaryColor">#6fa8dc</Color>
+        <Color x:Key="DarkColor">#3c3d3c</Color>
+        <Color x:Key="GreyColor">#a5a5a5</Color>
+        <Color x:Key="LightColor">#ffffff</Color>
+
+        <!-- Implicit styles -->
+        <Style TargetType="ContentPage"
+               ApplyToDerivedTypes="True">
+            <Setter Property="BackgroundColor"
+                    Value="{StaticResource AppPrimaryColor}" />
+        </Style>
+        
+    </Application.Resources>
+</Application>

@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:xPowerPhoneApp.ViewModels" 
+             x:DataType="viewmodels:MainViewModel"
+             x:Class="xPowerPhoneApp.Pages.MainPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="5*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Text="xPower"
+                VerticalTextAlignment="Center"
+                HorizontalTextAlignment="Center"
+                FontSize="25"
+                ></Label>
+            <Frame
+                Grid.Row="1">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0"
+                             EndPoint="1,0">
+                        <GradientStop Color="#fff"
+                          Offset="0"/>
+                        <GradientStop Color="#e6e9ea"
+                          Offset="1"/>
+                        <GradientStop Color="#fff"
+                          Offset="2.0"/>
+                    </LinearGradientBrush>
+                </Frame.Background>
+
+                <Grid
+                    RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="10*" />
+                        <ColumnDefinition Width="0.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        AutomationId="automationSeeUnitsButton"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        CornerRadius="20"
+                        Text="Se enheder">
+                    </Button>
+                    <Button
+                        AutomationId="automationSeeUnitsButton"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        CornerRadius="20"
+                        Text="Tilføj enhed"
+                        Command="{Binding GoToAddDevice}"></Button>
+                </Grid>
+
+            </Frame>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
