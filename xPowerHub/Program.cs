@@ -1,104 +1,150 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using ConsoleApp4;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿namespace xPowerHub;
 
-//static void K()
-//{
-//    using (var client = new UdpClient())
-//    {
-//        var endPoint = new IPEndPoint(IPAddress.Parse("192.168.1.50"), 38899);
-//        var opts = new JsonSerializerOptions();
-//        opts.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-//        string serializedRequest = JsonSerializer.Serialize(new WizMessage { Method = EMethod.getModelConfig.ToString() }, opts);
-//        byte[] buffer = Encoding.ASCII.GetBytes(serializedRequest);
-//        client.Send(buffer, buffer.Length, endPoint);
-//        byte[] responseBuffer = client.Receive(ref endPoint);
-//        string response = System.Text.Encoding.ASCII.GetString(responseBuffer, 0, responseBuffer.Length);
-//        Console.WriteLine(response);
-//        var msg = JsonSerializer.Deserialize<WizMessage?>(response);
-//        //serializedRequest = JsonSerializer.Serialize(WizMessage.SetState((!msg?.Result?.State) ?? false), opts);
-//        //buffer = Encoding.ASCII.GetBytes(serializedRequest);
-//        //client.Send(buffer, buffer.Length, endPoint);
-//        //responseBuffer = client.Receive(ref endPoint);
-//        //response = System.Text.Encoding.ASCII.GetString(responseBuffer, 0, responseBuffer.Length);
-//        //Console.WriteLine(response);
-//        //    Thread.Sleep(1000);
-//    }
-//}
-
-static (IPAddress ip, byte[] bytes) ListenForBroadcast(int port)
+public class Program
 {
-    using var client = new UdpClient(port);
-    var endPoint = new IPEndPoint(IPAddress.Broadcast, port);    
-    
-    byte[] bytes = client.Receive(ref endPoint);
-    return (endPoint.Address, bytes);
-}
+    static readonly string file = @"..\..\..\data.json";
 
-static (IPAddress ip, WizMessage? msg) ListenForFirstBeat()
-{
-    // Wiz devices broadcast on port 38900
-    const int broadcastPort = 38900;
+    static readonly List<ISmart> devices = DeviceSerializer.Deserialize(File.ReadAllText(file)).ToList();
 
-    var responseBuf = ListenForBroadcast(broadcastPort);
-    string response = Encoding.ASCII.GetString(responseBuf.bytes);
-    return (responseBuf.ip, WizMessage.FromJSON(response));
-}
-
-static WizMessage? SendMessageToWiz(WizMessage message, IPAddress address)
-{
-    // all wiz devices listen on port 38899
-    const int wizPort = 38899;
-
-    using var client = new UdpClient();
-    var endPoint = new IPEndPoint(address, wizPort);
-
-    // Send the command by JSON request
-    byte[] buffer = Encoding.ASCII.GetBytes(message.ToJSON());
-    client.Send(buffer, buffer.Length, endPoint);
-    // wait for JSON response
-    byte[] responseBuffer = client.Receive(ref endPoint);
-    string response = Encoding.ASCII.GetString(responseBuffer);
-    return WizMessage.FromJSON(response);
-}
-
-// Write device to file
-void WriteDevice(string file, WizDevice device)
-{
-    var opts = new JsonSerializerOptions();
-    opts.WriteIndented = true;
-
-    File.WriteAllText(file, JsonSerializer.Serialize(device, opts));
-}
-
-// Get a device that is broadcasting its first beat
-WizDevice GetDevice()
-{
-    var first = ListenForFirstBeat();
-
-    var dev = new WizDevice
+    static bool GetDevNum(out int devnum)
     {
-        ip = first.ip.ToString(),
-        mac = first.msg?.Params?.MacAddress ?? string.Empty,
-    };
-    return dev;
+        var k = Console.ReadLine();
+        if (int.TryParse(k, out devnum))
+        {
+            return 0 <= devnum && devnum < devices.Count;
+        }
+        return false;
+    }
+    static bool GetBool(out bool b)
+    {
+        var k = Console.ReadLine();
+        return bool.TryParse(k, out b);
+    }
+
+    static void PrintAllDevices()
+    {
+        for (var i = 0; i < devices.Count; i++)
+        {
+            Console.WriteLine(i + ": " + devices[i]);
+        }
+    }
+
+    static void GetDeviceState()
+    {
+        Console.WriteLine("status of what device number?");
+        if (GetDevNum(out int devnum))
+        {
+            var response = devices[devnum].GetCurrentState();
+            Console.WriteLine("state of " + devnum + " is: " + response);
+        }
+        else
+        {
+            Console.WriteLine("device does not exist");
+        }
+    }
+
+    public static void SetDeviceState()
+    {
+        Console.WriteLine("what device number?");
+        if (GetDevNum(out int devnus))
+        {
+            Console.WriteLine("true or false");
+            if (GetBool(out bool desiredState))
+            {
+                if (devices[devnus].SetState(desiredState))
+                {
+                    Console.WriteLine("success");
+                }
+                else
+                {
+                    Console.WriteLine("errornous response");
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("device does not exist");
+        }
+    }
+
+    public static void SwitchAllStates()
+    {
+        foreach (var dev in devices)
+        {
+            var current = dev.GetCurrentState();
+            if (current is bool b)
+            {
+               dev.SetState(!b);
+            }
+            else
+            {
+                Console.WriteLine("error reading device");
+            }
+        }
+    }
+
+    public static void AddDevice()
+    {
+        devices.Add(WizDeviceCommunicator.GetNewDevice());
+        Console.WriteLine("success");
+    }
+
+    public static void DeleteDevice()
+    {
+        Console.WriteLine("delete what device number?");
+        if (GetDevNum(out int devnu))
+        {
+            devices.RemoveAt(devnu);
+        }
+        else
+        {
+            Console.WriteLine("device does not exist");
+        }
+    }
+
+
+    public static void Main()
+    {
+        ConsoleKey keypress;
+        do
+        {
+            Console.WriteLine("Select option");
+            Console.WriteLine("0: print all current devices");
+            Console.WriteLine("1: get status of device");
+            Console.WriteLine("2: set status of device");
+            Console.WriteLine("3: flip all devices");
+            Console.WriteLine("4: add a device");
+            Console.WriteLine("5: delete a device");
+            Console.WriteLine("esc: exit");
+            keypress = Console.ReadKey().Key;
+            Console.WriteLine();
+            switch (keypress)
+            {
+                case ConsoleKey.D0:
+                    PrintAllDevices();
+                    break;
+                case ConsoleKey.D1:
+                    GetDeviceState();
+                    break;
+                case ConsoleKey.D2:
+                    SetDeviceState();
+                    break;
+                case ConsoleKey.D3:
+                    SwitchAllStates();
+                    break;
+                case ConsoleKey.D4:
+                    AddDevice();
+                    break;
+                case ConsoleKey.D5:
+                    DeleteDevice();
+                    break;
+                case ConsoleKey.Escape:
+                    break;
+                default:
+                    Console.WriteLine("invalid keypress");
+                    break;
+            }
+        } while (keypress != ConsoleKey.Escape);
+        File.WriteAllText(file, DeviceSerializer.Serialize(devices.ToArray()));
+    }
 }
-
-WizDevice GetDeviceFromFile(string file)
-{
-    return JsonSerializer.Deserialize<WizDevice>(File.ReadAllText(file))!;
-}
-
-var file = @"..\..\..\data.json";
-
-WriteDevice(file, GetDevice());
-
-var dev = GetDeviceFromFile(file);
-IPAddress devip = IPAddress.Parse(dev.ip);
-var state = SendMessageToWiz(WizMessage.GetPilot(), devip);
-
-var msg = SendMessageToWiz(WizMessage.SetState(!state?.Result?.State ?? false), devip);
-//Thread.Sleep(1000);

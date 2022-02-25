@@ -1,49 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using System.Text.Json;
-using System.Runtime.Serialization;
 
-namespace ConsoleApp4;
+namespace xPowerHub;
 
-public enum EMethod
-{
-    setState,
-    getPilot,
-    firstBeat,
-    getModelConfig,
-}
-public class Params
-{
-    [JsonPropertyName("state")]
-    public bool? State { get; set; }
-    [JsonPropertyName("mac")]
-    public string? MacAddress { get; set; }
-    [JsonPropertyName("homeId")]
-    public int? HomeID { get; set; }
-    [JsonPropertyName("fwVersion")]
-    public string? FirmwareVersion { get; set; }
-}
-public class WizError
-{
-    [JsonPropertyName("code")]
-    public int Code { get; set; }
-    [JsonPropertyName("message")]
-    public string? Message { get; set; }
-}
-
-public class WizResult
-{
-    [JsonPropertyName("state")]
-    public bool? State { get; set; }
-}
 public class WizMessage
 {
+    enum EMethod
+    {
+        setState,
+        getPilot,
+        firstBeat,
+        getModelConfig,
+    }
+
+    public class WizParameters
+    {
+        [JsonPropertyName("state")]
+        public bool? State { get; init; }
+        [JsonPropertyName("mac")]
+        public string? MacAddress { get; init; }
+        [JsonPropertyName("homeId")]
+        public int? HomeID { get; init; }
+        [JsonPropertyName("fwVersion")]
+        public string? FirmwareVersion { get; init; }
+    }
+    public class WizError
+    {
+        [JsonPropertyName("code")]
+        public int Code { get; init; }
+        [JsonPropertyName("message")]
+        public string? Message { get; init; }
+    }
+
+    public class WizResult
+    {
+        [JsonPropertyName("state")]
+        public bool? State { get; set; }
+    }
+
     private EMethod method;
     [JsonPropertyName("method")]
+
     public string Method
     {
         get => method.ToString();
@@ -60,10 +57,10 @@ public class WizMessage
     }
     
     [JsonPropertyName("params")]
-    public Params? Params { get; set; }
-    [JsonPropertyName("error"), DataMember(EmitDefaultValue = false)]
+    public WizParameters? Parameters { get; set; }
+    [JsonPropertyName("error")]
     public WizError? Error { get; set; }
-    [JsonPropertyName("result"), DataMember(EmitDefaultValue = false)]
+    [JsonPropertyName("result")]
     public WizResult? Result { get; set; }
     [JsonPropertyName("env")]
     public string? Environment { get; set; }
@@ -72,7 +69,7 @@ public class WizMessage
         return new WizMessage
         {
             method = EMethod.setState,
-            Params = new Params
+            Parameters = new WizParameters
             {
                 State = b
             }
@@ -88,8 +85,11 @@ public class WizMessage
 
     public string ToJSON()
     {
-        var opts = new JsonSerializerOptions();
-        opts.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        var opts = new JsonSerializerOptions
+        {
+            // WiZ devices ignore you if you send any null values
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
         return JsonSerializer.Serialize(this, opts);
     }
 
