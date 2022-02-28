@@ -54,7 +54,7 @@
                         Text="Se enheder">
                     </Button>
                     <Button
-                        AutomationId="automationSeeUnitsButton"
+                        AutomationId="automationAddDeviceButton"
                         Grid.Row="2"
                         Grid.Column="1"
                         CornerRadius="20"

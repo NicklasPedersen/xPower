@@ -27,6 +27,7 @@ namespace xPowerPhoneApp.ViewModels
         {
             AddCommand = new Command(async (mac) => await AddAsync(mac.ToString()));
             smartUnitRepo = new SmartUnitRepositoryMock();
+            Devices.Add(new AddDevice("testUnit", "automationMac"));
             _ = InitializeAsync();
         }
 
