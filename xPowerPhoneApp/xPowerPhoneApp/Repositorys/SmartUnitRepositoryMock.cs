@@ -22,13 +22,14 @@ namespace xPowerPhoneApp.Repositorys
         public async Task<bool> AddDevice(AddDevice device)
         {
             Random random = new Random();
-            Thread.Sleep(random.Next(0, 1000));
+            await Task.Delay(random.Next(0, 1000));
 
             return true;
         }
 
         public async Task<List<AddDevice>> GetDevices()
         {
+            await Task.Delay(1);
             Random random = new Random();
 
             var devices = new List<AddDevice>();
@@ -43,6 +44,8 @@ namespace xPowerPhoneApp.Repositorys
 
         public async Task<List<AddDevice>> GetNewDevices(List<AddDevice> knownDevices)
         {
+            await Task.Delay(300);
+
             Random random = new Random();
 
             var devices = new List<AddDevice>();

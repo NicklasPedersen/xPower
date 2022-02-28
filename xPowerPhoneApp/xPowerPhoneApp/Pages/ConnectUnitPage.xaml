@@ -31,7 +31,7 @@
                     Søger
                 </Label>
                 
-                <ScrollView Grid.Row="1" >
+                <ScrollView x:Name="StackRef" Grid.Row="1" >
                     <StackLayout BindableLayout.ItemsSource="{Binding Devices}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
@@ -39,7 +39,6 @@
                                     CornerRadius="20"
                                     BackgroundColor="{DynamicResource LightPrimaryColor}"
                                     Padding="20,10,0,10"
-                                    IsVisible="{Binding NotAdded}"
                                     Margin="1">
                                     <Grid 
                                         RowSpacing="0" 
@@ -66,13 +65,20 @@
                                             Grid.RowSpan="2" 
                                             Grid.Column="1" 
                                             Color="#6fa8dc" 
-                                            IsRunning="{Binding Adding}"/>
+                                            IsRunning="{Binding Adding}"
+                                            IsVisible="{Binding Adding}"/>
                                         <Button 
                                             Grid.RowSpan="2" 
                                             Grid.Column="1" 
                                             BackgroundColor="Transparent" 
                                             Text="tilføj"
-                                            IsVisible="{Binding NotAdding}"></Button>
+                                            IsVisible="{Binding NotAdding}"
+                                            Command="{Binding BindingContext.AddCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Mac}"></Button>
+                                        <Image
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            Source="green_checkmark.png"
+                                            IsVisible="{Binding Added}"/>
                                     </Grid>
                                 </Custom:CustomFrame>
                             </DataTemplate>

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Repositorys;
@@ -13,6 +16,8 @@ namespace xPowerPhoneApp.ViewModels
     {
         private ISmartUnit smartUnitRepo;
         private ObservableCollection<AddDevice> _device = new ObservableCollection<AddDevice>();
+
+        public ICommand AddCommand { get; set; }
         public ObservableCollection<AddDevice> Devices
         {
             get => _device;
@@ -20,8 +25,8 @@ namespace xPowerPhoneApp.ViewModels
         }
         public ConnectUnitViewModel(IChangePage pageChanger) : base(pageChanger)
         {
+            AddCommand = new Command(async (mac) => await AddAsync(mac.ToString()));
             smartUnitRepo = new SmartUnitRepositoryMock();
-            Devices.Add(new AddDevice("hello", "world"));
             _ = InitializeAsync();
         }
 
@@ -33,6 +38,26 @@ namespace xPowerPhoneApp.ViewModels
             {
                 Devices.Add(device);
             }
+            NotifyPropertyChanged(nameof(Devices));
+        }
+
+        public async Task AddAsync(string mac)
+        {
+            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Mac == mac));
+            var device = Devices[index];
+            device.Adding = true;
+            Devices[index] = device;
+            NotifyPropertyChanged(nameof(Devices));
+
+            device = Devices[index];
+            bool added = await smartUnitRepo.AddDevice(device);
+
+            device.Adding = false;
+            if (added)
+            {
+                device.Added = true;
+            }
+            Devices[index] = device;
             NotifyPropertyChanged(nameof(Devices));
         }
     }

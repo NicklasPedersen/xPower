@@ -9,8 +9,8 @@ namespace xPowerPhoneApp.Models
         public string Name { get; set; }
         public string Mac { get; set; }
         public bool Adding { get; set; }
-        public bool NotAdding { get => !Adding; set => Adding = !value; }
-        public bool NotAdded { get; set; }
+        public bool NotAdding { get => !Adding && !Added; }
+        public bool Added { get; set; }
 
         public AddDevice()
         {
@@ -21,7 +21,7 @@ namespace xPowerPhoneApp.Models
         {
             Name = name;
             Mac = mac;
-            NotAdded = !added;
+            Added = added;
         }
     }
 }

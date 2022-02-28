@@ -133,4 +133,7 @@
       <Name>xPowerPhoneApp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\green_checkmark.png" />
+  </ItemGroup>
 </Project>
