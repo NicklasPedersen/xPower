@@ -49,9 +49,7 @@ namespace xPowerPhoneApp.ViewModels
             Devices[index] = device;
             NotifyPropertyChanged(nameof(Devices));
 
-            device = Devices[index];
             bool added = await smartUnitRepo.AddDevice(device);
-
             device.Adding = false;
             if (added)
             {

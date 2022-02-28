@@ -12,10 +12,12 @@ namespace xPowerPhoneApp.ViewModels
     {
 
         public ICommand GoToAddDevice { get; set; }
+        public ICommand GoToListDevice { get; set; }
         public MainViewModel(IChangePage pageChanger) : base(pageChanger)
         {
 
             GoToAddDevice = new Command(() => _pageChanger.PushPage(new AddDevicePage()));
+            GoToListDevice = new Command(() => _pageChanger.PushPage(new DeviceListPage()));
         }
     }
 }
