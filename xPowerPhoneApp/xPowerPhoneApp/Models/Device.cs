@@ -11,5 +11,12 @@ namespace xPowerPhoneApp.Models
         public string Name { get; set; }
         [JsonPropertyName("id")]
         public string Id { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if(obj is Device device)
+                return Name == device.Name && Id == device.Id;
+            return base.Equals(obj);
+        }
     }
 }

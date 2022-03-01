@@ -9,9 +9,9 @@ namespace xPowerPhoneApp.Repositorys
 {
     internal class SmartUnitRepository : ISmartUnitRepository
     {
-        public Task<bool> AddDevice(AddDevice device)
+        public async Task<bool> AddDevice(AddDevice device)
         {
-            throw new NotImplementedException();
+            return await SharedHttpClient.Instants.Post("Unit/Add", device);
         }
 
         public async Task<List<AddDevice>> GetDevices()
@@ -26,7 +26,7 @@ namespace xPowerPhoneApp.Repositorys
             var devices = await this.GetDevices();
             foreach (var device in devices)
             {
-                if (knownDevices.Contains(device)) continue;
+                if (knownDevices.FindAll(d => d.Equals(device)).Count > 0) continue;
                 newDevices.Add(device);
             }
             return newDevices;

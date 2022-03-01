@@ -60,7 +60,7 @@
                                             VerticalTextAlignment="Start"
                                             Grid.Row="1" Grid.Column="0"
                                             FontSize="Micro"
-                                            Text="{Binding Mac}"/>
+                                            Text="{Binding Id}"/>
                                         <ActivityIndicator  
                                             Grid.RowSpan="2" 
                                             Grid.Column="1" 
@@ -73,7 +73,7 @@
                                             BackgroundColor="Transparent" 
                                             Text="tilføj"
                                             IsVisible="{Binding NotAdding}"
-                                            Command="{Binding BindingContext.AddCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Mac}"></Button>
+                                            Command="{Binding BindingContext.AddCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Id}"></Button>
                                         <Image
                                             Grid.RowSpan="2"
                                             Grid.Column="1"

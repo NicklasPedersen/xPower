@@ -17,6 +17,7 @@ namespace xPowerPhoneApp.ViewModels
         private ISmartUnitRepository smartUnitRepo;
         private ObservableCollection<AddDevice> _device = new ObservableCollection<AddDevice>();
         private Task _getDevicesTask;
+        private bool _run = true;
 
         public ICommand AddCommand { get; set; }
         public ObservableCollection<AddDevice> Devices
@@ -27,7 +28,7 @@ namespace xPowerPhoneApp.ViewModels
         public ConnectUnitViewModel(IChangePage pageChanger) : base(pageChanger)
         {
             AddCommand = new Command(async (mac) => await AddAsync(mac.ToString()));
-            smartUnitRepo = new SmartUnitRepositoryMock();
+            smartUnitRepo = new SmartUnitRepository();
             _ = InitializeAsync();
         }
 
@@ -42,14 +43,18 @@ namespace xPowerPhoneApp.ViewModels
             _getDevicesTask = GetDevices();
         }
 
-        public async Task GetDevices()
+        private async Task GetDevices()
         {
-            var devices = await smartUnitRepo.GetNewDevices(Devices.ToList());
-            foreach (var device in devices)
+            while (_run)
             {
-                Devices.Add(device);
+                var devices = await smartUnitRepo.GetNewDevices(Devices.ToList());
+                foreach (var device in devices)
+                {
+                    Devices.Add(device);
+                }
+                NotifyPropertyChanged(nameof(Devices));
+                await Task.Delay(100);
             }
-            NotifyPropertyChanged(nameof(Devices));
         }
 
         public async Task AddAsync(string mac)
