@@ -1,26 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using xPowerPhoneApp.Models;
+using xPowerPhoneApp.Repositorys.Shared;
 
 namespace xPowerPhoneApp.Repositorys
 {
     internal class DeviceRepository : IDeviceRepository
     {
-        public Task<List<ControlDevice>> GetAllDevices()
+        private static HttpClient _client;
+        public DeviceRepository()
         {
-            throw new NotImplementedException();
         }
 
-        public Task<List<ControlDevice>> GetStatusOnDevices(List<ControlDevice> controllDevices)
+        public async Task<List<ControlDevice>> GetAllDevices()
         {
-            throw new NotImplementedException();
+            List<ControlDevice> devices = null;
+
+            devices = (await SharedHttpClient.Instants.Get<ControlDevice[]>("Device/GetAll")).ToList();
+
+            return devices;
         }
 
-        public Task<bool> UpdateStatus(ControlDevice device)
+        public async Task<List<ControlDevice>> GetStatusOnDevices(List<ControlDevice> controllDevices)
         {
-            throw new NotImplementedException();
+            List<ControlDevice> devices = null;
+
+            devices = (await SharedHttpClient.Instants.Post<ControlDevice[]>("Device/GetStatus", controllDevices.ToArray())).ToList();
+
+            for (int i = 0; i < devices.Count; i++)
+            {
+                devices[i].IsStatusKnown = true;
+            }
+
+            return devices;
+        }
+
+        public async Task<bool> UpdateStatus(ControlDevice device)
+        {
+            return await SharedHttpClient.Instants.Post("Device/ChangeStatus", device);
         }
     }
 }

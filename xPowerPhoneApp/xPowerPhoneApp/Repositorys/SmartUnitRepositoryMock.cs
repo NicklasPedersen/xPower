@@ -7,7 +7,7 @@ using xPowerPhoneApp.Models;
 
 namespace xPowerPhoneApp.Repositorys
 {
-    internal class SmartUnitRepositoryMock : ISmartUnit
+    internal class SmartUnitRepositoryMock : ISmartUnitRepository
     {
         private readonly string[] _names = new string[]
         {
@@ -53,7 +53,7 @@ namespace xPowerPhoneApp.Repositorys
 
             for (int i = 0; i < amount; i++)
             {
-                devices.Add(new AddDevice() { Name = _names[random.Next(0, _names.Length)], Mac = BitConverter.ToString(BitConverter.GetBytes(random.Next(0, 10000))) });
+                devices.Add(new AddDevice() { Name = _names[random.Next(0, _names.Length)], Id = BitConverter.ToString(BitConverter.GetBytes(random.Next(0, 10000))) });
             }
             return devices;
         }

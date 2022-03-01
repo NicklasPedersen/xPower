@@ -25,7 +25,7 @@ internal class DeviceSerializer
         }
         return JsonSerializer.Serialize(d);
     }
-    public static ISmart[] Deserialize(string json)
+    public static WizDevice[] Deserialize(string json)
     {
         var d = JsonSerializer.Deserialize<DeviceLists>(json)!;
         return d.WizDevs.ToArray();

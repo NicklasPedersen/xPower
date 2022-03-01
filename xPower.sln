@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xPowerPhoneLib", "xPowerPho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xPowerHub", "xPowerHub\xPowerHub.csproj", "{479FADAE-2F9A-4AFB-A814-B819AE0BD43A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xPowerHub.Web", "xPowerHub.Web\xPowerHub.Web.csproj", "{537A172C-34B3-4A45-AE60-DFAAB8304689}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,18 @@ Global
 		{479FADAE-2F9A-4AFB-A814-B819AE0BD43A}.Release|iPhone.Build.0 = Release|Any CPU
 		{479FADAE-2F9A-4AFB-A814-B819AE0BD43A}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{479FADAE-2F9A-4AFB-A814-B819AE0BD43A}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Release|iPhone.Build.0 = Release|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{537A172C-34B3-4A45-AE60-DFAAB8304689}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
