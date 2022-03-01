@@ -51,7 +51,7 @@ public class WizMessage
             } 
             else
             {
-                throw new Exception("No such method " + value);
+                throw new InvalidDataException("No such Wiz method " + value);
             }
         }
     }
