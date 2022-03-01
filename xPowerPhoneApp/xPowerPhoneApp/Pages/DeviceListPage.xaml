@@ -52,7 +52,7 @@
                                 </Grid>
 
                                 <Custom:CustomFrame.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding BindingContext.SwitchStautsCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Mac}"/>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.SwitchStautsCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Id}"/>
                                 </Custom:CustomFrame.GestureRecognizers>
                             </Custom:CustomFrame>
                         </DataTemplate>

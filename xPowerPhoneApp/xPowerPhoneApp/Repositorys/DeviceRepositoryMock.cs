@@ -27,7 +27,7 @@ namespace xPowerPhoneApp.Repositorys
             var count = random.Next(4, 25);
             for (int i = 0; i < count; i++)
             {
-                devices.Add(new ControlDevice() { Name = _names[random.Next(0,_names.Length)], Mac = i.ToString() });
+                devices.Add(new ControlDevice() { Name = _names[random.Next(0,_names.Length)], Id = i.ToString() });
             }
             return devices;
         }

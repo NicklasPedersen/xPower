@@ -43,7 +43,7 @@ namespace xPowerPhoneApp.ViewModels
 
         public async Task AddAsync(string mac)
         {
-            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Mac == mac));
+            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Id == mac));
             var device = Devices[index];
             device.Adding = true;
             Devices[index] = device;
