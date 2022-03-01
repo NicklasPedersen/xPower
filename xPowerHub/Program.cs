@@ -1,110 +1,24 @@
-﻿namespace xPowerHub;
+﻿using xPowerHub.DataStore;
+
+namespace xPowerHub;
 
 public class Program
 {
-    static readonly string file = @"..\..\..\data.json";
+    static readonly string file = @"..\..\..\data\data.json";
 
-    static readonly List<ISmart> devices = DeviceSerializer.Deserialize(File.ReadAllText(file)).ToList<ISmart>();
-
-    static bool GetDevNum(out int devnum)
+    public static void Maind()
     {
-        var k = Console.ReadLine();
-        if (int.TryParse(k, out devnum))
+        var d = new DAL(@"..\..\..\data\database.db");
+        d.DropCreatePopulate();
+        foreach (var k in d.GetAllDevices().Result)
         {
-            return 0 <= devnum && devnum < devices.Count;
-        }
-        return false;
-    }
-    static bool GetBool(out bool b)
-    {
-        var k = Console.ReadLine();
-        return bool.TryParse(k, out b);
-    }
-
-    static void PrintAllDevices()
-    {
-        for (var i = 0; i < devices.Count; i++)
-        {
-            Console.WriteLine(i + ": " + devices[i]);
+            Console.WriteLine(k);
         }
     }
-
-    static void GetDeviceState()
-    {
-        Console.WriteLine("status of what device number?");
-        if (GetDevNum(out int devnum))
-        {
-            var response = devices[devnum].GetCurrentState();
-            Console.WriteLine("state of " + devnum + " is: " + response);
-        }
-        else
-        {
-            Console.WriteLine("device does not exist");
-        }
-    }
-
-    public static void SetDeviceState()
-    {
-        Console.WriteLine("what device number?");
-        if (GetDevNum(out int devnus))
-        {
-            Console.WriteLine("true or false");
-            if (GetBool(out bool desiredState))
-            {
-                if (devices[devnus].SetState(desiredState))
-                {
-                    Console.WriteLine("success");
-                }
-                else
-                {
-                    Console.WriteLine("errornous response");
-                }
-            }
-        }
-        else
-        {
-            Console.WriteLine("device does not exist");
-        }
-    }
-
-    public static void SwitchAllStates()
-    {
-        foreach (var dev in devices)
-        {
-            var current = dev.GetCurrentState();
-            if (current is bool b)
-            {
-               dev.SetState(!b);
-            }
-            else
-            {
-                Console.WriteLine("error reading device");
-            }
-        }
-    }
-
-    public static void AddDevice()
-    {
-        devices.Add(WizDeviceCommunicator.GetNewDevice());
-        Console.WriteLine("success");
-    }
-
-    public static void DeleteDevice()
-    {
-        Console.WriteLine("delete what device number?");
-        if (GetDevNum(out int devnu))
-        {
-            devices.RemoveAt(devnu);
-        }
-        else
-        {
-            Console.WriteLine("device does not exist");
-        }
-    }
-
 
     public static void Main()
     {
+        var c = new CRUD(new DAL(@"..\..\..\data\database.db"));
         ConsoleKey keypress;
         do
         {
@@ -121,22 +35,22 @@ public class Program
             switch (keypress)
             {
                 case ConsoleKey.D0:
-                    PrintAllDevices();
+                    c.PrintAllDevices();
                     break;
                 case ConsoleKey.D1:
-                    GetDeviceState();
+                    c.GetDeviceState();
                     break;
                 case ConsoleKey.D2:
-                    SetDeviceState();
+                    c.SetDeviceState();
                     break;
                 case ConsoleKey.D3:
-                    SwitchAllStates();
+                    c.SwitchAllStates();
                     break;
                 case ConsoleKey.D4:
-                    AddDevice();
+                    c.AddDevice();
                     break;
                 case ConsoleKey.D5:
-                    DeleteDevice();
+                    c.DeleteDevice();
                     break;
                 case ConsoleKey.Escape:
                     break;
@@ -145,6 +59,5 @@ public class Program
                     break;
             }
         } while (keypress != ConsoleKey.Escape);
-        File.WriteAllText(file, DeviceSerializer.Serialize(devices.ToArray()));
     }
 }
