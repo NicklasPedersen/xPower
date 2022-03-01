@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,13 +12,12 @@ using xPowerPhoneApp.ViewModels;
 namespace xPowerPhoneApp.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ConnectUnitPage : ContentPage, IChangePage
+    public partial class DeviceListPage : ContentPage, IChangePage
     {
-
-        public ConnectUnitPage()
+        public DeviceListPage()
         {
             InitializeComponent();
-            BindingContext = new ConnectUnitViewModel(this);
+            BindingContext = new DeviceListViewModel(this);
         }
 
         /// <summary>

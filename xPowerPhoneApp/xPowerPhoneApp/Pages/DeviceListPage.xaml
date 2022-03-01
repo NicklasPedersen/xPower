@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:Custom="clr-namespace:xPowerPhoneApp.CustomItems" 
+             xmlns:Converters="clr-namespace:xPowerPhoneApp.Converters"
+             x:Class="xPowerPhoneApp.Pages.DeviceListPage">
+    <ContentPage.Content>
+
+        <Frame>
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                             EndPoint="1,0">
+                    <GradientStop Color="#fff"
+                          Offset="0"/>
+                    <GradientStop Color="#e6e9ea"
+                          Offset="1"/>
+                    <GradientStop Color="#fff"
+                          Offset="2.0"/>
+                </LinearGradientBrush>
+            </Frame.Background>
+            <ScrollView x:Name="StackRef" Grid.Row="1" >
+                <StackLayout BindableLayout.ItemsSource="{Binding Devices}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Custom:CustomFrame
+                                CornerRadius="20"
+                                BackgroundColor="{DynamicResource LightPrimaryColor}"
+                                Padding="20,10,20,10"
+                                Margin="2">
+                                <Grid 
+                                    RowSpacing="0" 
+                                    ColumnSpacing="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Grid.Column="0"
+                                        FontSize="Medium"
+                                        Text="{Binding Name}"/>
+                                    <Switch
+                                        Grid.Column="1"
+                                        OnColor="{DynamicResource AppPrimaryColor}"
+                                        IsToggled="{Binding Status}"
+                                        IsEnabled="False"
+                                        IsVisible="{Binding IsStatusKnown}"/>
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="Unknown"
+                                        HorizontalTextAlignment="End"
+                                        IsVisible="{Binding IsStatusKnown, Converter={Converters:InverseBoolConverter}, Mode=OneWay}"/>
+                                </Grid>
+
+                                <Custom:CustomFrame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.SwitchStautsCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Mac}"/>
+                                </Custom:CustomFrame.GestureRecognizers>
+                            </Custom:CustomFrame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </ScrollView>
+        </Frame>
+    </ContentPage.Content>
+</ContentPage>

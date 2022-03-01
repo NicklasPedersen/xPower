@@ -51,8 +51,8 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         CornerRadius="20"
-                        Text="Se enheder">
-                    </Button>
+                        Text="Se enheder"
+                        Command="{Binding GoToListDevice}"></Button>
                     <Button
                         AutomationId="automationSeeUnitsButton"
                         Grid.Row="2"

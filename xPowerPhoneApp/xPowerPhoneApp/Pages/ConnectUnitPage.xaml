@@ -2,13 +2,94 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:viewmodels="clr-namespace:xPowerPhoneApp.ViewModels" 
-             x:DataType="viewmodels:ConnectUnitViewModel"
+             xmlns:Custom="clr-namespace:xPowerPhoneApp.CustomItems"
              x:Class="xPowerPhoneApp.Pages.ConnectUnitPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Frame>
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                             EndPoint="1,0">
+                    <GradientStop Color="#fff"
+                          Offset="0"/>
+                    <GradientStop Color="#e6e9ea"
+                          Offset="1"/>
+                    <GradientStop Color="#fff"
+                          Offset="2.0"/>
+                </LinearGradientBrush>
+            </Frame.Background>
+
+            <Grid
+                RowSpacing="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <ActivityIndicator  Grid.Row="0" Color="#6fa8dc" IsRunning="True" />
+                <Label  Grid.Row="0" FontSize="Medium" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                    Søger
+                </Label>
+                
+                <ScrollView x:Name="StackRef" Grid.Row="1" >
+                    <StackLayout BindableLayout.ItemsSource="{Binding Devices}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Custom:CustomFrame
+                                    CornerRadius="20"
+                                    BackgroundColor="{DynamicResource LightPrimaryColor}"
+                                    Padding="20,10,0,10"
+                                    Margin="1">
+                                    <Grid 
+                                        RowSpacing="0" 
+                                        ColumnSpacing="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="2*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label
+                                            VerticalTextAlignment="End"
+                                            Grid.Row="0" Grid.Column="0"
+                                            FontSize="Medium"
+                                            Text="{Binding Name}"/>
+                                        <Label
+                                            VerticalTextAlignment="Start"
+                                            Grid.Row="1" Grid.Column="0"
+                                            FontSize="Micro"
+                                            Text="{Binding Mac}"/>
+                                        <ActivityIndicator  
+                                            Grid.RowSpan="2" 
+                                            Grid.Column="1" 
+                                            Color="#6fa8dc" 
+                                            IsRunning="{Binding Adding}"
+                                            IsVisible="{Binding Adding}"/>
+                                        <Button 
+                                            Grid.RowSpan="2" 
+                                            Grid.Column="1" 
+                                            BackgroundColor="Transparent" 
+                                            Text="tilføj"
+                                            IsVisible="{Binding NotAdding}"
+                                            Command="{Binding BindingContext.AddCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Mac}"></Button>
+                                        <Image
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            Source="green_checkmark.png"
+                                            IsVisible="{Binding Added}"/>
+                                    </Grid>
+                                </Custom:CustomFrame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+                
+                <Label Grid.Row="2" FontSize="Medium" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                    klik på pluset på den/de enhed(er) du gerne vil tilføje
+                </Label>
+            </Grid>
+        </Frame>
     </ContentPage.Content>
 </ContentPage>

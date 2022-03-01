@@ -33,15 +33,18 @@
                     Vil du tilføje en hub eller en enhed som ikke bruger en hub
                 </Label>
                 <Button
-                AutomationId="automationAddHubButton"
-                Grid.Row="2"
-                CornerRadius="20"
-                Text="Tilføj en hub"></Button>
+                    AutomationId="automationAddHubButton"
+                    Grid.Row="2"
+                    CornerRadius="20"
+                    Text="Tilføj en hub">
+                </Button>
                 <Button
-                AutomationId="automationAddUnitsButton"
-                Grid.Row="3"
-                CornerRadius="20"
-                Text="Tilføj en enkel enhed"></Button>
+                    AutomationId="automationAddUnitsButton"
+                    Grid.Row="3"
+                    CornerRadius="20"
+                    Text="Tilføj en enkel enhed"
+                    Command="{Binding GoToConnectUnit}">
+                </Button>
             </Grid>
         </Frame>
     </ContentPage.Content>
