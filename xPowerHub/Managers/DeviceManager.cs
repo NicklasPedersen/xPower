@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using xPowerHub.DataStore;
 using xPowerHub.Managers.Interfaces;
 using xPowerHub.Models;
 
@@ -10,14 +11,11 @@ namespace xPowerHub.Managers
 {
     public class DeviceManager : IDeviceManager
     {
-
-        readonly string file = @"..\xPowerHub\data.json";
-
-        readonly List<WizDevice> smartDevices;
+        readonly IDataStore dataStore;
 
         public DeviceManager()
         {
-            smartDevices = DeviceSerializer.Deserialize(File.ReadAllText(file)).ToList();
+            dataStore = new DAL(@"..\xPowerHub\data\database.db");
         }
 
         public void ChangeStatus(KnownStatusDevice device)
@@ -36,10 +34,12 @@ namespace xPowerHub.Managers
         public List<Device> GetAll()
         {
             var devices = new List<Device>();
-
-            foreach (var smartDevice in smartDevices)
+            var dbDevices =  dataStore.GetAllDevices();
+            dbDevices.Wait();
+            foreach (var smartDevice in dbDevices.Result)
             {
-                devices.Add(new Device() { Name = smartDevice.IP, Id = smartDevice.MAC });
+                if(smartDevice is WizDevice wizDevice)
+                    devices.Add(new Device() { Name = wizDevice.IP, Id = wizDevice.MAC });
             }
             return devices;
         }
@@ -66,7 +66,7 @@ namespace xPowerHub.Managers
 
         public void AddNewDevice(Device device)
         {
-            throw new NotImplementedException();
+            dataStore.AddWizAsync(new WizDevice(device.Name, device.Id)).Wait(); 
         }
     }
 }

@@ -11,7 +11,7 @@ public class WizDevice : ISmart
     [JsonPropertyName("name")]
     public string Name { get; init; }
 
-    public WizDevice(string IP, string MAC, string name)
+    public WizDevice(string IP, string MAC, string name = "")
     {
         this.IP = IP;
         this.MAC = MAC;
