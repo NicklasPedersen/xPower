@@ -30,7 +30,7 @@ public class WizDeviceCommunicator
         var (ip, msg) = ListenForFirstBeat();
 
         var mac = msg?.Parameters?.MacAddress ?? string.Empty;
-        var dev = new WizDevice(ip.ToString(), mac);
+        var dev = new WizDevice(ip.ToString(), mac, "???");
         return dev;
     }
 

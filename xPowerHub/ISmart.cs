@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace xPowerHub;
+﻿namespace xPowerHub;
 
 internal interface ISmart
 {
+    string Name { get; }
     // sets the state to true and returns whether or not it was successful
     public bool TurnOn();
     // sets the state to false and returns whether or not it was successful

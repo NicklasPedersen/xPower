@@ -8,11 +8,14 @@ public class WizDevice : ISmart
     public string IP { get; init; }
     [JsonPropertyName("mac")]
     public string MAC { get; init; }
+    [JsonPropertyName("name")]
+    public string Name { get; init; }
 
-    public WizDevice(string IP, string MAC)
+    public WizDevice(string IP, string MAC, string name)
     {
         this.IP = IP;
         this.MAC = MAC;
+        this.Name = name;
     }
 
     public bool? GetCurrentState()
@@ -34,7 +37,7 @@ public class WizDevice : ISmart
 
     public override string ToString()
     {
-        return $"(name: WizDevice, mac: {MAC}, ip: {IP})";
+        return $"(type: WizDevice, name: {Name}, mac: {MAC}, ip: {IP})";
     }
 
     public bool TurnOff()
