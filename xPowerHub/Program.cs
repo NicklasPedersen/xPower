@@ -4,7 +4,7 @@ public class Program
 {
     static readonly string file = @"..\..\..\data.json";
 
-    static readonly List<ISmart> devices = DeviceSerializer.Deserialize(File.ReadAllText(file)).ToList();
+    static readonly List<ISmart> devices = DeviceSerializer.Deserialize(File.ReadAllText(file)).ToList<ISmart>();
 
     static bool GetDevNum(out int devnum)
     {

@@ -18,7 +18,7 @@ namespace xPowerPhoneApp.Models
         public AddDevice(string name, string mac, bool added = false)
         {
             Name = name;
-            Mac = mac;
+            Id = mac;
             Added = added;
         }
     }

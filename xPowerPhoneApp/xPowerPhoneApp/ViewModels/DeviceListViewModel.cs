@@ -27,7 +27,7 @@ namespace xPowerPhoneApp.ViewModels
         public DeviceListViewModel(IChangePage pageChanger) : base(pageChanger)
         {
             SwitchStautsCommand = new Command(async (mac) => await SwitchStautsAsync(mac.ToString()));
-            _deviceRepository = new DeviceRepositoryMock();
+            _deviceRepository = new DeviceRepository();
             _ = InitializeAsync();
         }
 
@@ -45,13 +45,12 @@ namespace xPowerPhoneApp.ViewModels
             for (int j = 0; j < devices.Count; j++)
             {
                 Devices[j] = devices[j];
-                await Task.Delay(100);
             }
         }
 
         public async Task SwitchStautsAsync(string mac)
         {
-            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Mac == mac));
+            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Id == mac));
             var device = Devices[index];
 
             if (!device.IsStatusKnown) return;
