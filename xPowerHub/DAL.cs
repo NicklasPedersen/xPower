@@ -96,5 +96,62 @@ namespace xPowerHub
             comm.ExecuteNonQuery();
             conn.Close();
         }
+        private void DropTables()
+        {
+            DropWiz();
+            DropSmart();
+        }
+        private void AddTables()
+        {
+            AddWiz();
+            AddSmart();
+        }
+
+        public void DropCreatePopulate()
+        {
+            DropTables();
+            AddTables();
+            AddWizDevice(new WizDevice("192.112.31.35", "34:13:33:64", "dev1"));
+            AddWizDevice(new WizDevice("192.112.31.34", "34:13:57:64", "dev2"));
+            AddWizDevice(new WizDevice("192.112.31.37", "34:13:12:64", "dev3"));
+            AddWizDevice(new WizDevice("192.112.31.38", "34:13:54:64", "dev4"));
+            AddSmartDevice(new SmartThingsDevice("uuid4-asdad-ij23oi4-asdf", "smdev4"));
+        }
+
+        public void AddSmartDevice(SmartThingsDevice dev)
+        {
+            conn.Open();
+            var comm = conn.CreateCommand();
+            comm.CommandText =
+            @"
+                INSERT INTO " + smarttable + @" (uuid, name)
+                VALUES ($uuid, $name)
+            ";
+            comm.Parameters.AddWithValue("$uuid", dev.UUID);
+            comm.Parameters.AddWithValue("$name", dev.Name);
+            comm.ExecuteNonQuery();
+            conn.Close();
+        }
+        public List<SmartThingsDevice> GetSmartDevices()
+        {
+            conn.Open();
+            var comm = conn.CreateCommand();
+            comm.CommandText =
+            @"
+                SELECT uuid, name FROM " + smarttable + @"
+            ";
+            List<SmartThingsDevice> devices = new();
+            using var reader = comm.ExecuteReader();
+            while (reader.Read())
+            {
+                devices.Add(new SmartThingsDevice(reader.GetString(0), reader.GetString(1)));
+            }
+            conn.Close();
+            return devices;
+        }
+        public List<ISmart> GetAllDevices()
+        {
+            return GetSmartDevices().Concat<ISmart>(GetAllWizDevices()).ToList();
+        }
     }
 }
