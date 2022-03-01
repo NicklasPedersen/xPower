@@ -15,7 +15,9 @@ namespace xPowerHub.Managers
 
         public DeviceManager()
         {
-            dataStore = new DAL(@"..\xPowerHub\data\database.db");
+            var dal = new DAL(@".\database.db");
+            dal.AddTables();
+            dataStore = dal;
         }
 
         public void ChangeStatus(KnownStatusDevice device)

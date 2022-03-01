@@ -63,7 +63,7 @@ internal class DAL : IDataStore
         DropWizTable();
         DropSmartTable();
     }
-    private void AddTables()
+    public void AddTables()
     {
         AddWizTable();
         AddSmartTable();

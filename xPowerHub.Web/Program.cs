@@ -13,7 +13,6 @@ builder.Services.AddSwaggerGen();
 // Dependency injection
 builder.Services.AddSingleton<IDeviceManager>(new DeviceManager());
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
