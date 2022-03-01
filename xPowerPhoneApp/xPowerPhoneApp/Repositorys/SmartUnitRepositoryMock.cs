@@ -7,7 +7,7 @@ using xPowerPhoneApp.Models;
 
 namespace xPowerPhoneApp.Repositorys
 {
-    internal class SmartUnitRepositoryMock : ISmartUnit
+    internal class SmartUnitRepositoryMock : ISmartUnitRepository
     {
         private readonly string[] _names = new string[]
         {

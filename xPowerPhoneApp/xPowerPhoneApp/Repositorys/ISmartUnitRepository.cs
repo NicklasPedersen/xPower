@@ -6,7 +6,7 @@ using xPowerPhoneApp.Models;
 
 namespace xPowerPhoneApp.Repositorys
 {
-    internal interface ISmartUnit
+    internal interface ISmartUnitRepository
     {
         Task<List<AddDevice>> GetDevices();
         Task<bool> AddDevice(AddDevice device);

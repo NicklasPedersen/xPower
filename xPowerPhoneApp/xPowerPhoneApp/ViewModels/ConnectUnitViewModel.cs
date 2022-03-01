@@ -14,8 +14,9 @@ namespace xPowerPhoneApp.ViewModels
 {
     internal class ConnectUnitViewModel : BaseViewModel
     {
-        private ISmartUnit smartUnitRepo;
+        private ISmartUnitRepository smartUnitRepo;
         private ObservableCollection<AddDevice> _device = new ObservableCollection<AddDevice>();
+        private Task _getDevicesTask;
 
         public ICommand AddCommand { get; set; }
         public ObservableCollection<AddDevice> Devices
@@ -32,8 +33,18 @@ namespace xPowerPhoneApp.ViewModels
 
         public async Task InitializeAsync()
         {
-
             var devices = await smartUnitRepo.GetDevices();
+            foreach (var device in devices)
+            {
+                Devices.Add(device);
+            }
+            NotifyPropertyChanged(nameof(Devices));
+            _getDevicesTask = GetDevices();
+        }
+
+        public async Task GetDevices()
+        {
+            var devices = await smartUnitRepo.GetNewDevices(Devices.ToList());
             foreach (var device in devices)
             {
                 Devices.Add(device);
