@@ -18,6 +18,8 @@ namespace xPowerHub.Models
         {
             Name = device.Name;
             Id = device.Id;
+            Ip = device.Ip;
+            ParentId = device.ParentId;
         }
     }
 }

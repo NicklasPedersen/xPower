@@ -13,5 +13,10 @@ namespace xPowerHub.Models
         public string Name { get; set; }
         [JsonPropertyName("id")]
         public string Id { get; set; }
+        [JsonPropertyName("ip")]
+        public string? Ip { get; set; }
+        [JsonPropertyName("parentId")]
+        public string? ParentId { get; set; }
+
     }
 }
