@@ -31,11 +31,11 @@ public class WizDevice : ISmart
     public bool SetState(bool state)
     {
         var response = SendMessage(WizMessage.SetState(state));
-        if (response is not null)
+        if (response is null)
         {
-            return response.Error == null;
+            return false;
         }
-        return false;
+        return response.Error == null;
     }
 
     public override string ToString()
