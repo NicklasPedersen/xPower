@@ -38,7 +38,7 @@ namespace xPowerPhoneApp.Repositorys.Shared
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
             _client = new HttpClient(clientHandler);
-            _client.BaseAddress = new Uri("https://192.168.1.142:5001/api/");
+            _client.BaseAddress = new Uri("https://192.168.1.122:7075/api/");
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));

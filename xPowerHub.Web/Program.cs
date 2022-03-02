@@ -1,3 +1,4 @@
+using xPowerHub.DataStore;
 using xPowerHub.Managers;
 using xPowerHub.Managers.Interfaces;
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 // Dependency injection
 builder.Services.AddSingleton<IDeviceManager>(new DeviceManager());
+builder.Services.AddSingleton<IDataStore>(new DAL("./xPower.db"));
 
 var app = builder.Build();
 

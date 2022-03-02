@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:Custom="clr-namespace:xPowerPhoneApp.CustomItems"
+             x:Class="xPowerPhoneApp.Pages.ConnectHubPage">
+    <ContentPage.Content>
+        <Frame>
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                             EndPoint="1,0">
+                    <GradientStop Color="#fff"
+                          Offset="0"/>
+                    <GradientStop Color="#e6e9ea"
+                          Offset="1"/>
+                    <GradientStop Color="#fff"
+                          Offset="2.0"/>
+                </LinearGradientBrush>
+            </Frame.Background>
+
+            <Grid
+                RowSpacing="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Grid 
+                    Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        Grid.Row="0">
+                        Vælg din hub:
+                    </Label>
+                    <Picker
+                        Grid.Row="1"
+                        SelectedIndex="0">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>SmartThings</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </Grid>
+
+                <Grid 
+                    Grid.Row="1"
+                    ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2">
+                        Vælg din hub:
+                    </Label>
+                    <Custom:CustomFrame
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Padding="10,0,0,0"
+                        Margin="0"
+                        CornerRadius="20,0,20,0">
+                        <Entry
+                            Placeholder="user key"
+                            Text="{Binding Key}"/>
+                    </Custom:CustomFrame>
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        CornerRadius="0"
+                        Text="Søg"
+                        Command="{Binding SearchCommand}"/>
+                </Grid>
+
+                <ScrollView x:Name="StackRef" Grid.Row="2" >
+                    <StackLayout BindableLayout.ItemsSource="{Binding Devices}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Custom:CustomFrame
+                                    CornerRadius="20"
+                                    BackgroundColor="{DynamicResource LightPrimaryColor}"
+                                    Padding="20,10,0,10"
+                                    Margin="1">
+                                    <Grid 
+                                        RowSpacing="0" 
+                                        ColumnSpacing="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="2*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label
+                                            VerticalTextAlignment="End"
+                                            Grid.Row="0" Grid.Column="0"
+                                            FontSize="Medium"
+                                            Text="{Binding Name}"/>
+                                        <Label
+                                            VerticalTextAlignment="Start"
+                                            Grid.Row="1" Grid.Column="0"
+                                            FontSize="Micro"
+                                            Text="{Binding Id}"/>
+                                        <ActivityIndicator  
+                                            Grid.RowSpan="2" 
+                                            Grid.Column="1" 
+                                            Color="#6fa8dc" 
+                                            IsRunning="{Binding Adding}"
+                                            IsVisible="{Binding Adding}"/>
+                                        <Button 
+                                            Grid.RowSpan="2" 
+                                            Grid.Column="1" 
+                                            BackgroundColor="Transparent" 
+                                            Text="tilføj"
+                                            IsVisible="{Binding NotAdding}"
+                                            Command="{Binding BindingContext.AddCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Id}"></Button>
+                                        <Image
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            Source="green_checkmark.png"
+                                            IsVisible="{Binding Added}"/>
+                                    </Grid>
+                                </Custom:CustomFrame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+
+                <Label Grid.Row="5" FontSize="Medium" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                    klik på pluset på den/de enhed(er) du gerne vil tilføje
+                </Label>
+            </Grid>
+        </Frame>
+    </ContentPage.Content>
+</ContentPage>

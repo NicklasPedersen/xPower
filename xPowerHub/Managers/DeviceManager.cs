@@ -12,13 +12,11 @@ namespace xPowerHub.Managers
 {
     public class DeviceManager : IDeviceManager
     {
-        readonly IDataStore dataStore;
+        readonly IDataStore _dataStore;
 
-        public DeviceManager()
+        public DeviceManager(IDataStore dataStore)
         {
-            var dal = new DAL(@".\database.db");
-            dal.AddTables();
-            dataStore = dal;
+            _dataStore = dataStore;
         }
 
         public void ChangeStatus(KnownStatusDevice device)
@@ -37,7 +35,7 @@ namespace xPowerHub.Managers
             }
             else if(!string.IsNullOrWhiteSpace(device.ParentId))
             {
-                var getParentTask = dataStore.GetSmartAsync(device.ParentId);
+                var getParentTask = _dataStore.GetSmartAsync(device.ParentId);
                 getParentTask.Wait();
                 var parent = getParentTask.Result;
                 var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
@@ -55,7 +53,7 @@ namespace xPowerHub.Managers
         public List<Device> GetAll()
         {
             var devices = new List<Device>();
-            var getDbDevicesTask =  dataStore.GetAllDevices();
+            var getDbDevicesTask = _dataStore.GetAllDevices();
             getDbDevicesTask.Wait();
             var dbDevices = getDbDevicesTask.Result;
             foreach (var smartDevice in dbDevices)
@@ -96,7 +94,7 @@ namespace xPowerHub.Managers
             {
                 if (string.IsNullOrWhiteSpace(device.Ip))
                 {
-                    var getParentTask = dataStore.GetSmartAsync(device.ParentId);
+                    var getParentTask = _dataStore.GetSmartAsync(device.ParentId);
                     getParentTask.Wait();
                     var parent = getParentTask.Result;
                     var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
@@ -127,11 +125,11 @@ namespace xPowerHub.Managers
         {
             if(device is KeyedDevice keyedDevice)
             {
-                dataStore.AddSmartAsync(new SmartThingsDevice(keyedDevice.Id, keyedDevice.Name, keyedDevice.Key));
+                _dataStore.AddSmartAsync(new SmartThingsDevice(keyedDevice.Id, keyedDevice.Name, keyedDevice.Key));
             }
             else
             {
-                dataStore.AddWizAsync(new WizDevice(device.Name, device.Id)).Wait();
+                _dataStore.AddWizAsync(new WizDevice(device.Name, device.Id)).Wait();
             }
         }
 
