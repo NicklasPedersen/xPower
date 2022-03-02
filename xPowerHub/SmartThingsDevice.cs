@@ -1,33 +1,41 @@
-﻿namespace xPowerHub;
+﻿using xPowerHub.Communicators;
+
+namespace xPowerHub;
 
 internal class SmartThingsDevice : ISmart
 {
     public string Name { get; init; }
     public string UUID { get; init; }
-    public SmartThingsDevice(string uuid, string name)
+    public string Key { get; init; }
+    public SmartThingsDevice(string uuid, string name, string key)
     {
         UUID = uuid;
         Name = name;
+        Key = key;
     }
 
     public bool? GetCurrentState()
     {
-        throw new NotImplementedException();
+        var getStatusTask = SmartThingsCommunicator.GetDeviceOutletStatus(this);
+        getStatusTask.Wait();
+        return getStatusTask.Result;
     }
 
     public bool SetState(bool state)
     {
-        throw new NotImplementedException();
+        var setStatusTask = SmartThingsCommunicator.SetStatus(this, state);
+        setStatusTask.Wait();
+        return setStatusTask.Result;
     }
 
     public bool TurnOff()
     {
-        throw new NotImplementedException();
+        return SetState(false);
     }
 
     public bool TurnOn()
     {
-        throw new NotImplementedException();
+        return SetState(true);
     }
 
     public override string ToString()

@@ -11,6 +11,7 @@ internal interface IDataStore
     Task<bool> UpdateSmartAsync(SmartThingsDevice item);
     Task<bool> DeleteSmartAsync(SmartThingsDevice dev);
     Task<SmartThingsDevice?> GetSmartAsync(int id);
+    Task<SmartThingsDevice?> GetSmartAsync(string id);
     Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false);
     Task<IEnumerable<ISmart>> GetAllDevices(bool forceRefresh = false);
 }

@@ -39,5 +39,12 @@ namespace xPowerHub.Managers.Interfaces
         /// </summary>
         /// <param name="device">The new device</param>
         void AddNewDevice(Device device);
+
+        /// <summary>
+        /// Gets all hubs using the given key
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>A list of all the hubs</returns>
+        Device[] GetAllHubs(string key);
     }
 }

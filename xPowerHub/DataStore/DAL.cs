@@ -52,13 +52,14 @@ internal class DAL : IDataStore
                 CREATE TABLE IF NOT EXISTS " + smarttable + @" (
                     id INTEGER PRIMARY KEY,
                     uuid TEXT UNIQUE NOT NULL,
-                    name TEXT NOT NULL
+                    name TEXT NOT NULL,
+                    key TEXT NOT NULL
                 )
         ";
         comm.ExecuteNonQuery();
         conn.Close();
     }
-    private void DropTables()
+    public void DropTables()
     {
         DropWizTable();
         DropSmartTable();
@@ -76,7 +77,7 @@ internal class DAL : IDataStore
         AddWizAsync(new WizDevice("192.112.31.34", "34:13:57:64", "dev2"));
         AddWizAsync(new WizDevice("192.112.31.37", "34:13:12:64", "dev3"));
         AddWizAsync(new WizDevice("192.112.31.38", "34:13:54:64", "dev4"));
-        AddSmartAsync(new SmartThingsDevice("uuid4-asdad-ij23oi4-asdf", "smdev4"));
+        AddSmartAsync(new SmartThingsDevice("uuid4-asdad-ij23oi4-asdf", "smdev4", "uuid4-asdad-ij23oi4-asdf"));
     }
 
 
@@ -192,11 +193,12 @@ internal class DAL : IDataStore
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
-            INSERT INTO " + smarttable + @" (uuid, name)
-            VALUES ($uuid, $name)
+            INSERT INTO " + smarttable + @" (uuid, name, key)
+            VALUES ($uuid, $name, $key)
         ";
         comm.Parameters.AddWithValue("$uuid", item.UUID);
         comm.Parameters.AddWithValue("$name", item.Name);
+        comm.Parameters.AddWithValue("$key", item.Key);
         comm.ExecuteNonQuery();
         conn.Close();
         return Task.FromResult(true);
@@ -245,7 +247,7 @@ internal class DAL : IDataStore
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
-            SELECT * from " + wiztable + @"
+            SELECT * from " + smarttable + @"
             WHERE id=$id
         ";
         comm.Parameters.AddWithValue("$id", id);
@@ -253,11 +255,32 @@ internal class DAL : IDataStore
         SmartThingsDevice? dev = null;
         if (reader.Read())
         {
-            dev = new SmartThingsDevice(reader["uuid"] as string ?? "", reader["name"] as string ?? "");
+            dev = new SmartThingsDevice(reader["uuid"] as string, reader["name"] as string, reader["key"] as string);
         }
         conn.Close();
         return Task.FromResult(dev);
     }
+
+    public Task<SmartThingsDevice?> GetSmartAsync(string uuid)
+    {
+        conn.Open();
+        var comm = conn.CreateCommand();
+        comm.CommandText =
+        @"
+            SELECT * from " + smarttable + @"
+            WHERE uuid=$uuid
+        ";
+        comm.Parameters.AddWithValue("$uuid", uuid);
+        using var reader = comm.ExecuteReader();
+        SmartThingsDevice? dev = null;
+        if (reader.Read())
+        {
+            dev = new SmartThingsDevice(reader["uuid"] as string ?? "", reader["name"] as string ?? "", reader["key"] as string ?? "");
+        }
+        conn.Close();
+        return Task.FromResult(dev);
+    }
+
     IEnumerable<SmartThingsDevice>? _smartCache = null;
     public Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false)
     {
@@ -269,13 +292,13 @@ internal class DAL : IDataStore
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
-            SELECT uuid, name FROM " + smarttable + @"
+            SELECT uuid, name, key FROM " + smarttable + @"
         ";
         List<SmartThingsDevice> devices = new();
         using var reader = comm.ExecuteReader();
         while (reader.Read())
         {
-            devices.Add(new SmartThingsDevice(reader.GetString(0), reader.GetString(1)));
+            devices.Add(new SmartThingsDevice(reader.GetString(0), reader.GetString(1), reader.GetString(2)));
         }
         conn.Close();
         return Task.FromResult(devices.AsEnumerable());
