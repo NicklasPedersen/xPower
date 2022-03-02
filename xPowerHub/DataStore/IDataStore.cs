@@ -1,6 +1,6 @@
 ﻿namespace xPowerHub.DataStore;
 
-internal interface IDataStore
+public interface IDataStore
 {
     Task<bool> AddWizAsync(WizDevice item);
     Task<bool> UpdateWizAsync(WizDevice item);
