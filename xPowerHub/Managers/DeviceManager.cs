@@ -103,9 +103,12 @@ namespace xPowerHub.Managers
                     knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)smartDevice.GetCurrentState() });
                 }
                 else
-                {
+                {                
                     var smartDevice = new WizDevice(device.Name, device.Id);
-                    knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)smartDevice.GetCurrentState() });
+                    var status = smartDevice.GetCurrentState();
+                    // if status is null we did not get a response from the device
+                    // TODO: handle unresponsive devices
+                    knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)status });
                 }
             }
             return knownDevices;

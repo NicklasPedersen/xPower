@@ -51,7 +51,49 @@ internal class CRUD
             Console.WriteLine(i + ": " + GetDevice(i));
         }
     }
-
+    public void HandleKeyPresses()
+    {
+        ConsoleKey keypress;
+        do
+        {
+            Console.WriteLine("Select option");
+            Console.WriteLine("0: print all current devices");
+            Console.WriteLine("1: get status of device");
+            Console.WriteLine("2: set status of device");
+            Console.WriteLine("3: flip all devices");
+            Console.WriteLine("4: add a device");
+            Console.WriteLine("5: delete a device");
+            Console.WriteLine("esc: exit");
+            keypress = Console.ReadKey().Key;
+            Console.WriteLine();
+            switch (keypress)
+            {
+                case ConsoleKey.D0:
+                    PrintAllDevices();
+                    break;
+                case ConsoleKey.D1:
+                    GetDeviceState();
+                    break;
+                case ConsoleKey.D2:
+                    SetDeviceState();
+                    break;
+                case ConsoleKey.D3:
+                    SwitchAllStates();
+                    break;
+                case ConsoleKey.D4:
+                    AddDevice();
+                    break;
+                case ConsoleKey.D5:
+                    DeleteDevice();
+                    break;
+                case ConsoleKey.Escape:
+                    break;
+                default:
+                    Console.WriteLine("invalid keypress");
+                    break;
+            }
+        } while (keypress != ConsoleKey.Escape);
+    }
     public void GetDeviceState()
     {
         Console.WriteLine("status of what device number?");

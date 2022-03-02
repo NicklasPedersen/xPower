@@ -153,7 +153,7 @@ internal class DAL : IDataStore
         WizDevice? dev = null;
         if (reader.Read())
         {
-            dev = new WizDevice(reader["ip"] as string, reader["mac"] as string, reader["name"] as string);
+            dev = new WizDevice(reader["ip"] as string ?? "", reader["mac"] as string ?? "", reader["name"] as string ?? "");
         }
         conn.Close();
         return Task.FromResult(dev);
@@ -275,7 +275,7 @@ internal class DAL : IDataStore
         SmartThingsDevice? dev = null;
         if (reader.Read())
         {
-            dev = new SmartThingsDevice(reader["uuid"] as string, reader["name"] as string, reader["key"] as string);
+            dev = new SmartThingsDevice(reader["uuid"] as string ?? "", reader["name"] as string ?? "", reader["key"] as string ?? "");
         }
         conn.Close();
         return Task.FromResult(dev);
