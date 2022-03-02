@@ -52,7 +52,12 @@ namespace xPowerHub.Managers
             foreach(Device device in devices)
             {
                 var smartDevice = new WizDevice(device.Name, device.Id);
-                knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)smartDevice.GetCurrentState() });
+                var status = smartDevice.GetCurrentState();
+                // if status is null we did not get a response from the device
+                if (status is not null)
+                {
+                    knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)status });
+                }
             }
             return knownDevices;
         }

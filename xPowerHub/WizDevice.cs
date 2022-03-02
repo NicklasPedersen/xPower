@@ -20,19 +20,22 @@ public class WizDevice : ISmart
 
     public bool? GetCurrentState()
     {
-        
-        var state = SendMessage(WizMessage.GetPilot()).Result?.State;
-        return state;
+        return SendMessage(WizMessage.GetPilot())?.Result?.State;
     }
 
-    public WizMessage SendMessage(WizMessage msg)
+    public WizMessage? SendMessage(WizMessage msg)
     {
         return WizDeviceCommunicator.SendMessageToDevice(this, msg);
     }
 
     public bool SetState(bool state)
     {
-        return SendMessage(WizMessage.SetState(state)).Error == null;
+        var response = SendMessage(WizMessage.SetState(state));
+        if (response is not null)
+        {
+            return response.Error == null;
+        }
+        return false;
     }
 
     public override string ToString()

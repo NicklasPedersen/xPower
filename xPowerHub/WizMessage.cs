@@ -93,8 +93,8 @@ public class WizMessage
         return JsonSerializer.Serialize(this, opts);
     }
 
-    public static WizMessage FromJSON(string json)
+    public static WizMessage? FromJSON(string json)
     {
-        return JsonSerializer.Deserialize<WizMessage>(json)!;
+        return JsonSerializer.Deserialize<WizMessage>(json);
     }
 }
