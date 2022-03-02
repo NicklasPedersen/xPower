@@ -13,7 +13,6 @@ namespace xPowerPhoneApp.Repositorys
 {
     internal class DeviceRepository : IDeviceRepository
     {
-        private static HttpClient _client;
         public DeviceRepository()
         {
         }
