@@ -15,6 +15,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IDataStore>(new DAL("./xPower.db"));
 builder.Services.AddSingleton<IDeviceManager>(x => new DeviceManager(x.GetRequiredService<IDataStore>()));
 
+// Move to config?
+builder.WebHost.UseUrls("http://*:5000", "https://*:5001");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
