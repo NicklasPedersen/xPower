@@ -22,7 +22,7 @@ namespace xPowerHub.Web.Controllers
         /// </summary>
         /// <returns>The new Device</returns>
         [HttpGet("GetNew")]
-        public Device GetNew()
+        public Device? GetNew()
         {
             return _deviceManager.GetNewDevice();
         }

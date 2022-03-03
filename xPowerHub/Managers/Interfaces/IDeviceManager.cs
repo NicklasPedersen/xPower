@@ -32,7 +32,7 @@ namespace xPowerHub.Managers.Interfaces
         /// Gets a new device
         /// </summary>
         /// <returns>The new device</returns>
-        Device GetNewDevice();
+        Device? GetNewDevice();
         
         /// <summary>
         /// Addes the device to the system

@@ -12,24 +12,26 @@ public class WizDeviceCommunicator
     // all wiz devices listen on port 38899
     static readonly int wizPort = 38899;
 
+    static readonly int timeOutSeconds = 30;
+
     // Get a device that is broadcasting its first beat
-    public static WizDevice GetNewDevice()
+    public static WizDevice? GetNewDevice()
     {
         using var client = new UdpClient(broadcastPort);
         var endPoint = new IPEndPoint(IPAddress.Broadcast, broadcastPort);
-        byte[]? bytes = null;
+
         // receive broadcast on the broadcastPort, this should be the firstBeat
-        // TODO: timeout so we don't wait indefinitely
         var receiveTask = client.ReceiveAsync();
 
-        receiveTask.Wait(TimeSpan.FromSeconds(10));
-        if (receiveTask.IsCompleted)
+        receiveTask.Wait(TimeSpan.FromSeconds(timeOutSeconds));
+        // timeout
+        if (!receiveTask.IsCompleted)
         {
-            bytes = receiveTask.Result.Buffer;
-            endPoint = receiveTask.Result.RemoteEndPoint;
+            return null;
         }
 
-        if(bytes == null) return null;
+        var bytes = receiveTask.Result.Buffer;
+        endPoint = receiveTask.Result.RemoteEndPoint;
 
         string response = Encoding.ASCII.GetString(bytes);
         var msg = WizMessage.FromJSON(response);

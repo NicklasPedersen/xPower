@@ -112,11 +112,11 @@ namespace xPowerHub.Managers
             return knownDevices;
         }
 
-        public Device GetNewDevice()
+        public Device? GetNewDevice()
         {
             var device = WizDeviceCommunicator.GetNewDevice();
 
-            if(device == null) return null;
+            if (device == null) return null;
 
             return new Device() { Name = device.IP, Id = device.MAC };
         }
