@@ -22,7 +22,7 @@ namespace xPowerHub.Web.Controllers
         /// </summary>
         /// <returns>The new Device</returns>
         [HttpGet("GetNew")]
-        public Device GetNew()
+        public Device? GetNew()
         {
             return _deviceManager.GetNewDevice();
         }
@@ -31,9 +31,9 @@ namespace xPowerHub.Web.Controllers
         /// Addes the Device
         /// </summary>
         [HttpPost("Add")]
-        public void Add([FromBody] Device device)
+        public async Task AddAsync([FromBody] Device device)
         {
-            _deviceManager.AddNewDevice(device);
+            await _deviceManager.AddNewDeviceAsync(device);
         }
     }
 }

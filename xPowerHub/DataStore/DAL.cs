@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Linq;
 
 namespace xPowerHub.DataStore;
 
@@ -8,6 +9,7 @@ public class DAL : IDataStore
     public DAL(string fileName)
     {
         conn = new SqliteConnection("Data Source=" + fileName);
+        AddTables();
     }
     private string wiztable = "wizdev";
     private string smarttable = "smartdev";
@@ -80,13 +82,12 @@ public class DAL : IDataStore
         AddSmartAsync(new SmartThingsDevice("uuid4-asdad-ij23oi4-asdf", "smdev4", "uuid4-asdad-ij23oi4-asdf"));
     }
 
-
-    public Task<bool> AddWizAsync(WizDevice item)
+    public async Task<bool> AddWizAsync(WizDevice item)
     {
         // invalidate our cache
         _wizCache = null;
 
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
@@ -96,17 +97,17 @@ public class DAL : IDataStore
         comm.Parameters.AddWithValue("$mac", item.MAC);
         comm.Parameters.AddWithValue("$ip", item.IP);
         comm.Parameters.AddWithValue("$name", item.Name);
-        int inserted = comm.ExecuteNonQuery();
-        conn.Close();
-        return Task.FromResult(inserted == 1);
+        int inserted = await comm.ExecuteNonQueryAsync();
+        await conn.CloseAsync();
+        return inserted == 1;
     }
 
-    public Task<bool> UpdateWizAsync(WizDevice item)
+    public async Task<bool> UpdateWizAsync(WizDevice item)
     {
         // invalidate our cache
         _wizCache = null;
 
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
@@ -117,31 +118,31 @@ public class DAL : IDataStore
         comm.Parameters.AddWithValue("$name", item.Name);
         comm.Parameters.AddWithValue("$ip", item.IP);
         comm.Parameters.AddWithValue("$mac", item.MAC);
-        int updated = comm.ExecuteNonQuery();
-        conn.Close();
-        return Task.FromResult(updated == 1);
+        int updated = await comm.ExecuteNonQueryAsync();
+        await conn.CloseAsync();
+        return updated == 1;
     }
 
-    public Task<bool> DeleteWizAsync(WizDevice dev)
+    public async Task<bool> DeleteWizAsync(WizDevice dev)
     {
         // invalidate our cache
         _wizCache = null;
 
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
             DELETE from " + wiztable + @" WHERE mac=$mac
         ";
         comm.Parameters.AddWithValue("$mac", dev.MAC);
-        int deleted = comm.ExecuteNonQuery();
-        conn.Close();
-        return Task.FromResult(deleted == 1);
+        int deleted = await comm.ExecuteNonQueryAsync();
+        await conn.CloseAsync();
+        return deleted == 1;
     }
 
-    public Task<WizDevice?> GetWizAsync(int id)
+    public async Task<WizDevice?> GetWizAsync(int id)
     {
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
@@ -149,47 +150,47 @@ public class DAL : IDataStore
             WHERE id=$id
         ";
         comm.Parameters.AddWithValue("$id", id);
-        using var reader = comm.ExecuteReader();
+        using var reader = await comm.ExecuteReaderAsync();
         WizDevice? dev = null;
-        if (reader.Read())
+        if (await reader.ReadAsync())
         {
             dev = new WizDevice(reader["ip"] as string ?? "", reader["mac"] as string ?? "", reader["name"] as string ?? "");
         }
-        conn.Close();
-        return Task.FromResult(dev);
+        await conn.CloseAsync();
+        return dev;
     }
 
     IEnumerable<WizDevice>? _wizCache = null;
 
-    public Task<IEnumerable<WizDevice>> GetWizsAsync(bool forceRefresh = false)
+    public async Task<IEnumerable<WizDevice>> GetWizsAsync(bool forceRefresh = false)
     {
         if (!forceRefresh && _wizCache is not null)
         {
-            return Task.FromResult(_wizCache);
+            return _wizCache;
         }
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
             SELECT ip, mac, name FROM " + wiztable + @"
         ";
         List<WizDevice> devices = new();
-        using var reader = comm.ExecuteReader();
-        while (reader.Read())
+        using var reader = await comm.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
             devices.Add(new WizDevice(reader.GetString(0), reader.GetString(1), reader.GetString(2)));
         }
-        conn.Close();
+        await conn.CloseAsync();
         _wizCache = devices.AsEnumerable();
-        return Task.FromResult(_wizCache);
+        return _wizCache;
     }
 
-    public Task<bool> AddSmartAsync(SmartThingsDevice item)
+    public async Task<bool> AddSmartAsync(SmartThingsDevice item)
     {
         // invalidate our cache
         _smartCache = null;
 
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
@@ -199,17 +200,17 @@ public class DAL : IDataStore
         comm.Parameters.AddWithValue("$uuid", item.UUID);
         comm.Parameters.AddWithValue("$name", item.Name);
         comm.Parameters.AddWithValue("$key", item.Key);
-        comm.ExecuteNonQuery();
-        conn.Close();
-        return Task.FromResult(true);
+        int inserted = await comm.ExecuteNonQueryAsync();
+        await conn.CloseAsync();
+        return inserted == 1;
     }
 
-    public Task<bool> UpdateSmartAsync(SmartThingsDevice item)
+    public async Task<bool> UpdateSmartAsync(SmartThingsDevice item)
     {
         // invalidate our cache
         _smartCache = null;
 
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
@@ -219,31 +220,31 @@ public class DAL : IDataStore
         ";
         comm.Parameters.AddWithValue("$name", item.Name);
         comm.Parameters.AddWithValue("$uuid", item.UUID);
-        int updated = comm.ExecuteNonQuery();
-        conn.Close();
-        return Task.FromResult(updated == 1);
+        int updated = await comm.ExecuteNonQueryAsync();
+        await conn.CloseAsync();
+        return updated == 1;
     }
 
-    public Task<bool> DeleteSmartAsync(SmartThingsDevice dev)
+    public async Task<bool> DeleteSmartAsync(SmartThingsDevice dev)
     {
         // invalidate our cache
         _smartCache = null;
 
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
             DELETE from " + smarttable + @" WHERE uuid=$uuid
         ";
         comm.Parameters.AddWithValue("$uuid", dev.UUID);
-        int deleted = comm.ExecuteNonQuery();
-        conn.Close();
-        return Task.FromResult(deleted == 1);
+        int deleted = await comm.ExecuteNonQueryAsync();
+        await conn.CloseAsync();
+        return deleted == 1;
     }
 
-    public Task<SmartThingsDevice?> GetSmartAsync(int id)
+    public async Task<SmartThingsDevice?> GetSmartAsync(int id)
     {
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
@@ -251,19 +252,19 @@ public class DAL : IDataStore
             WHERE id=$id
         ";
         comm.Parameters.AddWithValue("$id", id);
-        using var reader = comm.ExecuteReader();
+        using var reader = await comm.ExecuteReaderAsync();
         SmartThingsDevice? dev = null;
-        if (reader.Read())
+        if (await reader.ReadAsync())
         {
-            dev = new SmartThingsDevice(reader["uuid"] as string, reader["name"] as string, reader["key"] as string);
+            dev = new SmartThingsDevice(reader["uuid"] as string ?? "", reader["name"] as string ?? "", reader["key"] as string ?? "");
         }
-        conn.Close();
-        return Task.FromResult(dev);
+        await conn.CloseAsync();
+        return dev;
     }
 
-    public Task<SmartThingsDevice?> GetSmartAsync(string uuid)
+    public async Task<SmartThingsDevice?> GetSmartAsync(string uuid)
     {
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
@@ -271,43 +272,43 @@ public class DAL : IDataStore
             WHERE uuid=$uuid
         ";
         comm.Parameters.AddWithValue("$uuid", uuid);
-        using var reader = comm.ExecuteReader();
+        using var reader = await comm.ExecuteReaderAsync();
         SmartThingsDevice? dev = null;
-        if (reader.Read())
+        if (await reader.ReadAsync())
         {
             dev = new SmartThingsDevice(reader["uuid"] as string ?? "", reader["name"] as string ?? "", reader["key"] as string ?? "");
         }
-        conn.Close();
-        return Task.FromResult(dev);
+        await conn.CloseAsync();
+        return dev;
     }
 
     IEnumerable<SmartThingsDevice>? _smartCache = null;
-    public Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false)
+    public async Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false)
     {
         if (!forceRefresh && _smartCache is not null)
         {
-            return Task.FromResult(_smartCache);
+            return _smartCache;
         }
-        conn.Open();
+        await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
             SELECT uuid, name, key FROM " + smarttable + @"
         ";
         List<SmartThingsDevice> devices = new();
-        using var reader = comm.ExecuteReader();
-        while (reader.Read())
+        using var reader = await comm.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
             devices.Add(new SmartThingsDevice(reader.GetString(0), reader.GetString(1), reader.GetString(2)));
         }
-        conn.Close();
-        return Task.FromResult(devices.AsEnumerable());
+        await conn.CloseAsync();
+        return devices;
     }
-    public Task<IEnumerable<ISmart>> GetAllDevices(bool forceRefresh = false)
+    public async Task<IEnumerable<ISmart>> GetAllDevicesAsync(bool forceRefresh = false)
     {
-        var list = new List<ISmart>();
-        list = list.Concat(GetSmartsAsync(forceRefresh).Result).ToList();
-        list = list.Concat(GetWizsAsync(forceRefresh).Result).ToList();
-        return Task.FromResult(list.AsEnumerable());
+        List<ISmart> k = new();
+        k = k.Concat(await GetSmartsAsync(forceRefresh)).ToList();
+        k = k.Concat(await GetWizsAsync(forceRefresh)).ToList();
+        return k;
     }
 }

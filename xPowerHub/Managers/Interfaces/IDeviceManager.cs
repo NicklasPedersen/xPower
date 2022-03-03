@@ -13,38 +13,38 @@ namespace xPowerHub.Managers.Interfaces
         /// Gets a list of connected devices
         /// </summary>
         /// <returns>List of devices</returns>
-        List<Device> GetAll();
-        
+        Task<List<Device>> GetAllAsync();
+
         /// <summary>
         /// Gets the status of the given devices
         /// </summary>
         /// <param name="devices">The devices where there status will be search for</param>
         /// <returns>A array of KnownStatusDevice</returns>
-        List<KnownStatusDevice> GetStatus(List<Device> devices);
+        Task<List<KnownStatusDevice>> GetStatusAsync(List<Device> devices);
         
         /// <summary>
         /// Changes the status of the given device
         /// </summary>
         /// <param name="device">The given device with the new status</param>
-        void ChangeStatus(KnownStatusDevice device);
+        Task ChangeStatusAsync(KnownStatusDevice device);
         
         /// <summary>
         /// Gets a new device
         /// </summary>
         /// <returns>The new device</returns>
-        Device GetNewDevice();
+        Device? GetNewDevice();
         
         /// <summary>
         /// Addes the device to the system
         /// </summary>
         /// <param name="device">The new device</param>
-        void AddNewDevice(Device device);
+        Task AddNewDeviceAsync(Device device);
 
         /// <summary>
         /// Gets all hubs using the given key
         /// </summary>
         /// <param name="key">The key</param>
         /// <returns>A list of all the hubs</returns>
-        Device[] GetAllHubs(string key);
+        Task<Device[]> GetAllHubsAsync(string key);
     }
 }

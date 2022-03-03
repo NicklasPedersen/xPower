@@ -45,7 +45,7 @@ internal class MockDAL : IDataStore
         return Task.FromResult(true);
     }
 
-    public Task<IEnumerable<ISmart>> GetAllDevices(bool forceRefresh = false)
+    public Task<IEnumerable<ISmart>> GetAllDevicesAsync(bool forceRefresh = false)
     {
         var list = new List<ISmart>();
         list = list.Concat(GetSmartsAsync(forceRefresh).Result).ToList();
