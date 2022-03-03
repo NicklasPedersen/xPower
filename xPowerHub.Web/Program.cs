@@ -1,3 +1,4 @@
+using xPowerHub.DataStore;
 using xPowerHub.Managers;
 using xPowerHub.Managers.Interfaces;
 
@@ -11,7 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency injection
-builder.Services.AddSingleton<IDeviceManager>(new DeviceManager());
+builder.Services.AddSingleton<IDataStore>(new DAL("./xPower.db"));
+builder.Services.AddSingleton<IDeviceManager>(x => new DeviceManager(x.GetRequiredService<IDataStore>()));
 
 // Move to config?
 builder.WebHost.UseUrls("http://*:5000", "https://*:5001");

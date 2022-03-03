@@ -2,7 +2,7 @@
 
 namespace xPowerHub;
 
-internal class SmartThingsDevice : ISmart
+public class SmartThingsDevice : ISmart
 {
     public string Name { get; init; }
     public string UUID { get; init; }

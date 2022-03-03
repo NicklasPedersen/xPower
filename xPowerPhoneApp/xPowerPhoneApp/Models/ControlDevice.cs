@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace xPowerPhoneApp.Models
 {
-    public class ControlDevice : Device
+    internal class ControlDevice : Device
     {
         [JsonPropertyName("status")]
         public bool Status { get; set; }

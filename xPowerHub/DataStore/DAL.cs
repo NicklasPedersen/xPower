@@ -2,7 +2,7 @@
 
 namespace xPowerHub.DataStore;
 
-internal class DAL : IDataStore
+public class DAL : IDataStore
 {
     readonly SqliteConnection conn;
     public DAL(string fileName)

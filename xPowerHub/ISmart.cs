@@ -1,6 +1,6 @@
 ﻿namespace xPowerHub;
 
-internal interface ISmart
+public interface ISmart
 {
     string Name { get; }
     // sets the state to true and returns whether or not it was successful

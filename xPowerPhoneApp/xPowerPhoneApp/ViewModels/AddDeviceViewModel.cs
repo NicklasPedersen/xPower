@@ -11,9 +11,11 @@ namespace xPowerPhoneApp.ViewModels
     internal class AddDeviceViewModel : BaseViewModel
     {
         public ICommand GoToConnectUnit { get; set; }
+        public ICommand GoToConnectHub { get; set; }
         public AddDeviceViewModel(IChangePage pageChanger) : base(pageChanger)
         {
             GoToConnectUnit = new Command(() => _pageChanger.PushPage(new ConnectUnitPage()));
+            GoToConnectHub = new Command(() => _pageChanger.PushPage(new ConnectHubPage()));
         }
     }
 }
