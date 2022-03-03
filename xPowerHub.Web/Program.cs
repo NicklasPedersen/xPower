@@ -12,8 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency injection
-builder.Services.AddSingleton<IDeviceManager>(new DeviceManager());
 builder.Services.AddSingleton<IDataStore>(new DAL("./xPower.db"));
+builder.Services.AddSingleton<IDeviceManager>(x => new DeviceManager(x.GetRequiredService<IDataStore>()));
 
 var app = builder.Build();
 
