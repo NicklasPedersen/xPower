@@ -17,10 +17,19 @@ public class WizDeviceCommunicator
     {
         using var client = new UdpClient(broadcastPort);
         var endPoint = new IPEndPoint(IPAddress.Broadcast, broadcastPort);
-
+        byte[]? bytes = null;
         // receive broadcast on the broadcastPort, this should be the firstBeat
         // TODO: timeout so we don't wait indefinitely
-        byte[] bytes = client.Receive(ref endPoint);
+        var receiveTask = client.ReceiveAsync();
+
+        receiveTask.Wait(TimeSpan.FromSeconds(10));
+        if (receiveTask.IsCompleted)
+        {
+            bytes = receiveTask.Result.Buffer;
+            endPoint = receiveTask.Result.RemoteEndPoint;
+        }
+
+        if(bytes == null) return null;
 
         string response = Encoding.ASCII.GetString(bytes);
         var msg = WizMessage.FromJSON(response);

@@ -1,15 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:viewmodels="clr-namespace:xPowerPhoneApp.ViewModels" 
+             xmlns:viewmodels="clr-namespace:xPowerPhoneApp.ViewModels" xmlns:custom="clr-namespace:xPowerPhoneApp.CustomItems"
              x:DataType="viewmodels:MainViewModel"
              x:Class="xPowerPhoneApp.Pages.MainPage"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
-        <Grid>
+        <Grid
+            Padding="0"
+            RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
-                <RowDefinition Height="5*" />
+                <RowDefinition Height="6*" />
             </Grid.RowDefinitions>
             <Label
                 Grid.Row="0"
@@ -19,7 +21,10 @@
                 FontSize="25"
                 ></Label>
             <Frame
-                Grid.Row="1">
+                Grid.Row="1"
+                Padding="0"
+                    HasShadow="False"
+                BorderColor="Transparent">
                 <Frame.Background>
                     <LinearGradientBrush StartPoint="0,0"
                              EndPoint="1,0">
@@ -31,8 +36,77 @@
                           Offset="2.0"/>
                     </LinearGradientBrush>
                 </Frame.Background>
-
                 <Grid
+                    RowSpacing="0"
+                    Padding="-5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="5*" />
+                    </Grid.RowDefinitions>
+                <Grid
+                    Grid.Row="0"
+                    ColumnSpacing="0"
+                    Padding="-5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <custom:CustomFrame
+                        Grid.Column="1"
+                        BackgroundColor="{DynamicResource LightPrimaryColor}"
+                        CornerRadius="0,0,20,20"
+                        Padding="0"
+                        Margin="20,0,20,0"
+                        HasShadow="False"
+                        BorderColor="Transparent">
+                        <Grid
+                            RowSpacing="0"
+                            Padding="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <custom:CustomFrame
+                                Grid.Row="0"
+                                Padding="0"
+                                BackgroundColor="{DynamicResource AppPrimaryColor}"
+                                CornerRadius="0,0,20,20"
+                                HasShadow="False"
+                                BorderColor="{DynamicResource AppPrimaryColor}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="3*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label 
+                                        Grid.Row="0"
+                                        FontSize="Medium"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center">
+                                        Nuværene Forbrug
+                                    </Label>
+                                    <Label 
+                                        Grid.Row="1"
+                                        HorizontalOptions="Center"
+                                        VerticalTextAlignment="Start"
+                                        FontSize="40">
+                                        403 W
+                                    </Label>
+                                </Grid>
+                            </custom:CustomFrame>
+                            <Label
+                                Grid.Row="1"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                                coming soon
+                            </Label>
+                        </Grid>
+
+                    </custom:CustomFrame>
+                </Grid>
+                    <Grid
+                    Grid.Row="1"
                     RowSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="3*" />
@@ -60,8 +134,8 @@
                         CornerRadius="20"
                         Text="Tilføj enhed"
                         Command="{Binding GoToAddDevice}"></Button>
+                    </Grid>
                 </Grid>
-
             </Frame>
         </Grid>
     </ContentPage.Content>
