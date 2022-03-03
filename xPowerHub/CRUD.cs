@@ -15,7 +15,7 @@ internal class CRUD
         var k = Console.ReadLine();
         if (int.TryParse(k, out devnum))
         {
-            return 0 <= devnum && devnum < _store.GetAllDevices().Result.Count();
+            return 0 <= devnum && devnum < _store.GetAllDevicesAsync().Result.Count();
         }
         return false;
     }
@@ -41,12 +41,12 @@ internal class CRUD
 
     ISmart[] GetAllDevices()
     {
-        return _store.GetAllDevices().Result.ToArray();
+        return _store.GetAllDevicesAsync().Result.ToArray();
     }
 
     public void PrintAllDevices()
     {
-        for (var i = 0; i < _store.GetAllDevices().Result.Count(); i++)
+        for (var i = 0; i < _store.GetAllDevicesAsync().Result.Count(); i++)
         {
             Console.WriteLine(i + ": " + GetDevice(i));
         }
@@ -134,7 +134,7 @@ internal class CRUD
 
     public void SwitchAllStates()
     {
-        foreach (var dev in _store.GetAllDevices().Result.ToArray())
+        foreach (var dev in _store.GetAllDevicesAsync().Result.ToArray())
         {
             var current = dev.GetCurrentState();
             if (current is bool b)

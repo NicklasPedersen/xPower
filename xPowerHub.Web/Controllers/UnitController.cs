@@ -31,9 +31,9 @@ namespace xPowerHub.Web.Controllers
         /// Addes the Device
         /// </summary>
         [HttpPost("Add")]
-        public void Add([FromBody] Device device)
+        public async Task AddAsync([FromBody] Device device)
         {
-            _deviceManager.AddNewDevice(device);
+            await _deviceManager.AddNewDeviceAsync(device);
         }
     }
 }

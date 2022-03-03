@@ -13,5 +13,5 @@ public interface IDataStore
     Task<SmartThingsDevice?> GetSmartAsync(int id);
     Task<SmartThingsDevice?> GetSmartAsync(string id);
     Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false);
-    Task<IEnumerable<ISmart>> GetAllDevices(bool forceRefresh = false);
+    Task<IEnumerable<ISmart>> GetAllDevicesAsync(bool forceRefresh = false);
 }

@@ -19,7 +19,7 @@ namespace xPowerHub.Managers
             _dataStore = dataStore;
         }
 
-        public void ChangeStatus(KnownStatusDevice device)
+        public async Task ChangeStatusAsync(KnownStatusDevice device)
         {
             if (!string.IsNullOrWhiteSpace(device.Ip))
             {
@@ -33,11 +33,9 @@ namespace xPowerHub.Managers
                     smartDevice.TurnOff();
                 }
             }
-            else if(!string.IsNullOrWhiteSpace(device.ParentId))
+            else if (!string.IsNullOrWhiteSpace(device.ParentId))
             {
-                var getParentTask = _dataStore.GetSmartAsync(device.ParentId);
-                getParentTask.Wait();
-                var parent = getParentTask.Result;
+                var parent = await _dataStore.GetSmartAsync(device.ParentId);
                 var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
                 if (device.Status)
                 {
@@ -50,12 +48,10 @@ namespace xPowerHub.Managers
             }
         }
 
-        public List<Device> GetAll()
+        public async Task<List<Device>> GetAllAsync()
         {
             var devices = new List<Device>();
-            var getDbDevicesTask = _dataStore.GetAllDevices();
-            getDbDevicesTask.Wait();
-            var dbDevices = getDbDevicesTask.Result;
+            var dbDevices = await _dataStore.GetAllDevicesAsync();
             foreach (var smartDevice in dbDevices)
             {
                 if (smartDevice is WizDevice wizDevice)
@@ -69,9 +65,7 @@ namespace xPowerHub.Managers
                 }
                 else if (smartDevice is SmartThingsDevice thingsDevice)
                 {
-                    var getDevicesTask = SmartThingsCommunicator.GetDevices(thingsDevice);
-                    getDevicesTask.Wait();
-                    var smartDevices = getDevicesTask.Result;
+                    var smartDevices = await SmartThingsCommunicator.GetDevices(thingsDevice);
 
                     foreach (var device in smartDevices)
                     {
@@ -87,16 +81,14 @@ namespace xPowerHub.Managers
             return devices;
         }
 
-        public List<KnownStatusDevice> GetStatus(List<Device> devices)
+        public async Task<List<KnownStatusDevice>> GetStatusAsync(List<Device> devices)
         {
             var knownDevices = new List<KnownStatusDevice>();
             foreach(Device device in devices)
             {
                 if (string.IsNullOrWhiteSpace(device.Ip))
                 {
-                    var getParentTask = _dataStore.GetSmartAsync(device.ParentId);
-                    getParentTask.Wait();
-                    var parent = getParentTask.Result;
+                    var parent = await _dataStore.GetSmartAsync(device.ParentId);
                     var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
                     knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)smartDevice.GetCurrentState() });
                 }
@@ -121,24 +113,22 @@ namespace xPowerHub.Managers
             return new Device() { Name = device.IP, Id = device.MAC };
         }
 
-        public void AddNewDevice(Device device)
+        public async Task AddNewDeviceAsync(Device device)
         {
-            if(device is KeyedDevice keyedDevice)
+            if (device is KeyedDevice keyedDevice)
             {
-                _dataStore.AddSmartAsync(new SmartThingsDevice(keyedDevice.Id, keyedDevice.Name, keyedDevice.Key));
+                await _dataStore.AddSmartAsync(new SmartThingsDevice(keyedDevice.Id, keyedDevice.Name, keyedDevice.Key));
             }
             else
             {
-                _dataStore.AddWizAsync(new WizDevice(device.Name, device.Id)).Wait();
+                await _dataStore.AddWizAsync(new WizDevice(device.Name, device.Id));
             }
         }
 
-        public Device[] GetAllHubs(string key)
+        public async Task<Device[]> GetAllHubsAsync(string key)
         {
             List<Device> devices = new List<Device>();
-            var getHubsTask = SmartThingsCommunicator.GetHubs(key);
-            getHubsTask.Wait();
-            var smartDevices = getHubsTask.Result;
+            var smartDevices = await SmartThingsCommunicator.GetHubs(key);
             foreach (var device in smartDevices)
             {
                 devices.Add(new Device()

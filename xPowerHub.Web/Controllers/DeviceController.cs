@@ -22,9 +22,9 @@ namespace xPowerHub.Web.Controllers
         /// </summary>
         /// <returns>Array of Device</returns>
         [HttpGet("GetAll")]
-        public Device[] GetAll()
+        public async Task<Device[]> GetAllAsync()
         {
-            return _deviceManager.GetAll().ToArray();
+            return (await _deviceManager.GetAllAsync()).ToArray();
         }
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace xPowerHub.Web.Controllers
         /// <param name="devices">The devices where there status will be search for</param>
         /// <returns>A array of KnownStatusDevice</returns>
         [HttpPost("GetStatus")]
-        public KnownStatusDevice[] PostStatus([FromBody] Device[] devices)
+        public async Task<KnownStatusDevice[]> PostStatusAsync([FromBody] Device[] devices)
         {
-            return _deviceManager.GetStatus(devices.ToList()).ToArray();
+            return (await _deviceManager.GetStatusAsync(devices.ToList())).ToArray();
         }
 
         /// <summary>
@@ -43,11 +43,9 @@ namespace xPowerHub.Web.Controllers
         /// </summary>
         /// <param name="device">The device with the new status</param>
         [HttpPost("ChangeStatus")]
-        public void ChangeStatus([FromBody] KnownStatusDevice device)
+        public async Task ChangeStatusAsync([FromBody] KnownStatusDevice device)
         {
-            _deviceManager.ChangeStatus(device);
+            await _deviceManager.ChangeStatusAsync(device);
         }
-
-        
     }
 }

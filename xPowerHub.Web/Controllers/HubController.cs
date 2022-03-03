@@ -22,18 +22,18 @@ namespace xPowerHub.Web.Controllers
         /// </summary>
         /// <returns>The new Device</returns>
         [HttpPost("GetHubs")]
-        public Device[] GetNew([FromBody] string key)
+        public async Task<Device[]> GetNewAsync([FromBody] string key)
         {
-            return _deviceManager.GetAllHubs(key);
+            return await _deviceManager.GetAllHubsAsync(key);
         }
 
         /// <summary>
         /// Addes the Device
         /// </summary>
         [HttpPost("Add")]
-        public void Add([FromBody] KeyedDevice device)
+        public async Task AddAsync([FromBody] KeyedDevice device)
         {
-            _deviceManager.AddNewDevice(device);
+            await _deviceManager.AddNewDeviceAsync(device);
         }
     }
 }
