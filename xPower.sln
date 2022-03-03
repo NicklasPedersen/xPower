@@ -11,11 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xPowerPhoneApp.iOS", "xPowe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xPowerPhoneApp", "xPowerPhoneApp\xPowerPhoneApp\xPowerPhoneApp.csproj", "{77F07ECA-338A-4CAF-8156-80990F3CC6B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xPowerPhoneLib", "xPowerPhoneLib\xPowerPhoneLib.csproj", "{B96402CF-02C0-49B7-B5FA-EFE49C32FE16}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xPowerHub", "xPowerHub\xPowerHub.csproj", "{479FADAE-2F9A-4AFB-A814-B819AE0BD43A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xPowerHub.Web", "xPowerHub.Web\xPowerHub.Web.csproj", "{537A172C-34B3-4A45-AE60-DFAAB8304689}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xPowerHub.Web", "xPowerHub.Web\xPowerHub.Web.csproj", "{537A172C-34B3-4A45-AE60-DFAAB8304689}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
