@@ -13,6 +13,9 @@ builder.Services.AddSwaggerGen();
 // Dependency injection
 builder.Services.AddSingleton<IDeviceManager>(new DeviceManager());
 
+// Move to config?
+builder.WebHost.UseUrls("http://*:5000", "https://*:5001");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -16,10 +16,10 @@ public class WizDeviceCommunicator
     public static WizDevice GetNewDevice()
     {
         using var client = new UdpClient(broadcastPort);
-        var endPoint = new IPEndPoint(IPAddress.Broadcast, broadcastPort);
-
+        IPEndPoint? endPoint = null; // doesn't matter because it is never used by UdpClient/Socket
         // receive broadcast on the broadcastPort, this should be the firstBeat
         // TODO: timeout so we don't wait indefinitely
+
         byte[] bytes = client.Receive(ref endPoint);
 
         string response = Encoding.ASCII.GetString(bytes);
