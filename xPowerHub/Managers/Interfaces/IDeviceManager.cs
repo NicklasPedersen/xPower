@@ -46,5 +46,12 @@ namespace xPowerHub.Managers.Interfaces
         /// <param name="key">The key</param>
         /// <returns>A list of all the hubs</returns>
         Task<Device[]> GetAllHubsAsync(string key);
+
+
+        /// <summary>
+        /// Gets all wattages from all devices that supports it
+        /// </summary>
+        /// <returns>A number containing the sum of current wattage</returns>
+        public Task<double> GetAllWattageUsageAsync();
     }
 }

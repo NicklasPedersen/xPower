@@ -28,6 +28,11 @@ public class SmartThingsDevice : ISmart
         return setStatusTask.Result;
     }
 
+    public double GetWatt()
+    {
+        return SmartThingsCommunicator.GetDeviceWattStatus(this).Result;
+    }
+
     public bool TurnOff()
     {
         return SetState(false);
