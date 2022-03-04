@@ -1,4 +1,6 @@
-﻿namespace xPowerHub.DataStore;
+﻿using xPowerHub.Models;
+
+namespace xPowerHub.DataStore;
 
 public interface IDataStore
 {
@@ -14,4 +16,7 @@ public interface IDataStore
     Task<SmartThingsDevice?> GetSmartAsync(string id);
     Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false);
     Task<IEnumerable<ISmart>> GetAllDevicesAsync(bool forceRefresh = false);
+    Task<bool> AddPowerStatementAsync(PowerStatement powerStatement);
+    Task<IEnumerable<PowerStatement>> GetPowerStatementWeekdayAvgAsync();
+    Task<IEnumerable<PowerStatement>> GetPowerStatementHourlyAvgAsync(DateTime date);
 }

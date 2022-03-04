@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using xPowerHub.Models;
 
 namespace xPowerHub.DataStore;
 
@@ -21,6 +22,12 @@ internal class MockDAL : IDataStore
     };
     List<SmartThingsDevice> _smartDevices = _stdSmartDevices.ToList();
     List<WizDevice> _wizDevices = _stdWizDevices.ToList();
+
+    public Task<bool> AddPowerStatementAsync(PowerStatement powerStatement)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<bool> AddSmartAsync(SmartThingsDevice item)
     {
         _smartDevices.Add(item);
@@ -51,6 +58,16 @@ internal class MockDAL : IDataStore
         list = list.Concat(GetSmartsAsync(forceRefresh).Result).ToList();
         list = list.Concat(GetWizsAsync(forceRefresh).Result).ToList();
         return Task.FromResult(list.AsEnumerable());
+    }
+
+    public Task<IEnumerable<PowerStatement>> GetPowerStatementHourlyAvgAsync(DateTime date)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<PowerStatement>> GetPowerStatementWeekdayAvgAsync()
+    {
+        throw new NotImplementedException();
     }
 
     public Task<SmartThingsDevice?> GetSmartAsync(int id)

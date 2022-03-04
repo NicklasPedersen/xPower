@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Linq;
+using xPowerHub.Models;
 
 namespace xPowerHub.DataStore;
 
@@ -13,6 +14,7 @@ public class DAL : IDataStore
     }
     private string wiztable = "wizdev";
     private string smarttable = "smartdev";
+    private string powertable = "powerval";
     private void DropWizTable()
     {
         conn.Open();
@@ -61,15 +63,40 @@ public class DAL : IDataStore
         comm.ExecuteNonQuery();
         conn.Close();
     }
+    private void DropPowerTable()
+    {
+        conn.Open();
+        var comm = conn.CreateCommand();
+        comm.CommandText = $"DROP TABLE IF EXISTS {powertable}";
+        comm.ExecuteNonQuery();
+        conn.Close();
+    }
+    private void AddPowerTable()
+    {
+        conn.Open();
+        var comm = conn.CreateCommand();
+        comm.CommandText =
+        @"
+            CREATE TABLE IF NOT EXISTS " + powertable + @" (
+                id INTEGER PRIMARY KEY,
+                date NUMERIC NOT NULL,
+                wattHour REAL NOT NULL
+            )
+        ";
+        comm.ExecuteNonQuery();
+        conn.Close();
+    }
     public void DropTables()
     {
         DropWizTable();
         DropSmartTable();
+        DropPowerTable();
     }
     public void AddTables()
     {
         AddWizTable();
         AddSmartTable();
+        AddPowerTable();
     }
     public void DropCreatePopulate()
     {
@@ -261,7 +288,7 @@ public class DAL : IDataStore
         await conn.CloseAsync();
         return dev;
     }
-
+    
     public async Task<SmartThingsDevice?> GetSmartAsync(string uuid)
     {
         await conn.OpenAsync();
@@ -304,11 +331,77 @@ public class DAL : IDataStore
         await conn.CloseAsync();
         return devices;
     }
+    
     public async Task<IEnumerable<ISmart>> GetAllDevicesAsync(bool forceRefresh = false)
     {
         List<ISmart> k = new();
         k = k.Concat(await GetSmartsAsync(forceRefresh)).ToList();
         k = k.Concat(await GetWizsAsync(forceRefresh)).ToList();
         return k;
+    }
+
+    public async Task<bool> AddPowerStatementAsync(PowerStatement powerStatement)
+    {
+        // invalidate our cache
+        _smartCache = null;
+
+        await conn.OpenAsync();
+        var comm = conn.CreateCommand();
+        comm.CommandText =
+        @"
+            INSERT INTO " + powertable + @" (date, wattHour)
+            VALUES ($date, $wattHour)
+        ";
+        comm.Parameters.AddWithValue("$date", powerStatement.Taken);
+        comm.Parameters.AddWithValue("$wattHour", powerStatement.WattHour);
+        int inserted = await comm.ExecuteNonQueryAsync();
+        await conn.CloseAsync();
+        return inserted == 1;
+    }
+   
+    public async Task<IEnumerable<PowerStatement>> GetPowerStatementWeekdayAvgAsync()
+    {
+        await conn.OpenAsync();
+        var comm = conn.CreateCommand();
+        comm.CommandText =
+        @$"
+            SELECT min(date), avg(wattHour) 
+                FROM (
+                    SELECT min(date) as date, sum(wattHour) as wattHour 
+                    FROM {powertable}
+                    GROUP BY (strftime('%Y-%m-%d', [date]))
+                )
+                GROUP BY (strftime('%w', [date])) 
+                ORDER BY strftime('%w', [date]) 
+        ";
+        List<PowerStatement> powers = new();
+        using var reader = await comm.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            powers.Add(new PowerStatement() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) });
+        }
+        await conn.CloseAsync();
+        return powers;
+    }
+    
+    public async Task<IEnumerable<PowerStatement>> GetPowerStatementHourlyAvgAsync(DateTime date)
+    {
+        await conn.OpenAsync();
+        var comm = conn.CreateCommand();
+        comm.CommandText =
+        @$"
+            SELECT min(date), sum(wattHour) FROM {powertable} 
+            WHERE strftime('%Y-%m-%d', [date])=strftime('%Y-%m-%d', $datet)
+            GROUP BY strftime('%Y-%m-%d %H', [date]) 
+        ";
+        comm.Parameters.AddWithValue("$datet", date);
+        using var reader = await comm.ExecuteReaderAsync();
+        List<PowerStatement> powers = new();
+        while (await reader.ReadAsync())
+        {
+            powers.Add(new PowerStatement() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) });
+        }
+        await conn.CloseAsync();
+        return powers;
     }
 }
