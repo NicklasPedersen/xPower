@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using xPowerHub.Communicators;
+using xPowerHub.Communicators.WizMessages;
 
 namespace xPowerHub;
 

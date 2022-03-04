@@ -75,11 +75,11 @@ public class DAL : IDataStore
     {
         DropTables();
         AddTables();
-        AddWizAsync(new WizDevice("192.112.31.35", "34:13:33:64", "dev1"));
-        AddWizAsync(new WizDevice("192.112.31.34", "34:13:57:64", "dev2"));
-        AddWizAsync(new WizDevice("192.112.31.37", "34:13:12:64", "dev3"));
-        AddWizAsync(new WizDevice("192.112.31.38", "34:13:54:64", "dev4"));
-        AddSmartAsync(new SmartThingsDevice("uuid4-asdad-ij23oi4-asdf", "smdev4", "uuid4-asdad-ij23oi4-asdf"));
+        AddWizAsync(new WizDevice("192.112.31.35", "34:13:33:64", "dev1")).Wait();
+        AddWizAsync(new WizDevice("192.112.31.34", "34:13:57:64", "dev2")).Wait();
+        AddWizAsync(new WizDevice("192.112.31.37", "34:13:12:64", "dev3")).Wait();
+        AddWizAsync(new WizDevice("192.112.31.38", "34:13:54:64", "dev4")).Wait();
+        AddSmartAsync(new SmartThingsDevice("uuid4-asdad-ij23oi4-asdf", "smdev4", "uuid4-asdad-ij23oi4-asdf")).Wait();
     }
 
     public async Task<bool> AddWizAsync(WizDevice item)
