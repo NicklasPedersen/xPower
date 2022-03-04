@@ -112,8 +112,9 @@ namespace xPowerHub.Communicators
             }
 
             if (smartResponse != null)
-                if (smartResponse.Component.Main.PowerMeter != null)
-                    return smartResponse.Component.Main.PowerMeter.Power.Value;
+                if (smartResponse.Component.Main != null)
+                    if (smartResponse.Component.Main.PowerMeter != null)
+                        return smartResponse.Component.Main.PowerMeter.Power.Value;
 
             return 0;
         }

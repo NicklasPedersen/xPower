@@ -139,5 +139,17 @@ namespace xPowerHub.Managers
             }
             return devices.ToArray();
         }
+
+        public async Task<double> GetAllWattageUsageAsync()
+        {
+            //var l = await _dataStore.GetSmartsAsync();
+            //double o = 0;
+            //foreach (var device in l)
+            //    o += await SmartThingsCommunicator.GetDeviceWattStatus(device);
+            //return o;
+            var l = await _dataStore.GetSmartsAsync();
+            var k = (SmartThingsDevice s) => SmartThingsCommunicator.GetDevices(s).Result.Sum(x => x.GetWatt());
+            return l.ToList().Sum(k);
+        }
     }
 }
