@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using xPowerHub.Communicators.WizMessages;
 
-namespace xPowerHub;
+namespace xPowerHub.Communicators;
 
 public class WizDeviceCommunicator
 {
