@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using xPowerPhoneApp.Models;
+using xPowerPhoneApp.Repositorys.Interfaces;
 using xPowerPhoneApp.Repositorys.Shared;
 
 namespace xPowerPhoneApp.Repositorys

@@ -90,8 +90,8 @@
                                         Grid.Row="1"
                                         HorizontalOptions="Center"
                                         VerticalTextAlignment="Start"
-                                        FontSize="40">
-                                        403 W
+                                        FontSize="40"
+                                        Text="{Binding PowerLevel}">
                                     </Label>
                                 </Grid>
                             </custom:CustomFrame>

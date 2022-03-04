@@ -9,12 +9,13 @@ using Xamarin.Forms;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Repositorys;
+using xPowerPhoneApp.Repositorys.Interfaces;
 
 namespace xPowerPhoneApp.ViewModels
 {
     internal class ConnectHubViewModel : BaseViewModel
     {
-        private IHubRepository _hubRepo;
+        private readonly IHubRepository _hubRepo;
         private ObservableCollection<AddDevice> _device = new ObservableCollection<AddDevice>();
 
         public ICommand AddCommand { get; set; }

@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Repositorys;
+using xPowerPhoneApp.Repositorys.Interfaces;
 
 namespace xPowerPhoneApp.ViewModels
 {
