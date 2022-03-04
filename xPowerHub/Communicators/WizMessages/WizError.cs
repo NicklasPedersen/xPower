@@ -2,7 +2,7 @@
 
 namespace xPowerHub.Communicators.WizMessages;
 
-internal class WizError
+public class WizError
 {
     [JsonPropertyName("code")]
     public int Code { get; init; }

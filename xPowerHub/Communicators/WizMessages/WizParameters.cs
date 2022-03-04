@@ -2,7 +2,7 @@
 
 namespace xPowerHub.Communicators.WizMessages;
 
-internal class WizParameters
+public class WizParameters
 {
     [JsonPropertyName("state")]
     public bool? State { get; init; }

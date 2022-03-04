@@ -5,10 +5,6 @@ namespace xPowerHub.Communicators.WizMessages;
 
 public class WizMessage
 {
-    public class WizResult
-    {
-    }
-
     private WizMethod method;
     [JsonPropertyName("method")]
 
