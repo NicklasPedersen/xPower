@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using xPowerPhoneApp.Models;
 
-namespace xPowerPhoneApp.Repositorys
+namespace xPowerPhoneApp.Repositorys.Interfaces
 {
     internal interface IDeviceRepository
     {

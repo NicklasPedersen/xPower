@@ -4,8 +4,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using xPowerPhoneApp.Models;
+using xPowerPhoneApp.Repositorys.Interfaces;
 
-namespace xPowerPhoneApp.Repositorys
+namespace xPowerPhoneApp.Repositorys.Mocks
 {
     internal class SmartUnitRepositoryMock : ISmartUnitRepository
     {

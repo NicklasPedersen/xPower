@@ -20,6 +20,18 @@ namespace xPowerPhoneApp.Pages
             BindingContext = new MainViewModel(this);
         }
 
+        protected override void OnAppearing()
+        {
+            ((MainViewModel)BindingContext).StartGettingData();
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            ((MainViewModel)BindingContext).StopGettingData();
+            base.OnDisappearing();
+        }
+
         /// <summary>
         /// Changes the page to the given page
         /// </summary>

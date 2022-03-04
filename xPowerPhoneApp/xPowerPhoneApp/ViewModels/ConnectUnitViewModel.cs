@@ -9,12 +9,13 @@ using Xamarin.Forms;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Repositorys;
+using xPowerPhoneApp.Repositorys.Interfaces;
 
 namespace xPowerPhoneApp.ViewModels
 {
     internal class ConnectUnitViewModel : BaseViewModel
     {
-        private ISmartUnitRepository smartUnitRepo;
+        private ISmartUnitRepository _smartUnitRepo;
         private ObservableCollection<AddDevice> _device = new ObservableCollection<AddDevice>();
         private Task _getDevicesTask;
         private bool _run = true;
@@ -28,13 +29,13 @@ namespace xPowerPhoneApp.ViewModels
         public ConnectUnitViewModel(IChangePage pageChanger) : base(pageChanger)
         {
             AddCommand = new Command(async (mac) => await AddAsync(mac.ToString()));
-            smartUnitRepo = new SmartUnitRepository();
+            _smartUnitRepo = new SmartUnitRepository();
             _ = InitializeAsync();
         }
 
         public async Task InitializeAsync()
         {
-            var devices = await smartUnitRepo.GetDevices();
+            var devices = await _smartUnitRepo.GetDevices();
             foreach (var device in devices)
             {
                 Devices.Add(device);
@@ -47,7 +48,7 @@ namespace xPowerPhoneApp.ViewModels
         {
             while (_run)
             {
-                var devices = await smartUnitRepo.GetNewDevices(Devices.ToList());
+                var devices = await _smartUnitRepo.GetNewDevices(Devices.ToList());
                 foreach (var device in devices)
                 {
                     Devices.Add(device);
@@ -65,7 +66,7 @@ namespace xPowerPhoneApp.ViewModels
             Devices[index] = device;
             NotifyPropertyChanged(nameof(Devices));
 
-            bool added = await smartUnitRepo.AddDevice(device);
+            bool added = await _smartUnitRepo.AddDevice(device);
             device.Adding = false;
             if (added)
             {
