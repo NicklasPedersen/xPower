@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 // Dependency injection
 builder.Services.AddSingleton<IDataStore>(new DAL("./xPower.db"));
 builder.Services.AddSingleton<IDeviceManager>(x => new DeviceManager(x.GetRequiredService<IDataStore>()));
+builder.Services.AddSingleton<IPowerManager>(x => new PowerManager(x.GetRequiredService<IDataStore>()));
 
 // Move to config?
 builder.WebHost.UseUrls("http://*:5000", "https://*:5001");
