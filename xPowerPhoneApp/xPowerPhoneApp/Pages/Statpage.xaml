@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:custom="clr-namespace:xPowerPhoneApp.CustomItems"
+             x:Class="xPowerPhoneApp.Pages.Statpage">
+    <ContentPage.Content>
+        <Frame
+            Padding="0"
+            HasShadow="False"
+            BorderColor="Transparent">
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                            EndPoint="1,0">
+                    <GradientStop Color="#fff"
+                        Offset="0"/>
+                    <GradientStop Color="#e6e9ea"
+                        Offset="1"/>
+                    <GradientStop Color="#fff"
+                        Offset="2.0"/>
+                </LinearGradientBrush>
+            </Frame.Background>
+            <Grid
+                RowSpacing="0"
+                Padding="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="5*" />
+                </Grid.RowDefinitions>
+                <Grid
+                Grid.Row="0"
+                ColumnSpacing="0"
+                Padding="-5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <custom:CustomFrame
+                    Grid.Column="1"
+                    BackgroundColor="{DynamicResource LightPrimaryColor}"
+                    CornerRadius="0,0,20,20"
+                    Padding="0"
+                    Margin="20,0,20,0"
+                    HasShadow="False"
+                    BorderColor="Transparent">
+                        <Grid
+                        RowSpacing="0"
+                        Padding="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <custom:CustomFrame
+                            Grid.Row="0"
+                            Padding="0"
+                            BackgroundColor="{DynamicResource AppPrimaryColor}"
+                            CornerRadius="0,0,20,20"
+                            HasShadow="False"
+                            BorderColor="{DynamicResource AppPrimaryColor}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="3*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label 
+                                    Grid.Row="0"
+                                    FontSize="Medium"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                                        Nuværene Forbrug
+                                    </Label>
+                                    <Label 
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    VerticalTextAlignment="Start"
+                                    FontSize="40"
+                                    Text="{Binding PowerLevel}">
+                                    </Label>
+                                </Grid>
+                            </custom:CustomFrame>
+                            <Label
+                                Grid.Row="1"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Text="{Binding PowerUsage}">
+                            </Label>
+                        </Grid>
+
+                    </custom:CustomFrame>
+                </Grid>
+                <Grid
+                    Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <ContentView
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Content="{Binding CurrentView}">
+
+                    </ContentView>
+                    <Grid
+                        Grid.Row="1"
+                        Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Grid.Column="0"
+                            BackgroundColor="{DynamicResource LightPrimaryColor}"
+                            TextColor="{DynamicResource AppPrimaryColor}"
+                            IsEnabled="{Binding IsWeeklyAvgSelectedInv}"
+                            Command="{Binding SelectViewCommand}"
+                            CommandParameter="0"
+                            Text="ugenligt gennemsnit"/>
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="{DynamicResource LightPrimaryColor}"
+                            TextColor="{DynamicResource AppPrimaryColor}"
+                            IsEnabled="{Binding IsDailyUsageSelectedInv}"
+                            Command="{Binding SelectViewCommand}"
+                            CommandParameter="1"
+                            Text="Dagligt forbrug"/>
+                        <Button
+                            Grid.Column="2"
+                            BackgroundColor="{DynamicResource LightPrimaryColor}"
+                            TextColor="{DynamicResource AppPrimaryColor}"
+                            IsEnabled="{Binding IsPowerPriceSelectedInv}"
+                            Command="{Binding SelectViewCommand}"
+                            CommandParameter="2"
+                            Text="Strøm pris"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Frame>
+    </ContentPage.Content>
+</ContentPage>

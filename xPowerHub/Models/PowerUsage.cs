@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace xPowerHub.Models
 {
-    public class PowerStatement
+    public class PowerUsage
     {
         public DateTime Taken { get; set; }
         public double WattHour { get; set; }

@@ -16,16 +16,21 @@ namespace xPowerHub.Web.Controllers
         }
 
         [HttpGet("WeekdayAvg")]
-        public async Task<PowerStatement[]> GetWeekdayAvgAsync()
+        public async Task<PowerUsage[]> GetWeekdayAvgAsync()
         {
             return await _powerManager.GetWeekdayAvgAsync();
         }
 
         [HttpGet("DayHourlyAvg/{date}")]
-        public async Task<PowerStatement[]> GetDayHourlyAvgAsync(string date)
+        public async Task<PowerUsage[]> GetDayHourlyAvgAsync(string date)
         {
             return await _powerManager.GetDayHourlyAvgAsync(DateTime.Parse(date));
         }
 
+        [HttpGet("Today")]
+        public async Task<double> GetTodaysPowerUsage()
+        {
+            return await _powerManager.GetpowerUsageTodayAvgAsync();
+        }
     }
 }

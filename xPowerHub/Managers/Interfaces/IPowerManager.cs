@@ -9,7 +9,9 @@ namespace xPowerHub.Managers.Interfaces
 {
     public interface IPowerManager
     {
-        Task<PowerStatement[]> GetWeekdayAvgAsync();
-        Task<PowerStatement[]> GetDayHourlyAvgAsync(DateTime date);
+        Task<PowerUsage[]> GetWeekdayAvgAsync();
+        Task<PowerUsage[]> GetDayHourlyAvgAsync(DateTime date);
+        Task<double> GetpowerUsageTodayAvgAsync();
+        Task<bool> AddUsageAsync(PowerUsage powerUsage);
     }
 }
