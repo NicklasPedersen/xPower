@@ -56,5 +56,11 @@ namespace xPowerPhoneApp.Repositorys.Mocks
             await Task.Delay(random.Next(0, 1000));
             return true;
         }
+        public async Task<bool> UpdateName(Device device)
+        {
+            var random = new Random();
+            await Task.Delay(random.Next(0, 1000));
+            return true;
+        }
     }
 }

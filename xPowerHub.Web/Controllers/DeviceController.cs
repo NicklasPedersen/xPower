@@ -57,5 +57,10 @@ namespace xPowerHub.Web.Controllers
         {
             return await _deviceManager.GetAllWattageUsageAsync();
         }
+        [HttpPost("ChangeName")]
+        public async Task<bool> ChangeName([FromBody] Device device)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

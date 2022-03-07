@@ -45,5 +45,10 @@ namespace xPowerPhoneApp.Repositorys
         {
             return await SharedHttpClient.Instants.Post("Device/ChangeStatus", device);
         }
+
+        public async Task<bool> UpdateName(Device device)
+        {
+            return await SharedHttpClient.Instants.Post("Device/ChangeName", device);
+        }
     }
 }

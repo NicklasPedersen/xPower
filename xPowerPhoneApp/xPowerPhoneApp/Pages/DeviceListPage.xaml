@@ -4,6 +4,9 @@
              xmlns:Custom="clr-namespace:xPowerPhoneApp.CustomItems" 
              xmlns:Converters="clr-namespace:xPowerPhoneApp.Converters"
              x:Class="xPowerPhoneApp.Pages.DeviceListPage">
+    <ContentPage.Resources>
+        <Converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
     <ContentPage.Content>
 
         <Frame>
@@ -33,10 +36,12 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="2*"/>
                                         <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
                                     <Label
                                         Grid.Column="0"
                                         FontSize="Medium"
+                                        VerticalOptions="Center"
                                         Text="{Binding Name}"/>
                                     <Switch
                                         Grid.Column="1"
@@ -48,7 +53,13 @@
                                         Grid.Column="1"
                                         Text="Unknown"
                                         HorizontalTextAlignment="End"
-                                        IsVisible="{Binding IsStatusKnown, Converter={Converters:InverseBoolConverter}, Mode=OneWay}"/>
+                                        IsVisible="{Binding IsStatusKnown, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}"/>
+                                    <Button
+                                        Grid.Column="2"
+                                        Text="edit"
+                                        Command="{Binding BindingContext.GoToEditDevice, Source={x:Reference StackRef}}"
+                                        CommandParameter="{Binding Id}"
+                                       />
                                 </Grid>
 
                                 <Custom:CustomFrame.GestureRecognizers>
