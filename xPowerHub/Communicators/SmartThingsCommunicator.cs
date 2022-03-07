@@ -91,12 +91,7 @@ namespace xPowerHub.Communicators
                 smartResponse = JsonSerializer.Deserialize<ComponentHolder>(str);
             }
 
-            if (smartResponse != null)
-            {
-                return smartResponse.Component.Main.Outlet.Switch.Value == "on";
-            }
-
-            return false;
+            return smartResponse?.Component?.Main?.Outlet?.Switch?.Value == "on";
         }
 
         public static async Task<double> GetDeviceWattStatus(SmartThingsDevice device)
@@ -111,12 +106,7 @@ namespace xPowerHub.Communicators
                 smartResponse = JsonSerializer.Deserialize<ComponentHolder>(str);
             }
 
-            if (smartResponse != null)
-                if (smartResponse.Component.Main != null)
-                    if (smartResponse.Component.Main.PowerMeter != null)
-                        return smartResponse.Component.Main.PowerMeter.Power.Value;
-
-            return 0;
+            return smartResponse?.Component?.Main?.PowerMeter?.Power?.Value ?? 0;
         }
 
         public static async Task<bool> SetStatus(SmartThingsDevice device, bool status)
