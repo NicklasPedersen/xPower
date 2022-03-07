@@ -13,7 +13,7 @@ using xPowerPhoneApp.Repositorys.Interfaces;
 
 namespace xPowerPhoneApp.ViewModels
 {
-    internal class ConnectHubViewModel : BaseViewModel
+    internal class ConnectHubViewModel : PageViewModel
     {
         private readonly IHubRepository _hubRepo;
         private ObservableCollection<AddDevice> _device = new ObservableCollection<AddDevice>();

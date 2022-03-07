@@ -1,6 +1,7 @@
 using xPowerHub.DataStore;
 using xPowerHub.Managers;
 using xPowerHub.Managers.Interfaces;
+using xPowerHub.Web.services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IDataStore>(new DAL("./xPower.db"));
 builder.Services.AddSingleton<IDeviceManager>(x => new DeviceManager(x.GetRequiredService<IDataStore>()));
 builder.Services.AddSingleton<IPowerManager>(x => new PowerManager(x.GetRequiredService<IDataStore>()));
+
+// Hosted services
+builder.Services.AddHostedService<PowerUsageService>();
 
 // Move to config?
 builder.WebHost.UseUrls("http://*:5000", "https://*:5001");

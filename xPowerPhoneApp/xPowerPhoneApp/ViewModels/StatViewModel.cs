@@ -5,35 +5,55 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using xPowerPhoneApp.Interfaces;
-using xPowerPhoneApp.Pages;
 using xPowerPhoneApp.Repositorys;
-using xPowerPhoneApp.Repositorys.Mocks;
 using xPowerPhoneApp.Repositorys.Interfaces;
+using xPowerPhoneApp.Repositorys.Mocks;
+using xPowerPhoneApp.Views;
 
 namespace xPowerPhoneApp.ViewModels
 {
-    internal class MainViewModel : PageViewModel
+    internal class StatViewModel : PageViewModel
     {
         public string PowerLevel { get => _powerLevel.ToString("0.#") + "W"; }
         public string PowerUsage { get => $"Brugt I dag: {_powerUsage.ToString("0.#")}Wh"; }
-        public ICommand GoToAddDevice { get; set; }
-        public ICommand GoToListDevice { get; set; }
-        public ICommand GoToStatPage { get; set; }
+        public ContentView CurrentView { get; set; }
+        public bool IsWeeklyAvgSelectedInv { get => _selected != 0; }
+        public bool IsDailyUsageSelectedInv { get => _selected != 1; }
+        public bool IsPowerPriceSelectedInv { get => _selected != 2; }
+        public ICommand SelectViewCommand { get; set; }
+
+        private int _selected;
 
         private double _powerLevel;
         private double _powerUsage;
         private bool _getPower = true;
         private Task _getPowerTask;
+        private ContentView[] _views;
 
         private IPowerRepository _powerRepository;
-        public MainViewModel(IChangePage pageChanger) : base(pageChanger)
+        public StatViewModel(IChangePage pageChanger) : base(pageChanger)
         {
             _powerRepository = new PowerRepository();
-
-            GoToAddDevice = new Command(() => _pageChanger.PushPage(new AddDevicePage()));
-            GoToListDevice = new Command(() => _pageChanger.PushPage(new DeviceListPage()));
-            GoToStatPage = new Command(() => _pageChanger.PushPage(new Statpage()));
+            SelectViewCommand = new Command(async (select) => await Task.Run(() => SelectView(int.Parse(select.ToString()))));
+            _views = new ContentView[]
+            {
+                new WeekAvgView(_powerRepository),
+                new DailyUsageView(_powerRepository),
+                new PriceView(_powerRepository)
+            };
+            SelectView(0);
         }
+
+        private void SelectView(int selected)
+        {
+            CurrentView = _views[selected];
+            _selected = selected;
+            NotifyPropertyChanged(nameof(CurrentView));
+            NotifyPropertyChanged(nameof(IsWeeklyAvgSelectedInv));
+            NotifyPropertyChanged(nameof(IsDailyUsageSelectedInv));
+            NotifyPropertyChanged(nameof(IsPowerPriceSelectedInv));
+        }
+
 
         public void StartGettingData()
         {

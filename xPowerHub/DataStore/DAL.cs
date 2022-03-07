@@ -339,8 +339,7 @@ public class DAL : IDataStore
         k = k.Concat(await GetWizsAsync(forceRefresh)).ToList();
         return k;
     }
-
-    public async Task<bool> AddPowerStatementAsync(PowerStatement powerStatement)
+    public async Task<bool> AddPowerStatementAsync(PowerUsage powerStatement)
     {
         // invalidate our cache
         _smartCache = null;
@@ -359,7 +358,7 @@ public class DAL : IDataStore
         return inserted == 1;
     }
    
-    public async Task<IEnumerable<PowerStatement>> GetPowerStatementWeekdayAvgAsync()
+    public async Task<IEnumerable<PowerUsage>> GetPowerUsageWeekdayAvgAsync()
     {
         await conn.OpenAsync();
         var comm = conn.CreateCommand();
@@ -374,34 +373,74 @@ public class DAL : IDataStore
                 GROUP BY (strftime('%w', [date])) 
                 ORDER BY strftime('%w', [date]) 
         ";
-        List<PowerStatement> powers = new();
+        List<PowerUsage> powers = new();
         using var reader = await comm.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
-            powers.Add(new PowerStatement() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) });
+            powers.Add(new PowerUsage() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) });
         }
         await conn.CloseAsync();
         return powers;
     }
     
-    public async Task<IEnumerable<PowerStatement>> GetPowerStatementHourlyAvgAsync(DateTime date)
+    public async Task<IEnumerable<PowerUsage>> GetPowerUsageHourlyAvgAsync(DateTime date)
     {
         await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =
         @$"
             SELECT min(date), sum(wattHour) FROM {powertable} 
-            WHERE strftime('%Y-%m-%d', [date])=strftime('%Y-%m-%d', $datet)
+            WHERE strftime('%Y-%m-%d', [date])=strftime('%Y-%m-%d', $date)
             GROUP BY strftime('%Y-%m-%d %H', [date]) 
         ";
-        comm.Parameters.AddWithValue("$datet", date);
+        comm.Parameters.AddWithValue("$date", date);
         using var reader = await comm.ExecuteReaderAsync();
-        List<PowerStatement> powers = new();
+        List<PowerUsage> powers = new();
         while (await reader.ReadAsync())
         {
-            powers.Add(new PowerStatement() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) });
+            powers.Add(new PowerUsage() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) });
         }
         await conn.CloseAsync();
         return powers;
+    }
+
+    public async Task<PowerUsage?> GetPowerUsage(DateTime date)
+    {
+        await conn.OpenAsync();
+        var comm = conn.CreateCommand();
+        comm.CommandText =
+        @$"
+            SELECT date, wattHour, id FROM {powertable} 
+            WHERE strftime('%Y-%m-%d %H', [date])=strftime('%Y-%m-%d %H', $date)
+        ";
+        comm.Parameters.AddWithValue("$date", date);
+        using var reader = await comm.ExecuteReaderAsync();
+        PowerUsage powers = null;
+        while (await reader.ReadAsync())
+        {
+            powers = new PowerUsage() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) };
+        }
+        await conn.CloseAsync();
+        return powers;
+    }
+
+    public async Task<bool> UpdatePowerUsage(PowerUsage powerUsage)
+    {
+        // invalidate our cache
+        _smartCache = null;
+
+        await conn.OpenAsync();
+        var comm = conn.CreateCommand();
+        comm.CommandText =
+        @"
+            UPDATE " + powertable + @"
+            SET wattHour=$wattHour
+            WHERE date=$date
+        ";
+        comm.Parameters.AddWithValue("$wattHour", powerUsage.WattHour);
+        comm.Parameters.AddWithValue("$date", powerUsage.Taken);
+        int updated = await comm.ExecuteNonQueryAsync();
+        await conn.CloseAsync();
+        return updated == 1;
     }
 }

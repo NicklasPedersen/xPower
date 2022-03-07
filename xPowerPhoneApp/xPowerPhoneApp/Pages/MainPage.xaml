@@ -95,12 +95,12 @@
                                     </Label>
                                 </Grid>
                             </custom:CustomFrame>
-                            <Label
-                                Grid.Row="1"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center">
-                                coming soon
-                            </Label>
+                                <Label
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    Text="{Binding PowerUsage}">
+                                </Label>
                         </Grid>
 
                     </custom:CustomFrame>
@@ -110,6 +110,7 @@
                     RowSpacing="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="3*" />
+                        <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="5*" />
@@ -134,6 +135,13 @@
                         CornerRadius="20"
                         Text="Tilføj enhed"
                         Command="{Binding GoToAddDevice}"></Button>
+                        <Button
+                        AutomationId="automationSeeStatButton"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        CornerRadius="20"
+                        Text="Se Statistik"
+                        Command="{Binding GoToStatPage}"></Button>
                     </Grid>
                 </Grid>
             </Frame>
