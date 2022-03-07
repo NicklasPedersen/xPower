@@ -21,5 +21,6 @@ namespace xPowerPhoneApp.Repositorys.Interfaces
         /// <returns>A list of devices with there status</returns>
         Task<List<ControlDevice>> GetStatusOnDevices(List<ControlDevice> controllDevices);
         Task<bool> UpdateStatus(ControlDevice device);
+        Task<bool> UpdateName(Device device);
     }
 }

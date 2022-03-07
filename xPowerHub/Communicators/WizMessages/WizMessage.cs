@@ -5,47 +5,14 @@ namespace xPowerHub.Communicators.WizMessages;
 
 public class WizMessage
 {
-    enum EMethod
-    {
-        setState,
-        getPilot,
-        firstBeat,
-        getModelConfig,
-    }
-
-    public class WizParameters
-    {
-        [JsonPropertyName("state")]
-        public bool? State { get; init; }
-        [JsonPropertyName("mac")]
-        public string? MacAddress { get; init; }
-        [JsonPropertyName("homeId")]
-        public int? HomeID { get; init; }
-        [JsonPropertyName("fwVersion")]
-        public string? FirmwareVersion { get; init; }
-    }
-    public class WizError
-    {
-        [JsonPropertyName("code")]
-        public int Code { get; init; }
-        [JsonPropertyName("message")]
-        public string? Message { get; init; }
-    }
-
-    public class WizResult
-    {
-        [JsonPropertyName("state")]
-        public bool? State { get; set; }
-    }
-
-    private EMethod method;
+    private WizMethod method;
     [JsonPropertyName("method")]
 
     public string Method
     {
         get => method.ToString();
         set {
-            if (Enum.TryParse(value, out EMethod m))
+            if (Enum.TryParse(value, out WizMethod m))
             {
                 method = m;
             } 
@@ -68,7 +35,7 @@ public class WizMessage
     {
         return new WizMessage
         {
-            method = EMethod.setState,
+            method = WizMethod.setState,
             Parameters = new WizParameters
             {
                 State = b
@@ -79,7 +46,7 @@ public class WizMessage
     {
         return new WizMessage
         {
-            method = EMethod.getPilot,
+            method = WizMethod.getPilot,
         };
     }
 

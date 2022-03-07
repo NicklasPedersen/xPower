@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
+using xPowerPhoneApp.Pages;
 using xPowerPhoneApp.Repositorys;
 using xPowerPhoneApp.Repositorys.Interfaces;
 
@@ -19,6 +20,8 @@ namespace xPowerPhoneApp.ViewModels
         private ObservableCollection<ControlDevice> _device = new ObservableCollection<ControlDevice>();
 
         public ICommand SwitchStautsCommand { get; set; }
+        public ICommand GoToEditDevice { get; set; }
+
         public ObservableCollection<ControlDevice> Devices
         {
             get => _device;
@@ -28,6 +31,9 @@ namespace xPowerPhoneApp.ViewModels
         public DeviceListViewModel(IChangePage pageChanger) : base(pageChanger)
         {
             SwitchStautsCommand = new Command(async (mac) => await SwitchStautsAsync(mac.ToString()));
+            GoToEditDevice = new Command((mac) => {
+                _pageChanger.PushPage(new SetDeviceNamePage(mac as string));
+            });
             _deviceRepository = new DeviceRepository();
             _ = InitializeAsync();
         }

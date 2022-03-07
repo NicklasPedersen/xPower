@@ -339,7 +339,6 @@ public class DAL : IDataStore
         k = k.Concat(await GetWizsAsync(forceRefresh)).ToList();
         return k;
     }
-
     public async Task<bool> AddPowerStatementAsync(PowerUsage powerStatement)
     {
         // invalidate our cache
