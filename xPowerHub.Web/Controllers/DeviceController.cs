@@ -57,5 +57,14 @@ namespace xPowerHub.Web.Controllers
         {
             return await _deviceManager.GetAllWattageUsageAsync();
         }
+        /// <summary>
+        /// Change the device based on id
+        /// </summary>
+        /// <returns>Whether or not it was successful</returns>
+        [HttpPost("ChangeDevice")] // should this be patch?
+        public async Task<bool> ChangeDevice([FromBody] Device d)
+        {
+            return await _deviceManager.ChangeDevice(d);
+        }
     }
 }

@@ -93,7 +93,7 @@ namespace xPowerHub.Managers
                     knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)smartDevice.GetCurrentState() });
                 }
                 else
-                {                
+                {
                     var smartDevice = new WizDevice(device.Name, device.Id);
                     var status = smartDevice.GetCurrentState();
                     // if status is null we did not get a response from the device
@@ -122,6 +122,21 @@ namespace xPowerHub.Managers
             else
             {
                 await _dataStore.AddWizAsync(new WizDevice(device.Name, device.Id));
+            }
+        }
+
+        public async Task<bool> ChangeDevice(Device device)
+        {
+            if (string.IsNullOrWhiteSpace(device.Ip))
+            {
+                var parent = await _dataStore.GetSmartAsync(device.ParentId);
+                var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
+                return await _dataStore.UpdateSmartAsync(smartDevice);
+            }
+            else
+            {
+                var smartDevice = new WizDevice(device.Name, device.Id);
+                return await _dataStore.UpdateWizAsync(smartDevice);
             }
         }
 
