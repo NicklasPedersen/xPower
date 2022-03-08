@@ -1,25 +1,25 @@
-﻿using xPowerHub.Models;
+﻿using Microsoft.Data.Sqlite;
+using xPowerHub.Models;
 
 namespace xPowerHub.DataStore;
 
-public interface IDataStore
+public interface IDataStore<T>
 {
-    Task<bool> AddWizAsync(WizDevice item);
-    Task<bool> UpdateWizAsync(WizDevice item);
-    Task<bool> DeleteWizAsync(WizDevice dev);
-    Task<WizDevice?> GetWizAsync(int id);
-    Task<WizDevice?> GetWizAsync(string mac);
-    Task<IEnumerable<WizDevice>> GetWizsAsync(bool forceRefresh = false);
-    Task<bool> AddSmartAsync(SmartThingsDevice item);
-    Task<bool> UpdateSmartAsync(SmartThingsDevice item);
-    Task<bool> DeleteSmartAsync(SmartThingsDevice dev);
-    Task<SmartThingsDevice?> GetSmartAsync(int id);
-    Task<SmartThingsDevice?> GetSmartAsync(string id);
-    Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false);
-    Task<IEnumerable<ISmart>> GetAllDevicesAsync(bool forceRefresh = false);
-    Task<bool> AddPowerStatementAsync(PowerUsage powerStatement);
+    void AddTable();
+    void RemoveTable();
+    Task<bool> SaveAsync(T item);
+    Task<bool> UpdateAsync(T item);
+    Task<T> GetAsync(string key);
+    Task<IEnumerable<T>> GetAllAsync(bool forceRefresh = false);
+}
+
+public interface IDataStorePower
+{
+    void AddTable();
+    void RemoveTable();
+    Task<bool> SaveAsync(PowerUsage item);
+    Task<bool> UpdateAsync(PowerUsage item);
+    Task<PowerUsage> GetAsync(DateTime key);
     Task<IEnumerable<PowerUsage>> GetPowerUsageWeekdayAvgAsync();
     Task<IEnumerable<PowerUsage>> GetPowerUsageHourlyAvgAsync(DateTime date);
-    Task<PowerUsage?> GetPowerUsage(DateTime date);
-    Task<bool> UpdatePowerUsage(PowerUsage powerUsage);
 }

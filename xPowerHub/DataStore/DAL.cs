@@ -12,9 +12,9 @@ public class DAL : IDataStore
         conn = new SqliteConnection("Data Source=" + fileName);
         AddTables();
     }
-    private string wiztable = "wizdev";
-    private string smarttable = "smartdev";
-    private string powertable = "powerval";
+    private string wiztable = nameof(WizDevice);
+    private string smarttable = nameof(SmartThingsDevice);
+    private string powertable = nameof(PowerUsage);
     private void DropWizTable()
     {
         conn.Open();
@@ -28,8 +28,8 @@ public class DAL : IDataStore
         conn.Open();
         var comm = conn.CreateCommand();
         comm.CommandText =
-        @"
-            CREATE TABLE IF NOT EXISTS " + wiztable + @" (
+        @$"
+            CREATE TABLE IF NOT EXISTS {nameof(WizDevice)} (
                 id INTEGER PRIMARY KEY,
                 mac TEXT UNIQUE NOT NULL,
                 ip TEXT NOT NULL,
@@ -43,7 +43,7 @@ public class DAL : IDataStore
     {
         conn.Open();
         var comm = conn.CreateCommand();
-        comm.CommandText = $"DROP TABLE IF EXISTS {smarttable}";
+        comm.CommandText = $"DROP TABLE IF EXISTS {nameof(SmartThingsDevice)}";
         comm.ExecuteNonQuery();
         conn.Close();
     }
@@ -107,26 +107,6 @@ public class DAL : IDataStore
         AddWizAsync(new WizDevice("192.112.31.37", "34:13:12:64", "dev3")).Wait();
         AddWizAsync(new WizDevice("192.112.31.38", "34:13:54:64", "dev4")).Wait();
         AddSmartAsync(new SmartThingsDevice("uuid4-asdad-ij23oi4-asdf", "smdev4", "uuid4-asdad-ij23oi4-asdf")).Wait();
-    }
-
-    public async Task<bool> AddWizAsync(WizDevice item)
-    {
-        // invalidate our cache
-        _wizCache = null;
-
-        await conn.OpenAsync();
-        var comm = conn.CreateCommand();
-        comm.CommandText =
-        @"
-            INSERT INTO " + wiztable + @" (mac, ip, name)
-            VALUES ($mac, $ip, $name)
-        ";
-        comm.Parameters.AddWithValue("$mac", item.MAC);
-        comm.Parameters.AddWithValue("$ip", item.IP);
-        comm.Parameters.AddWithValue("$name", item.Name);
-        int inserted = await comm.ExecuteNonQueryAsync();
-        await conn.CloseAsync();
-        return inserted == 1;
     }
 
     public async Task<bool> UpdateWizAsync(WizDevice item)
@@ -211,26 +191,6 @@ public class DAL : IDataStore
         await conn.CloseAsync();
         _wizCache = devices.AsEnumerable();
         return _wizCache;
-    }
-
-    public async Task<bool> AddSmartAsync(SmartThingsDevice item)
-    {
-        // invalidate our cache
-        _smartCache = null;
-
-        await conn.OpenAsync();
-        var comm = conn.CreateCommand();
-        comm.CommandText =
-        @"
-            INSERT INTO " + smarttable + @" (uuid, name, key)
-            VALUES ($uuid, $name, $key)
-        ";
-        comm.Parameters.AddWithValue("$uuid", item.UUID);
-        comm.Parameters.AddWithValue("$name", item.Name);
-        comm.Parameters.AddWithValue("$key", item.Key);
-        int inserted = await comm.ExecuteNonQueryAsync();
-        await conn.CloseAsync();
-        return inserted == 1;
     }
 
     public async Task<bool> UpdateSmartAsync(SmartThingsDevice item)
@@ -339,25 +299,7 @@ public class DAL : IDataStore
         k = k.Concat(await GetWizsAsync(forceRefresh)).ToList();
         return k;
     }
-    public async Task<bool> AddPowerStatementAsync(PowerUsage powerStatement)
-    {
-        // invalidate our cache
-        _smartCache = null;
 
-        await conn.OpenAsync();
-        var comm = conn.CreateCommand();
-        comm.CommandText =
-        @"
-            INSERT INTO " + powertable + @" (date, wattHour)
-            VALUES ($date, $wattHour)
-        ";
-        comm.Parameters.AddWithValue("$date", powerStatement.Taken);
-        comm.Parameters.AddWithValue("$wattHour", powerStatement.WattHour);
-        int inserted = await comm.ExecuteNonQueryAsync();
-        await conn.CloseAsync();
-        return inserted == 1;
-    }
-   
     public async Task<IEnumerable<PowerUsage>> GetPowerUsageWeekdayAvgAsync()
     {
         await conn.OpenAsync();
