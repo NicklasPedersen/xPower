@@ -33,7 +33,7 @@ namespace xPowerPhoneApp.ViewModels
         private IPowerRepository _powerRepository;
         public StatViewModel(IChangePage pageChanger) : base(pageChanger)
         {
-            _powerRepository = new PowerRepository();
+            _powerRepository = new PowerRepositoryMock();
             SelectViewCommand = new Command(async (select) => await Task.Run(() => SelectView(int.Parse(select.ToString()))));
             _views = new ContentView[]
             {

@@ -12,7 +12,7 @@ namespace xPowerPhoneApp.Repositorys
     {
         public async Task<double> GetPowerLevel()
         {
-            return await SharedHttpClient.Instants.Get<double>("Device/GetCurrentWattage");
+            return await SharedHttpClient.Instants.Get<double>("Power/GetCurrentWattage");
         }
 
         public async Task<double> GetTodaysPowerUsage()

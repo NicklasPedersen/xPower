@@ -9,19 +9,20 @@ namespace xPowerHub.DataStore;
 
 internal class MockDAL : IDataStore
 {
-    static SmartThingsDevice[] _stdSmartDevices = {
+    List<SmartThingsDevice> _smartDevices = new List<SmartThingsDevice>()
+    {
         new SmartThingsDevice("asdada", "tasd", "asdadas"),
         new SmartThingsDevice("asdada", "tasd", "asdadas"),
         new SmartThingsDevice("asdada", "tasd", "asdadas"),
-        new SmartThingsDevice("asdada", "tasd", "asdadas"),
+        new SmartThingsDevice("asdada", "tasd", "asdadas")
     };
-    static WizDevice[] _stdWizDevices = {
+
+    List<WizDevice> _wizDevices = new List<WizDevice>()
+    {
         new WizDevice("123.123.123.123", "20:20:20:20", "asdad"),
         new WizDevice("123.123.123.123", "20:20:20:20", "asdad"),
-        new WizDevice("123.123.123.123", "20:20:20:20", "asdad"),
+        new WizDevice("123.123.123.123", "20:20:20:20", "asdad")
     };
-    List<SmartThingsDevice> _smartDevices = _stdSmartDevices.ToList();
-    List<WizDevice> _wizDevices = _stdWizDevices.ToList();
 
     public Task<bool> AddPowerStatementAsync(PowerUsage powerStatement)
     {

@@ -11,7 +11,7 @@ using xPowerPhoneApp.Repositorys.Interfaces;
 
 namespace xPowerPhoneApp.ViewModels
 {
-    internal class EditDeviceViewModel : BaseViewModel
+    internal class EditDeviceViewModel : PageViewModel
     {
         private string _mac;
         public string Mac
