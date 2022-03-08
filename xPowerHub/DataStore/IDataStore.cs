@@ -8,6 +8,7 @@ public interface IDataStore
     Task<bool> UpdateWizAsync(WizDevice item);
     Task<bool> DeleteWizAsync(WizDevice dev);
     Task<WizDevice?> GetWizAsync(int id);
+    Task<WizDevice?> GetWizAsync(string mac);
     Task<IEnumerable<WizDevice>> GetWizsAsync(bool forceRefresh = false);
     Task<bool> AddSmartAsync(SmartThingsDevice item);
     Task<bool> UpdateSmartAsync(SmartThingsDevice item);
