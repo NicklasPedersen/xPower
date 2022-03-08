@@ -53,5 +53,12 @@ namespace xPowerHub.Managers.Interfaces
         /// </summary>
         /// <returns>A number containing the sum of current wattage</returns>
         public Task<double> GetAllWattageUsageAsync();
+
+        /// <summary>
+        /// Changes a device based on its key
+        /// </summary>
+        /// <param name="device">The new device to be stored</param>
+        /// <returns>Whether the item stored successfully</returns>
+        public Task<bool> ChangeDevice(Device device);
     }
 }

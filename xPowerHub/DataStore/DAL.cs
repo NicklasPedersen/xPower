@@ -138,9 +138,9 @@ public class DAL : IDataStore
         var comm = conn.CreateCommand();
         comm.CommandText =
         @"
-            UPDATE " + smarttable + @"
+            UPDATE " + wiztable + @"
             SET name=$name, ip=$ip
-            WHERE uuid=$uuid
+            WHERE mac=$mac
         ";
         comm.Parameters.AddWithValue("$name", item.Name);
         comm.Parameters.AddWithValue("$ip", item.IP);
@@ -188,6 +188,7 @@ public class DAL : IDataStore
     }
 
     IEnumerable<WizDevice>? _wizCache = null;
+    IEnumerable<SmartThingsDevice>? _smartCache = null;
 
     public async Task<IEnumerable<WizDevice>> GetWizsAsync(bool forceRefresh = false)
     {
@@ -309,7 +310,6 @@ public class DAL : IDataStore
         return dev;
     }
 
-    IEnumerable<SmartThingsDevice>? _smartCache = null;
     public async Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false)
     {
         if (!forceRefresh && _smartCache is not null)
@@ -424,11 +424,28 @@ public class DAL : IDataStore
         return powers;
     }
 
+    public async Task<WizDevice?> GetWizAsync(string mac)
+    {
+        await conn.OpenAsync();
+        var comm = conn.CreateCommand();
+        comm.CommandText =
+        @"
+            SELECT * from " + wiztable + @"
+            WHERE mac=$mac
+        ";
+        comm.Parameters.AddWithValue("$mac", mac);
+        using var reader = await comm.ExecuteReaderAsync();
+        WizDevice? dev = null;
+        if (await reader.ReadAsync())
+        {
+            dev = new WizDevice(reader["ip"] as string ?? "", reader["mac"] as string ?? "", reader["name"] as string ?? "");
+        }
+        await conn.CloseAsync();
+        return dev;
+    }
+
     public async Task<bool> UpdatePowerUsage(PowerUsage powerUsage)
     {
-        // invalidate our cache
-        _smartCache = null;
-
         await conn.OpenAsync();
         var comm = conn.CreateCommand();
         comm.CommandText =

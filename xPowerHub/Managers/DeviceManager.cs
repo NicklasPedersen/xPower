@@ -93,9 +93,9 @@ namespace xPowerHub.Managers
                     knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)smartDevice.GetCurrentState() });
                 }
                 else
-                {                
-                    var smartDevice = new WizDevice(device.Name, device.Id);
-                    var status = smartDevice.GetCurrentState();
+                {
+                    var wizDevice = await _dataStore.GetWizAsync(device.Id);
+                    var status = wizDevice?.GetCurrentState();
                     // if status is null we did not get a response from the device
                     // TODO: handle unresponsive devices
                     knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)status });
@@ -121,7 +121,22 @@ namespace xPowerHub.Managers
             }
             else
             {
-                await _dataStore.AddWizAsync(new WizDevice(device.Name, device.Id));
+                await _dataStore.AddWizAsync(new WizDevice(device.Ip, device.Id, device.Ip));
+            }
+        }
+
+        public async Task<bool> ChangeDevice(Device device)
+        {
+            if (string.IsNullOrWhiteSpace(device.Ip))
+            {
+                var parent = await _dataStore.GetSmartAsync(device.ParentId);
+                var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
+                return await _dataStore.UpdateSmartAsync(smartDevice);
+            }
+            else
+            {
+                var smartDevice = new WizDevice(device.Ip, device.Id, device.Name);
+                return await _dataStore.UpdateWizAsync(smartDevice);
             }
         }
 

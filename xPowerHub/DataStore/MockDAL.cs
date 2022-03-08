@@ -105,6 +105,11 @@ internal class MockDAL : IDataStore
         return Task.FromResult<WizDevice?>(_wizDevices[id]);
     }
 
+    public Task<WizDevice?> GetWizAsync(string mac)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<IEnumerable<WizDevice>> GetWizsAsync(bool forceRefresh = false)
     {
         return Task.FromResult(_wizDevices.AsEnumerable());

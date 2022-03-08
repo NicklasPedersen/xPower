@@ -51,10 +51,14 @@ namespace xPowerHub.Web.Controllers
             await _deviceManager.ChangeStatusAsync(device);
         }
 
-        [HttpPost("ChangeName")]
-        public async Task<bool> ChangeName([FromBody] Device device)
+        /// <summary>
+        /// Change the device based on id
+        /// </summary>
+        /// <returns>Whether or not it was successful</returns>
+        [HttpPost("ChangeDevice")] // should this be patch?
+        public async Task<bool> ChangeDevice([FromBody] Device d)
         {
-            throw new NotImplementedException();
+            return await _deviceManager.ChangeDevice(d);
         }
     }
 }
