@@ -1,10 +1,28 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:forms="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
              x:Class="xPowerPhoneApp.Views.PriceView">
-  <ContentView.Content>
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentView.Content>
+    <ContentView.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="0.1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <DatePicker 
+                Date="{Binding Date}"
+                Grid.Row="0"/>
+            <forms:ChartView 
+                Grid.Row="2"
+                Chart="{Binding DailyChart}" 
+                BackgroundColor="Transparent"/>
+            <forms:ChartView 
+                Grid.Row="1"
+                Grid.RowSpan="3"
+                Chart="{Binding Chart}" 
+                BackgroundColor="Transparent"/>
+        </Grid>
+    </ContentView.Content>
 </ContentView>

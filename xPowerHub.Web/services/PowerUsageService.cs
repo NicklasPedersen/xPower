@@ -3,12 +3,15 @@ using xPowerHub.Models;
 
 namespace xPowerHub.Web.services
 {
+    /// <summary>
+    /// A Service that Gets current the power usage in W and calulates it to Wh 
+    /// </summary>
     public class PowerUsageService : IHostedService, IDisposable
     {
         private IPowerManager _powerManager;
         private IDeviceManager _deviceManager;
         private ILogger<PowerUsageService> _logger;
-        private Task _TakePowerUsageTask;
+        private Task _takePowerUsageTask;
         private bool _stop;
         private TimeSpan _interval = TimeSpan.FromMinutes(1);
 
@@ -19,7 +22,11 @@ namespace xPowerHub.Web.services
             _logger = logger;
         }
 
-        public async Task TakePowerUsageAsync()
+
+        /// <summary>
+        /// Gets & saves the power usage
+        /// </summary>
+        private async Task TakePowerUsageAsync()
         {
             while (!_stop)
             {
@@ -31,17 +38,23 @@ namespace xPowerHub.Web.services
             }
         }
 
+        /// <summary>
+        /// Starts the service that will get & save the power usage
+        /// </summary>
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Timed Hosted Service running.");
 
             _stop = false;
 
-            _TakePowerUsageTask = TakePowerUsageAsync();
+            _takePowerUsageTask = TakePowerUsageAsync();
 
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Stops the service that will get & save the power usage
+        /// </summary>
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Timed Hosted Service is stopping.");
@@ -53,7 +66,7 @@ namespace xPowerHub.Web.services
 
         public void Dispose()
         {
-            _TakePowerUsageTask.Dispose();
+            _takePowerUsageTask.Dispose();
         }
     }
 }

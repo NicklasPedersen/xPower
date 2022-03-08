@@ -5,6 +5,9 @@ using xPowerHub.Managers.Interfaces;
 
 namespace xPowerHub.Web.Controllers
 {
+    /// <summary>
+    /// Controlls the database
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class DatabaseController : ControllerBase

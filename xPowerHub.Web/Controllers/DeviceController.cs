@@ -5,6 +5,9 @@ using xPowerHub.Models;
 
 namespace xPowerHub.Web.Controllers
 {
+    /// <summary>
+    /// Controlls all general device methodes
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class DeviceController : ControllerBase
@@ -48,15 +51,6 @@ namespace xPowerHub.Web.Controllers
             await _deviceManager.ChangeStatusAsync(device);
         }
 
-        /// <summary>
-        /// Gets all wattages from all devices that supports it
-        /// </summary>
-        /// <returns>A number containing the sum of current wattage</returns>
-        [HttpGet("GetCurrentWattage")]
-        public async Task<double> GetCurrentWattageAsync()
-        {
-            return await _deviceManager.GetAllWattageUsageAsync();
-        }
         [HttpPost("ChangeName")]
         public async Task<bool> ChangeName([FromBody] Device device)
         {

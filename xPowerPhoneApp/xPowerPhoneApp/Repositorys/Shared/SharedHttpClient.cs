@@ -13,32 +13,42 @@ namespace xPowerPhoneApp.Repositorys.Shared
         private HttpClient _client;
 
         private static SharedHttpClient _instants;
+        private static SharedHttpClient _priceInstant;
 
         public static SharedHttpClient Instants { 
             get 
             { 
                 if (_instants == null) 
-                    _instants = new SharedHttpClient(); 
+                    _instants = new SharedHttpClient("https://192.168.1.122:7075/api/"); 
                 return _instants; 
-            } 
+            }
+        }
+        public static SharedHttpClient PriceInstant
+        {
+            get
+            {
+                if (_priceInstant == null)
+                    _priceInstant = new SharedHttpClient("http://api.energidataservice.dk/");
+                return _priceInstant;
+            }
         }
 
-        public SharedHttpClient()
+        public SharedHttpClient(string baseurl)
         {
-            SetupClient();
+            SetupClient(baseurl);
         }
 
         /// <summary>
         /// Sets up the http client with the base data
         /// </summary>
-        private void SetupClient()
+        private void SetupClient(string baseurl)
         {
             if (_client != null) return;
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
             _client = new HttpClient(clientHandler);
-            _client.BaseAddress = new Uri("https://192.168.1.122:7075/api/");
+            _client.BaseAddress = new Uri(baseurl);
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));

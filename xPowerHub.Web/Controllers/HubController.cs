@@ -5,6 +5,9 @@ using xPowerHub.Models;
 
 namespace xPowerHub.Web.Controllers
 {
+    /// <summary>
+    /// Controlls all Hub specific methodes
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class HubController : ControllerBase
