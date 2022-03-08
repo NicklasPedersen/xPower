@@ -9,7 +9,7 @@ using Xamarin.UITest;
 namespace xPowerPhoneApp.Test
 {
     [TestFixture(Platform.Android)]
-    internal class UseCaseAddUnitToSystem
+    internal class UAT5AddUnit
     {
         IApp app;
         Platform platform;
@@ -17,7 +17,7 @@ namespace xPowerPhoneApp.Test
         public string _preSetUnit;
 
 
-        public UseCaseAddUnitToSystem(Platform platform)
+        public UAT5AddUnit(Platform platform)
         {
             _preSetUnit = "btotest1";
             this.platform = platform;
