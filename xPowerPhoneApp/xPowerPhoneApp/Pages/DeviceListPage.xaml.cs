@@ -20,6 +20,11 @@ namespace xPowerPhoneApp.Pages
             BindingContext = new DeviceListViewModel(this);
         }
 
+        protected override void OnAppearing()
+        {
+            _ = ((DeviceListViewModel)BindingContext).InitializeAsync();
+            base.OnAppearing();
+        }
         /// <summary>
         /// Changes the page to the given page
         /// </summary>

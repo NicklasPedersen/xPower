@@ -35,12 +35,11 @@ namespace xPowerPhoneApp.ViewModels
                 _pageChanger.PushPage(new SetDeviceNamePage(mac as string));
             });
             _deviceRepository = new DeviceRepository();
-            _ = InitializeAsync();
         }
 
         public async Task InitializeAsync()
         {
-
+            Devices.Clear();
             var devices = await _deviceRepository.GetAllDevices();
             foreach (var device in devices)
             {

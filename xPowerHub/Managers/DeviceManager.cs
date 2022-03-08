@@ -110,7 +110,7 @@ namespace xPowerHub.Managers
 
             if (device == null) return null;
 
-            return new Device() { Name = device.IP, Id = device.MAC };
+            return new Device() { Name = device.IP, Id = device.MAC, Ip = device.IP };
         }
 
         public async Task AddNewDeviceAsync(Device device)
