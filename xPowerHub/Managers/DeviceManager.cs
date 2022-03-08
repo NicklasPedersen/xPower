@@ -94,8 +94,8 @@ namespace xPowerHub.Managers
                 }
                 else
                 {
-                    var smartDevice = new WizDevice(device.Name, device.Id);
-                    var status = smartDevice.GetCurrentState();
+                    var wizDevice = await _dataStore.GetWizAsync(device.Id);
+                    var status = wizDevice?.GetCurrentState();
                     // if status is null we did not get a response from the device
                     // TODO: handle unresponsive devices
                     knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)status });
@@ -121,7 +121,7 @@ namespace xPowerHub.Managers
             }
             else
             {
-                await _dataStore.AddWizAsync(new WizDevice(device.Name, device.Id));
+                await _dataStore.AddWizAsync(new WizDevice(device.Ip, device.Id, device.Ip));
             }
         }
 
@@ -135,7 +135,7 @@ namespace xPowerHub.Managers
             }
             else
             {
-                var smartDevice = new WizDevice(device.Name, device.Id);
+                var smartDevice = new WizDevice(device.Ip, device.Id, device.Name);
                 return await _dataStore.UpdateWizAsync(smartDevice);
             }
         }
