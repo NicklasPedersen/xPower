@@ -1,15 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
+using xPowerHub.Communicators;
+using xPowerHub.Communicators.WizMessages;
 
-namespace ConsoleApp4
+namespace xPowerHub;
+
+public class WizDevice : ISmart
 {
-    public class WizDevice
+    [JsonPropertyName("ip")]
+    public string IP { get; init; }
+    [JsonPropertyName("mac")]
+    public string MAC { get; init; }
+    [JsonPropertyName("name")]
+    public string Name { get; init; }
+
+    public WizDevice(string IP, string MAC, string name = "")
     {
-        public string ip { get; set; }
-        public string mac { get; set; }
+        this.IP = IP;
+        this.MAC = MAC;
+        this.Name = name;
+    }
+
+    public bool? GetCurrentState()
+    {
+        return SendMessage(WizMessage.GetPilot())?.Result?.State;
+    }
+
+    public WizMessage? SendMessage(WizMessage msg)
+    {
+        return WizDeviceCommunicator.SendMessageToDevice(this, msg);
+    }
+
+    public bool SetState(bool state)
+    {
+        var response = SendMessage(WizMessage.SetState(state));
+        if (response is null)
+        {
+            return false;
+        }
+        return response.Error == null;
+    }
+
+    public override string ToString()
+    {
+        return $"(type: WizDevice, name: {Name}, mac: {MAC}, ip: {IP})";
+    }
+
+    public bool TurnOff()
+    {
+        return SetState(false);
+    }
+
+    public bool TurnOn()
+    {
+        return SetState(true);
     }
 }

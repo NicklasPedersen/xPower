@@ -9,13 +9,16 @@ using Xamarin.Forms;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Repositorys;
+using xPowerPhoneApp.Repositorys.Interfaces;
 
 namespace xPowerPhoneApp.ViewModels
 {
-    internal class ConnectUnitViewModel : BaseViewModel
+    internal class ConnectUnitViewModel : PageViewModel
     {
-        private ISmartUnit smartUnitRepo;
+        private ISmartUnitRepository _smartUnitRepo;
         private ObservableCollection<AddDevice> _device = new ObservableCollection<AddDevice>();
+        private Task _getDevicesTask;
+        private bool _run = true;
 
         public ICommand AddCommand { get; set; }
         public ObservableCollection<AddDevice> Devices
@@ -26,33 +29,44 @@ namespace xPowerPhoneApp.ViewModels
         public ConnectUnitViewModel(IChangePage pageChanger) : base(pageChanger)
         {
             AddCommand = new Command(async (mac) => await AddAsync(mac.ToString()));
-            smartUnitRepo = new SmartUnitRepositoryMock();
-            Devices.Add(new AddDevice("testUnit", "automationMac"));
+            _smartUnitRepo = new SmartUnitRepository();
             _ = InitializeAsync();
         }
 
         public async Task InitializeAsync()
         {
-
-            var devices = await smartUnitRepo.GetDevices();
+            var devices = await _smartUnitRepo.GetDevices();
             foreach (var device in devices)
             {
                 Devices.Add(device);
             }
             NotifyPropertyChanged(nameof(Devices));
+            _getDevicesTask = GetDevices();
+        }
+
+        private async Task GetDevices()
+        {
+            while (_run)
+            {
+                var devices = await _smartUnitRepo.GetNewDevices(Devices.ToList());
+                foreach (var device in devices)
+                {
+                    Devices.Add(device);
+                }
+                NotifyPropertyChanged(nameof(Devices));
+                await Task.Delay(100);
+            }
         }
 
         public async Task AddAsync(string mac)
         {
-            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Mac == mac));
+            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Id == mac));
             var device = Devices[index];
             device.Adding = true;
             Devices[index] = device;
             NotifyPropertyChanged(nameof(Devices));
 
-            device = Devices[index];
-            bool added = await smartUnitRepo.AddDevice(device);
-
+            bool added = await _smartUnitRepo.AddDevice(device);
             device.Adding = false;
             if (added)
             {

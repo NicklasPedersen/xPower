@@ -36,7 +36,8 @@
                     AutomationId="automationAddHubButton"
                     Grid.Row="2"
                     CornerRadius="20"
-                    Text="Tilføj en hub">
+                    Text="Tilføj en hub"
+                    Command="{Binding GoToConnectHub}">
                 </Button>
                 <Button
                     AutomationId="automationAddUnitsButton"

@@ -4,10 +4,8 @@ using System.Text;
 
 namespace xPowerPhoneApp.Models
 {
-    public class AddDevice
+    internal class AddDevice : Device
     {
-        public string Name { get; set; }
-        public string Mac { get; set; }
         public bool Adding { get; set; }
         public bool NotAdding { get => !Adding && !Added; }
         public bool Added { get; set; }
@@ -17,10 +15,12 @@ namespace xPowerPhoneApp.Models
 
         }
 
-        public AddDevice(string name, string mac, bool added = false)
+        public AddDevice(Device device, bool added = false)
         {
-            Name = name;
-            Mac = mac;
+            Name = device.Name;
+            Id = device.Id;
+            Ip = device.Ip;
+            ParentId = device.ParentId;
             Added = added;
         }
     }

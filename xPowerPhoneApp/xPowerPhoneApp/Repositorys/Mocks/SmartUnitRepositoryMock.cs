@@ -4,10 +4,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using xPowerPhoneApp.Models;
+using xPowerPhoneApp.Repositorys.Interfaces;
 
-namespace xPowerPhoneApp.Repositorys
+namespace xPowerPhoneApp.Repositorys.Mocks
 {
-    internal class SmartUnitRepositoryMock : ISmartUnit
+    internal class SmartUnitRepositoryMock : ISmartUnitRepository
     {
         private readonly string[] _names = new string[]
         {
@@ -37,7 +38,11 @@ namespace xPowerPhoneApp.Repositorys
 
             for (int i = 0; i < amount; i++)
             {
-                devices.Add(new AddDevice(_names[random.Next(0,_names.Length)], BitConverter.ToString(BitConverter.GetBytes(random.Next(0,10000)))));
+                devices.Add(new AddDevice()
+                {
+                    Name = _names[random.Next(0,_names.Length)], 
+                    Id = BitConverter.ToString(BitConverter.GetBytes(random.Next(0,10000)))
+                });
             }
             return devices;
         }
@@ -53,7 +58,7 @@ namespace xPowerPhoneApp.Repositorys
 
             for (int i = 0; i < amount; i++)
             {
-                devices.Add(new AddDevice() { Name = _names[random.Next(0, _names.Length)], Mac = BitConverter.ToString(BitConverter.GetBytes(random.Next(0, 10000))) });
+                devices.Add(new AddDevice() { Name = _names[random.Next(0, _names.Length)], Id = BitConverter.ToString(BitConverter.GetBytes(random.Next(0, 10000))) });
             }
             return devices;
         }

@@ -8,12 +8,14 @@ using xPowerPhoneApp.Pages;
 
 namespace xPowerPhoneApp.ViewModels
 {
-    internal class AddDeviceViewModel : BaseViewModel
+    internal class AddDeviceViewModel : PageViewModel
     {
         public ICommand GoToConnectUnit { get; set; }
+        public ICommand GoToConnectHub { get; set; }
         public AddDeviceViewModel(IChangePage pageChanger) : base(pageChanger)
         {
             GoToConnectUnit = new Command(() => _pageChanger.PushPage(new ConnectUnitPage()));
+            GoToConnectHub = new Command(() => _pageChanger.PushPage(new ConnectHubPage()));
         }
     }
 }
