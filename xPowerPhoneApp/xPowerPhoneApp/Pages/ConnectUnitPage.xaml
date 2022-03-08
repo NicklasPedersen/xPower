@@ -27,10 +27,8 @@
                 </Grid.RowDefinitions>
 
                 <ActivityIndicator  Grid.Row="0" Color="#6fa8dc" IsRunning="True" />
-                <Label  Grid.Row="0" FontSize="Medium" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
-                    Søger
-                </Label>
-                
+                <Label  Grid.Row="0" FontSize="Medium" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="Søger"/>
+
                 <ScrollView x:Name="StackRef" Grid.Row="1" >
                     <StackLayout BindableLayout.ItemsSource="{Binding Devices}">
                         <BindableLayout.ItemTemplate>
@@ -68,6 +66,7 @@
                                             IsRunning="{Binding Adding}"
                                             IsVisible="{Binding Adding}"/>
                                         <Button 
+                                            AutomationId="automationAddUnitButton"
                                             Grid.RowSpan="2" 
                                             Grid.Column="1" 
                                             BackgroundColor="Transparent" 
@@ -75,6 +74,7 @@
                                             IsVisible="{Binding NotAdding}"
                                             Command="{Binding BindingContext.AddCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Id}"></Button>
                                         <Image
+                                            AutomationId="automationCheckImage"
                                             Grid.RowSpan="2"
                                             Grid.Column="1"
                                             Source="green_checkmark.png"
