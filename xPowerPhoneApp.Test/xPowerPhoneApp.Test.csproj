@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="AppInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UseCaseAddUnitToSystem.cs" />
+    <Compile Include="UAT5AddUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
