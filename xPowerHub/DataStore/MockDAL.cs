@@ -23,7 +23,7 @@ internal class MockDAL : IDataStore
     List<SmartThingsDevice> _smartDevices = _stdSmartDevices.ToList();
     List<WizDevice> _wizDevices = _stdWizDevices.ToList();
 
-    public Task<bool> AddPowerStatementAsync(PowerStatement powerStatement)
+    public Task<bool> AddPowerStatementAsync(PowerUsage powerStatement)
     {
         throw new NotImplementedException();
     }
@@ -60,12 +60,17 @@ internal class MockDAL : IDataStore
         return Task.FromResult(list.AsEnumerable());
     }
 
-    public Task<IEnumerable<PowerStatement>> GetPowerStatementHourlyAvgAsync(DateTime date)
+    public Task<PowerUsage?> GetPowerUsage(DateTime date)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<PowerStatement>> GetPowerStatementWeekdayAvgAsync()
+    public Task<IEnumerable<PowerUsage>> GetPowerUsageHourlyAvgAsync(DateTime date)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<PowerUsage>> GetPowerUsageWeekdayAvgAsync()
     {
         throw new NotImplementedException();
     }
@@ -107,6 +112,11 @@ internal class MockDAL : IDataStore
     public Task<IEnumerable<WizDevice>> GetWizsAsync(bool forceRefresh = false)
     {
         return Task.FromResult(_wizDevices.AsEnumerable());
+    }
+
+    public Task<bool> UpdatePowerUsage(PowerUsage powerUsage)
+    {
+        throw new NotImplementedException();
     }
 
     public Task<bool> UpdateSmartAsync(SmartThingsDevice item)

@@ -17,7 +17,9 @@ public interface IDataStore
     Task<SmartThingsDevice?> GetSmartAsync(string id);
     Task<IEnumerable<SmartThingsDevice>> GetSmartsAsync(bool forceRefresh = false);
     Task<IEnumerable<ISmart>> GetAllDevicesAsync(bool forceRefresh = false);
-    Task<bool> AddPowerStatementAsync(PowerStatement powerStatement);
-    Task<IEnumerable<PowerStatement>> GetPowerStatementWeekdayAvgAsync();
-    Task<IEnumerable<PowerStatement>> GetPowerStatementHourlyAvgAsync(DateTime date);
+    Task<bool> AddPowerStatementAsync(PowerUsage powerStatement);
+    Task<IEnumerable<PowerUsage>> GetPowerUsageWeekdayAvgAsync();
+    Task<IEnumerable<PowerUsage>> GetPowerUsageHourlyAvgAsync(DateTime date);
+    Task<PowerUsage?> GetPowerUsage(DateTime date);
+    Task<bool> UpdatePowerUsage(PowerUsage powerUsage);
 }
