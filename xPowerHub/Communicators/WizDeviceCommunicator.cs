@@ -38,7 +38,7 @@ public class WizDeviceCommunicator
 
         var mac = msg?.Parameters?.MacAddress ?? string.Empty;
         var ip = endPoint.Address.ToString();
-        var dev = new WizDevice(ip, mac);
+        var dev = new WizDevice(ip, mac, "wiz device");
         return dev;
     }
 

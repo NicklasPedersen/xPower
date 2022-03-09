@@ -23,31 +23,19 @@ namespace xPowerHub.Managers
 
         public async Task ChangeStatusAsync(KnownStatusDevice device)
         {
+            ISmart? smart = default;
+            // is it a WiZ or a SmartThings device?
             if (!string.IsNullOrWhiteSpace(device.Ip))
             {
-                var smartDevice = new WizDevice(device.Name, device.Id);
-                if (device.Status)
-                {
-                    smartDevice.TurnOn();
-                }
-                else
-                {
-                    smartDevice.TurnOff();
-                }
+                smart = new WizDevice(device.Ip, device.Id, device.Name);
             }
             else if (!string.IsNullOrWhiteSpace(device.ParentId))
             {
                 var parent = await _smartDS.GetAsync(device.ParentId);
-                var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
-                if (device.Status)
-                {
-                    smartDevice.TurnOn();
-                }
-                else
-                {
-                    smartDevice.TurnOff();
-                }
+                smart = new SmartThingsDevice(device.Id, device.Name, parent.Key);
             }
+            // set the state to the wanted state
+            smart?.SetState(device.Status);
         }
 
         public async Task<List<Device>> GetAllAsync()
@@ -86,20 +74,19 @@ namespace xPowerHub.Managers
             var knownDevices = new List<KnownStatusDevice>();
             foreach(Device device in devices)
             {
+                ISmart smart;
                 if (string.IsNullOrWhiteSpace(device.Ip))
                 {
                     var parent = await _smartDS.GetAsync(device.ParentId);
-                    var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
-                    knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)smartDevice.GetCurrentState() });
+                    smart = new SmartThingsDevice(device.Id, device.Name, parent.Key);
                 }
                 else
                 {
-                    var wizDevice = await _wizDS.GetAsync(device.Id);
-                    var status = wizDevice?.GetCurrentState();
-                    // if status is null we did not get a response from the device
-                    // TODO: handle unresponsive devices
-                    knownDevices.Add(new KnownStatusDevice(device) { Status = (bool)status });
+                    smart = await _wizDS.GetAsync(device.Id);
                 }
+                // if status is null we did not get a response from the device
+                // TODO: handle unresponsive devices
+                knownDevices.Add(new KnownStatusDevice(device) { Status = smart.GetCurrentState() ?? false });
             }
             return knownDevices;
         }
@@ -110,7 +97,7 @@ namespace xPowerHub.Managers
 
             if (device == null) return null;
 
-            return new Device() { Name = device.IP, Id = device.MAC, Ip = device.IP };
+            return new Device() { Name = device.Name, Id = device.MAC, Ip = device.IP };
         }
 
         public async Task AddNewDeviceAsync(Device device)
@@ -121,7 +108,7 @@ namespace xPowerHub.Managers
             }
             else
             {
-                await _wizDS.SaveAsync(new WizDevice(device.Ip, device.Id, device.Ip));
+                await _wizDS.SaveAsync(new WizDevice(device.Ip, device.Id, device.Name));
             }
         }
 
@@ -143,13 +130,13 @@ namespace xPowerHub.Managers
         public async Task<Device[]> GetAllHubsAsync(string key)
         {
             List<Device> devices = new List<Device>();
-            var smartDevices = await SmartThingsCommunicator.GetHubs(key);
-            foreach (var device in smartDevices)
+            var hubs = await SmartThingsCommunicator.GetHubs(key);
+            foreach (var hub in hubs)
             {
                 devices.Add(new Device()
                 {
-                    Name = device.Name,
-                    Id = device.UUID
+                    Name = hub.Name,
+                    Id = hub.UUID
                 });
             }
             return devices.ToArray();
@@ -157,9 +144,9 @@ namespace xPowerHub.Managers
 
         public async Task<double> GetAllWattageUsageAsync()
         {
-            var l = await _smartDS.GetAllAsync();
-            var k = (SmartThingsDevice s) => SmartThingsCommunicator.GetDevices(s).Result.Sum(x => x.GetWatt());
-            return l.ToList().Sum(k);
+            var hubs = await _smartDS.GetAllAsync();
+            var k = (SmartThingsDevice hub) => SmartThingsCommunicator.GetDevices(hub).Result.Sum(x => x.GetWatt());
+            return hubs.ToList().Sum(k);
         }
     }
 }
