@@ -2,6 +2,7 @@ using xPowerHub;
 using xPowerHub.DataStore;
 using xPowerHub.Managers;
 using xPowerHub.Managers.Interfaces;
+using xPowerHub.Managers.Test;
 using xPowerHub.Web.services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,13 +14,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-//IDataStore dds = new WizDS();
-//IDataStore sds = new SmartThingsDS();
-//IDataStorePower pds = new PowerDS();
-//IDeviceManager dm = new DeviceManager(dds, sds)
-//IPowerManager pm = new PowerManager(pds)
 // Dependency injection
+#if TEST
+builder.Services.AddScoped<IDeviceManager, DeviceManagerTest>();
+builder.Services.AddScoped<IPowerManager, PowerManagerTest>();
+#else
 builder.Services.AddScoped<IDataStore<WizDevice>, WizDS>();
 builder.Services.AddScoped<IDataStore<SmartThingsDevice>, SmartThingsDS>();
 builder.Services.AddScoped<IDataStorePower, PowerDS>();
@@ -29,6 +28,7 @@ builder.Services.AddScoped<IPowerManager, PowerManager>();
 
 // Hosted services
 builder.Services.AddHostedService<PowerUsageService>();
+#endif
 
 // Move to config?
 builder.WebHost.UseUrls("http://*:5000", "https://*:5001");
