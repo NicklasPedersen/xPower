@@ -18,7 +18,6 @@ namespace xPowerPhoneApp.Test
         {
             this.NavigateToSide();
             app.WaitForElement(l => l.Marked("automationSeeUnits"), timeout: TimeSpan.FromSeconds(30));
-            app.WaitForElement(l => l.Marked("automationSeeSingleUnit"), timeout: TimeSpan.FromSeconds(30));
             Assert.Pass("Successfull");
         }
         private void NavigateToSide()
