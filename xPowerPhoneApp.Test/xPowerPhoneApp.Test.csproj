@@ -53,8 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInitializer.cs" />
+    <Compile Include="BaseAndroidTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UAT5AddUnit.cs" />
+    <Compile Include="UAT3.cs" />
+    <Compile Include="UAT5.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

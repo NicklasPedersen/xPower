@@ -12,6 +12,7 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <forms:ChartView 
+                AutomationId="automationWeekChartView"
                 Grid.Row="1"
                 Chart="{Binding Chart}" 
                 x:Name="test"

@@ -115,6 +115,7 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
                         <Button
+                            AutomationId="automationWeeklyAvgButton"
                             Grid.Column="0"
                             BackgroundColor="{DynamicResource LightPrimaryColor}"
                             TextColor="{DynamicResource AppPrimaryColor}"
@@ -123,6 +124,7 @@
                             CommandParameter="0"
                             Text="ugenligt gennemsnit"/>
                         <Button
+                            AutomationId="automationDailyUsageButton"
                             Grid.Column="1"
                             BackgroundColor="{DynamicResource LightPrimaryColor}"
                             TextColor="{DynamicResource AppPrimaryColor}"
@@ -131,6 +133,7 @@
                             CommandParameter="1"
                             Text="Dagligt forbrug"/>
                         <Button
+                            AutomationId="automationPriceButton"
                             Grid.Column="2"
                             BackgroundColor="{DynamicResource LightPrimaryColor}"
                             TextColor="{DynamicResource AppPrimaryColor}"

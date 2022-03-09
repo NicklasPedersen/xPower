@@ -8,25 +8,10 @@ using Xamarin.UITest;
 
 namespace xPowerPhoneApp.Test
 {
-    [TestFixture(Platform.Android)]
-    internal class UAT5AddUnit
+    internal class UAT5 : BaseAndroidTest
     {
-        IApp app;
-        Platform platform;
-
-        public string _preSetUnit;
-
-
-        public UAT5AddUnit(Platform platform)
+        public UAT5(Platform platform) : base(platform)
         {
-            _preSetUnit = "btotest1";
-            this.platform = platform;
-        }
-
-        [SetUp]
-        public void BeforeEachTest()
-        {
-            app = AppInitializer.StartApp(platform);
         }
 
         [Test]
@@ -47,9 +32,9 @@ namespace xPowerPhoneApp.Test
 
         private void AddUnit()
         {
-            app.WaitForElement(l => l.Text("automationMac"), timeout: TimeSpan.FromSeconds(30));
-            app.Tap(c => c.Text("automationMac").Sibling().Marked("automationAddUnitButton"));
-            app.WaitForElement(l => l.Text("automationMac").Sibling().Marked("automationCheckImage"), timeout: TimeSpan.FromSeconds(30));
+            app.WaitForElement(l => l.Marked("automationAddUnitButton"), timeout: TimeSpan.FromSeconds(30));
+            app.Tap(c => c.Marked("automationAddUnitButton"));
+            app.WaitForElement(l => l.Marked("automationCheckImage"), timeout: TimeSpan.FromSeconds(30));
         }
     }
 }
