@@ -52,9 +52,9 @@ namespace xPowerHub.Managers
                 });
             }
             var smartHubs = await _smartDS.GetAllAsync();
-            foreach (var smartDevice in smartHubs)
+            foreach (var hub in smartHubs)
             {
-                var smartDevices = await SmartThingsCommunicator.GetDevices(smartDevice);
+                var smartDevices = await SmartThingsCommunicator.GetDevices(hub);
 
                 foreach (var device in smartDevices)
                 {
@@ -62,7 +62,7 @@ namespace xPowerHub.Managers
                     {
                         Name = device.Name,
                         Id = device.UUID,
-                        ParentId = smartDevice.UUID
+                        ParentId = hub.UUID
                     });
                 }
             }
@@ -102,14 +102,11 @@ namespace xPowerHub.Managers
 
         public async Task AddNewDeviceAsync(Device device)
         {
-            if (device is KeyedDevice keyedDevice)
-            {
-                await _smartDS.SaveAsync(new SmartThingsDevice(keyedDevice.Id, keyedDevice.Name, keyedDevice.Key));
-            }
-            else
-            {
-                await _wizDS.SaveAsync(new WizDevice(device.Ip, device.Id, device.Name));
-            }
+            await _wizDS.SaveAsync(new WizDevice(device.Ip, device.Id, device.Name));
+        }
+        public async Task AddNewDeviceAsync(KeyedDevice device)
+        {
+            await _smartDS.SaveAsync(new SmartThingsDevice(device.Id, device.Name, device.Key));
         }
 
         public async Task<bool> ChangeDevice(Device device)
