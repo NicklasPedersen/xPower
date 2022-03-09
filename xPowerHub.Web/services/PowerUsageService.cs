@@ -8,17 +8,15 @@ namespace xPowerHub.Web.services
     /// </summary>
     public class PowerUsageService : IHostedService, IDisposable
     {
-        private IPowerManager _powerManager;
-        private IDeviceManager _deviceManager;
+        private IServiceProvider _services;
         private ILogger<PowerUsageService> _logger;
-        private Task _takePowerUsageTask;
+        private Task? _takePowerUsageTask;
         private bool _stop;
         private TimeSpan _interval = TimeSpan.FromMinutes(1);
 
-        public PowerUsageService(IPowerManager powerManager, IDeviceManager deviceManager, ILogger<PowerUsageService> logger)
+        public PowerUsageService(IServiceProvider services, ILogger<PowerUsageService> logger)
         {
-            _powerManager = powerManager;
-            _deviceManager = deviceManager;
+            _services = services;
             _logger = logger;
         }
 
@@ -28,12 +26,30 @@ namespace xPowerHub.Web.services
         /// </summary>
         private async Task TakePowerUsageAsync()
         {
+            double lastWatt = -1;
             while (!_stop)
             {
-                var watts = await _deviceManager.GetAllWattageUsageAsync();
-                var powerUsage = watts/(60/_interval.Minutes);
+                using (var scope = _services.CreateScope())
+                {
+                    var deviceManager =
+                        scope.ServiceProvider
+                            .GetRequiredService<IDeviceManager>();
+                    var powerManager =
+                        scope.ServiceProvider
+                            .GetRequiredService<IPowerManager>();
 
-                await _powerManager.AddUsageAsync(new PowerUsage() { WattHour = powerUsage, Taken = DateTime.Now });
+                    var watts = await deviceManager.GetAllWattageUsageAsync();
+
+                    if (lastWatt < 0)
+                        lastWatt = watts;
+
+                    var powerUsage = (watts + lastWatt) / 2 / (60 / _interval.Minutes);
+
+                    lastWatt = watts;
+
+                    await powerManager.AddUsageAsync(new PowerUsage() { WattHour = powerUsage, Taken = DateTime.Now });
+
+                }
                 await Task.Delay(_interval);
             }
         }
@@ -66,7 +82,8 @@ namespace xPowerHub.Web.services
 
         public void Dispose()
         {
-            _takePowerUsageTask.Dispose();
+            if(_takePowerUsageTask != null)
+                _takePowerUsageTask.Dispose();
         }
     }
 }

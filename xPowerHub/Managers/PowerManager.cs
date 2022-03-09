@@ -12,27 +12,27 @@ namespace xPowerHub.Managers
 {
     public class PowerManager : IPowerManager
     {
-        readonly IDataStore _dataStore;
+        readonly IDataStorePower _powerDS;
 
-        public PowerManager(IDataStore dataStore)
+        public PowerManager(IDataStorePower powerDS)
         {
-            _dataStore = dataStore;
+            _powerDS = powerDS;
         }
 
         public async Task<PowerUsage[]> GetWeekdayAvgAsync()
         {
-            return (await _dataStore.GetPowerUsageWeekdayAvgAsync()).ToArray();
+            return (await _powerDS.GetPowerUsageWeekdayAvgAsync()).ToArray();
         }
         public async Task<PowerUsage[]> GetDayHourlyAvgAsync(DateTime date)
         {
-            return (await _dataStore.GetPowerUsageHourlyAvgAsync(date)).ToArray();
+            return (await _powerDS.GetPowerUsageHourlyAvgAsync(date)).ToArray();
         }
 
         public async Task<bool> AddUsageAsync(PowerUsage powerUsage)
         {
-            var hourPowerUsage = await _dataStore.GetPowerUsage(powerUsage.Taken);
+            var hourPowerUsage = await _powerDS.GetAsync(powerUsage.Taken);
             if (hourPowerUsage == null)
-                return await _dataStore.AddPowerStatementAsync(
+                return await _powerDS.SaveAsync(
                     new PowerUsage() { 
                         Taken = DateTime.ParseExact(powerUsage.Taken.ToString("yyyy-MM-dd HH"), "yyyy-MM-dd HH", CultureInfo.InvariantCulture),
                         WattHour = powerUsage.WattHour
@@ -41,14 +41,14 @@ namespace xPowerHub.Managers
             else
             {
                 hourPowerUsage.WattHour += powerUsage.WattHour;
-                return await _dataStore.UpdatePowerUsage(hourPowerUsage);
+                return await _powerDS.UpdateAsync(hourPowerUsage);
             }
 
         }
 
         public async Task<double> GetpowerUsageTodayAvgAsync()
         {
-             return (await _dataStore.GetPowerUsageHourlyAvgAsync(DateTime.Now)).Sum(p => p.WattHour);
+             return (await _powerDS.GetPowerUsageHourlyAvgAsync(DateTime.Now)).Sum(p => p.WattHour);
         }
     }
 }
