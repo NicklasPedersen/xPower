@@ -56,11 +56,14 @@
     <Compile Include="BaseAndroidTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UAT1.cs" />
-    <Compile Include="UAT11.cs" />
+    <Compile Include="UAT2.cs" />
     <Compile Include="UAT3.cs" />
+    <Compile Include="UAT4.cs" />
     <Compile Include="UAT5.cs" />
+    <Compile Include="UAT6.cs" />
     <Compile Include="UAT7.cs" />
     <Compile Include="UAT8.cs" />
+    <Compile Include="UAT11.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

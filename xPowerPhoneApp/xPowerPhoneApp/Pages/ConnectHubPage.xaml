@@ -39,7 +39,8 @@
                     </Label>
                     <Picker
                         Grid.Row="1"
-                        SelectedIndex="0">
+                        SelectedIndex="0"
+                        AutomationId="automationDeviceTypePicker">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>SmartThings</x:String>
@@ -71,6 +72,7 @@
                         Margin="0"
                         CornerRadius="20,0,20,0">
                         <Entry
+                            AutomationId="automationUserKey"
                             Placeholder="user key"
                             Text="{Binding Key}"/>
                     </Custom:CustomFrame>
@@ -78,6 +80,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         CornerRadius="0"
+                        AutomationId="automationSearch"
                         Text="Søg"
                         Command="{Binding SearchCommand}"/>
                 </Grid>
@@ -118,7 +121,8 @@
                                             Color="#6fa8dc" 
                                             IsRunning="{Binding Adding}"
                                             IsVisible="{Binding Adding}"/>
-                                        <Button 
+                                        <Button
+                                            AutomationId="automationAddHub"
                                             Grid.RowSpan="2" 
                                             Grid.Column="1" 
                                             BackgroundColor="Transparent" 
@@ -128,6 +132,7 @@
                                         <Image
                                             Grid.RowSpan="2"
                                             Grid.Column="1"
+                                            AutomationId="automationCheckImage"
                                             Source="green_checkmark.png"
                                             IsVisible="{Binding Added}"/>
                                     </Grid>
