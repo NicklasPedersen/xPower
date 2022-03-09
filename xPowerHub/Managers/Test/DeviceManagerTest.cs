@@ -55,6 +55,12 @@ namespace xPowerHub.Managers.Test
             await Task.Delay(random.Next(100, 301));
         }
 
+        public async Task AddNewDeviceAsync(KeyedDevice device)
+        {
+            var random = new Random();
+            await Task.Delay(random.Next(100, 301));
+        }
+
         public async Task<bool> ChangeDevice(Device device)
         {
             var random = new Random();

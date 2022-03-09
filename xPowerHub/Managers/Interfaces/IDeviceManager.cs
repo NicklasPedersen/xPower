@@ -41,6 +41,12 @@ namespace xPowerHub.Managers.Interfaces
         Task AddNewDeviceAsync(Device device);
 
         /// <summary>
+        /// Adds the keyed device to the system
+        /// </summary>
+        /// <param name="device">The new keyed device</param>
+        Task AddNewDeviceAsync(KeyedDevice device);
+
+        /// <summary>
         /// Gets all hubs using the given key
         /// </summary>
         /// <param name="key">The key</param>
