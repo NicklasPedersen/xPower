@@ -45,6 +45,7 @@ namespace xPowerPhoneApp.ViewModels
             EditNameCommand = new Command(() =>
             {
                 _deviceRepository.UpdateName(_device);
+                pageChanger.PopPage();
             });
             NewName = "";
             Task.Run(async () =>

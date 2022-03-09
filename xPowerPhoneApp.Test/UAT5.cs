@@ -15,7 +15,7 @@ namespace xPowerPhoneApp.Test
         }
 
         [Test]
-        public void Create_WithValidCredentials_ShouldCreateUser()
+        public void Create_AddUnit_ShouldAddUnit()
         {
             this.NavigateToSide();
             this.AddUnit();

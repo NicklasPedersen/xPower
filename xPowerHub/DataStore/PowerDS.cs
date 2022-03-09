@@ -11,9 +11,9 @@ namespace xPowerHub.DataStore
     public class PowerDS : IDataStorePower
     {
         private readonly SqliteConnection _conn;
-        public PowerDS()
+        public PowerDS(string path)
         {
-            _conn = new SqliteConnection(@"Data Source=.\xpower.db");
+            _conn = new SqliteConnection(@"Data Source=" + path);
             AddTable();
         }
 
@@ -164,6 +164,16 @@ namespace xPowerHub.DataStore
             await _conn.CloseAsync();
 
             return updated == 1;
+        }
+
+        public Task<PowerUsage> GetAsync(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<PowerUsage>> GetAllAsync(bool forceRefresh = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

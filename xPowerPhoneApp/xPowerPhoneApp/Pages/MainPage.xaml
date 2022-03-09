@@ -87,6 +87,7 @@
                                         Nuværene Forbrug
                                     </Label>
                                     <Label 
+                                        AutomationId="automationUsage"
                                         Grid.Row="1"
                                         HorizontalOptions="Center"
                                         VerticalTextAlignment="Start"

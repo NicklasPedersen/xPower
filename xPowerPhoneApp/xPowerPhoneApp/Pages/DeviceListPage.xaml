@@ -39,6 +39,7 @@
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
                                     <Label
+                                        AutomationId="automationDeviceNameLabel"
                                         Grid.Column="0"
                                         FontSize="Medium"
                                         VerticalOptions="Center"
@@ -55,6 +56,7 @@
                                         HorizontalTextAlignment="End"
                                         IsVisible="{Binding IsStatusKnown, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}"/>
                                     <Button
+                                        AutomationId="automationEditButton"
                                         Grid.Column="2"
                                         Text="edit"
                                         Command="{Binding BindingContext.GoToEditDevice, Source={x:Reference StackRef}}"

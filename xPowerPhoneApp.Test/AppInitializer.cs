@@ -14,7 +14,9 @@ namespace xPowerPhoneApp.Test
             if (platform == Platform.Android)
             {
                 //return ConfigureApp.Android.StartApp();
-                return ConfigureApp.Android.InstalledApp("com.companyname.xPowerPhoneApp").EnableLocalScreenshots().StartApp();
+                return ConfigureApp.Android
+                   .InstalledApp("com.companyname.xpowerphoneapp")
+                   .StartApp();
             }
 
             return ConfigureApp.iOS.StartApp();

@@ -13,8 +13,11 @@
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
             <Entry
+                AutomationId="automationNameEntry"
                 Text="{Binding NewName}" />
-            <Button Command="{Binding EditNameCommand}" />
+            <Button
+                AutomationId="automationEditNameButton"
+                Command="{Binding EditNameCommand}" />
 
 
         </StackLayout>

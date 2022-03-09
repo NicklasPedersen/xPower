@@ -7,9 +7,9 @@ public class WizDS : IDataStore<WizDevice>
     private readonly SqliteConnection _conn;
     private IEnumerable<SmartThingsDevice>? _smartCache = null;
 
-    public WizDS()
+    public WizDS(string path)
     {
-        _conn = new SqliteConnection(@"Data Source=.\xpower.db");
+        _conn = new SqliteConnection(@"Data Source=" + path);
         AddTable();
     }
     public void AddTable()

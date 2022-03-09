@@ -19,6 +19,7 @@
                 Chart="{Binding DailyChart}" 
                 BackgroundColor="Transparent"/>
             <forms:ChartView 
+                AutomationId="automationPriceChartView"
                 Grid.Row="1"
                 Grid.RowSpan="3"
                 Chart="{Binding Chart}" 

@@ -12,12 +12,8 @@ public interface IDataStore<T>
     Task<IEnumerable<T>> GetAllAsync(bool forceRefresh = false);
 }
 
-public interface IDataStorePower
+public interface IDataStorePower : IDataStore<PowerUsage>
 {
-    void AddTable();
-    void RemoveTable();
-    Task<bool> SaveAsync(PowerUsage item);
-    Task<bool> UpdateAsync(PowerUsage item);
     Task<PowerUsage> GetAsync(DateTime key);
     Task<IEnumerable<PowerUsage>> GetPowerUsageWeekdayAvgAsync();
     Task<IEnumerable<PowerUsage>> GetPowerUsageHourlyAvgAsync(DateTime date);

@@ -19,9 +19,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDeviceManager, DeviceManagerTest>();
 builder.Services.AddScoped<IPowerManager, PowerManagerTest>();
 #else
-builder.Services.AddScoped<IDataStore<WizDevice>, WizDS>();
-builder.Services.AddScoped<IDataStore<SmartThingsDevice>, SmartThingsDS>();
-builder.Services.AddScoped<IDataStorePower, PowerDS>();
+builder.Services.AddScoped<IDataStore<WizDevice>>(s => new WizDS(@".\xpower.db"));
+builder.Services.AddScoped<IDataStore<SmartThingsDevice>>(s => new SmartThingsDS(@".\xpower.db"));
+builder.Services.AddScoped<IDataStorePower>(s => new PowerDS(@".\xpower.db"));
 
 builder.Services.AddScoped<IDeviceManager, DeviceManager>();
 builder.Services.AddScoped<IPowerManager, PowerManager>();

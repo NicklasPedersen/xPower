@@ -12,9 +12,9 @@ namespace xPowerHub.DataStore
         private readonly SqliteConnection _conn;
         private IEnumerable<SmartThingsDevice>? _smartCache = null;
         
-        public SmartThingsDS()
+        public SmartThingsDS(string path)
         {
-            _conn = new SqliteConnection(@"Data Source=.\xpower.db");
+            _conn = new SqliteConnection(@"Data Source=" + path);
             AddTable();
         }
 
