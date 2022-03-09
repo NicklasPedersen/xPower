@@ -8,8 +8,5 @@ public class Program
 
     public static void Main()
     {
-        var d = new DAL(@"..\..\..\data\database.db");
-        var c = new CRUD(d);
-        c.HandleKeyPresses();
     }
 }

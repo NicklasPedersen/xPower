@@ -8,18 +8,19 @@ using xPowerHub.Models;
 
 namespace xPowerHub.DataStore
 {
-    internal class PowerDS : IDataStorePower
+    public class PowerDS : IDataStorePower
     {
-        private readonly SqliteConnection conn;
-        public PowerDS(string fileName)
+        private readonly SqliteConnection _conn;
+        public PowerDS()
         {
-            conn = new SqliteConnection("Data Source=" + fileName);
+            _conn = new SqliteConnection(@"Data Source=.\xpower.db");
+            AddTable();
         }
 
         public void AddTable()
         {
-            conn.Open();
-            var comm = conn.CreateCommand();
+            _conn.Open();
+            var comm = _conn.CreateCommand();
             comm.CommandText =
             @$"
                 CREATE TABLE IF NOT EXISTS {nameof(PowerUsage)} (
@@ -29,22 +30,22 @@ namespace xPowerHub.DataStore
                 )
             ";
             comm.ExecuteNonQuery();
-            conn.Close();
+            _conn.Close();
         }
 
         public void RemoveTable()
         {
-            conn.Open();
-            var comm = conn.CreateCommand();
+            _conn.Open();
+            var comm = _conn.CreateCommand();
             comm.CommandText = $"DROP TABLE IF EXISTS {nameof(PowerUsage)}";
             comm.ExecuteNonQuery();
-            conn.Close();
+            _conn.Close();
         }
 
         public async Task<PowerUsage> GetAsync(DateTime key)
         {
-            await conn.OpenAsync();
-            var comm = conn.CreateCommand();
+            await _conn.OpenAsync();
+            var comm = _conn.CreateCommand();
 
             comm.CommandText =
             @$"
@@ -62,15 +63,15 @@ namespace xPowerHub.DataStore
                 powers = new PowerUsage() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) };
             }
 
-            await conn.CloseAsync();
+            await _conn.CloseAsync();
 
             return powers;
         }
 
         public async Task<IEnumerable<PowerUsage>> GetPowerUsageHourlyAvgAsync(DateTime date)
         {
-            await conn.OpenAsync();
-            var comm = conn.CreateCommand();
+            await _conn.OpenAsync();
+            var comm = _conn.CreateCommand();
 
             comm.CommandText =
             @$"
@@ -89,15 +90,15 @@ namespace xPowerHub.DataStore
                 powers.Add(new PowerUsage() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) });
             }
 
-            await conn.CloseAsync();
+            await _conn.CloseAsync();
 
             return powers;
         }
 
         public async Task<IEnumerable<PowerUsage>> GetPowerUsageWeekdayAvgAsync()
         {
-            await conn.OpenAsync();
-            var comm = conn.CreateCommand();
+            await _conn.OpenAsync();
+            var comm = _conn.CreateCommand();
 
             comm.CommandText =
             @$"
@@ -119,15 +120,15 @@ namespace xPowerHub.DataStore
                 powers.Add(new PowerUsage() { Taken = reader.GetDateTime(0), WattHour = reader.GetDouble(1) });
             }
 
-            await conn.CloseAsync();
+            await _conn.CloseAsync();
 
             return powers;
         }
 
         public async Task<bool> SaveAsync(PowerUsage item)
         {
-            await conn.OpenAsync();
-            var comm = conn.CreateCommand();
+            await _conn.OpenAsync();
+            var comm = _conn.CreateCommand();
 
             comm.CommandText =
             @$"
@@ -139,15 +140,15 @@ namespace xPowerHub.DataStore
             comm.Parameters.AddWithValue("$wattHour", item.WattHour);
 
             int inserted = await comm.ExecuteNonQueryAsync();
-            await conn.CloseAsync();
+            await _conn.CloseAsync();
 
             return inserted == 1;
         }
 
         public async Task<bool> UpdateAsync(PowerUsage item)
         {
-            await conn.OpenAsync();
-            var comm = conn.CreateCommand();
+            await _conn.OpenAsync();
+            var comm = _conn.CreateCommand();
 
             comm.CommandText =
             @$"
@@ -160,7 +161,7 @@ namespace xPowerHub.DataStore
             comm.Parameters.AddWithValue("$date", item.Taken);
 
             int updated = await comm.ExecuteNonQueryAsync();
-            await conn.CloseAsync();
+            await _conn.CloseAsync();
 
             return updated == 1;
         }

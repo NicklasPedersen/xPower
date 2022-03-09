@@ -1,3 +1,4 @@
+using xPowerHub;
 using xPowerHub.DataStore;
 using xPowerHub.Managers;
 using xPowerHub.Managers.Interfaces;
@@ -12,10 +13,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+//IDataStore dds = new WizDS();
+//IDataStore sds = new SmartThingsDS();
+//IDataStorePower pds = new PowerDS();
+//IDeviceManager dm = new DeviceManager(dds, sds)
+//IPowerManager pm = new PowerManager(pds)
 // Dependency injection
-builder.Services.AddSingleton<IDataStore>(new DAL("./xPower.db"));
-builder.Services.AddSingleton<IDeviceManager>(x => new DeviceManager(x.GetRequiredService<IDataStore>()));
-builder.Services.AddSingleton<IPowerManager>(x => new PowerManager(x.GetRequiredService<IDataStore>()));
+builder.Services.AddScoped<IDataStore<WizDevice>, WizDS>();
+builder.Services.AddScoped<IDataStore<SmartThingsDevice>, SmartThingsDS>();
+builder.Services.AddScoped<IDataStorePower, PowerDS>();
+
+builder.Services.AddScoped<IDeviceManager, DeviceManager>();
+builder.Services.AddScoped<IPowerManager, PowerManager>();
 
 // Hosted services
 builder.Services.AddHostedService<PowerUsageService>();

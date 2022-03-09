@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using xPowerHub.Models;
+﻿using xPowerHub.Models;
 
 namespace xPowerHub.DataStore;
 

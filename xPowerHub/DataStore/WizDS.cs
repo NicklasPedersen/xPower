@@ -1,11 +1,21 @@
-﻿namespace xPowerHub.DataStore;
+﻿using Microsoft.Data.Sqlite;
+
+namespace xPowerHub.DataStore;
 
 public class WizDS : IDataStore<WizDevice>
 {
-    public async void AddTable()
+    private readonly SqliteConnection _conn;
+    private IEnumerable<SmartThingsDevice>? _smartCache = null;
+
+    public WizDS()
     {
-        conn.Open();
-        var comm = conn.CreateCommand();
+        _conn = new SqliteConnection(@"Data Source=.\xpower.db");
+        AddTable();
+    }
+    public void AddTable()
+    {
+        _conn.Open();
+        var comm = _conn.CreateCommand();
         comm.CommandText =
         @$"
             CREATE TABLE IF NOT EXISTS {nameof(WizDevice)} (
@@ -16,22 +26,22 @@ public class WizDS : IDataStore<WizDevice>
             )
         ";
         comm.ExecuteNonQuery();
-        conn.Close();
+        _conn.Close();
     }
 
-    public async void RemoveTable()
+    public void RemoveTable()
     {
-        conn.Open();
-        var comm = conn.CreateCommand();
+        _conn.Open();
+        var comm = _conn.CreateCommand();
         comm.CommandText = $"DROP TABLE IF EXISTS {nameof(WizDevice)}";
         comm.ExecuteNonQuery();
-        conn.Close();
+        _conn.Close();
     }
 
     public async Task<IEnumerable<WizDevice>> GetAllAsync(bool forceRefresh = false)
     {
-        await conn.OpenAsync();
-        var comm = conn.CreateCommand();
+        await _conn.OpenAsync();
+        var comm = _conn.CreateCommand();
         comm.CommandText =
         @$"
             SELECT ip, mac, name FROM {nameof(WizDevice)}
@@ -47,15 +57,15 @@ public class WizDS : IDataStore<WizDevice>
 
     public async Task<WizDevice> GetAsync(string key)
     {
-        await conn.OpenAsync();
-        var comm = conn.CreateCommand();
+        await _conn.OpenAsync();
+        var comm = _conn.CreateCommand();
 
         comm.CommandText =
         @"
-            SELECT ip, mac, name from " + wiztable + @"
-            WHERE id=$id
+            SELECT ip, mac, name from " + nameof(WizDevice) + @"
+            WHERE mac=$mac
         ";
-        comm.Parameters.AddWithValue("$id", id);
+        comm.Parameters.AddWithValue("$mac", key);
         using var reader = await comm.ExecuteReaderAsync();
 
         WizDevice? dev = null;
@@ -64,14 +74,15 @@ public class WizDS : IDataStore<WizDevice>
             dev = new WizDevice(reader.GetString(0), reader.GetString(1), reader.GetString(2));
         }
 
-        await conn.CloseAsync();
+        await _conn.CloseAsync();
+
         return dev;
     }
 
-    public Task<bool> SaveAsync(WizDevice item)
+    public async Task<bool> SaveAsync(WizDevice item)
     {
-        await conn.OpenAsync();
-        var comm = conn.CreateCommand();
+        await _conn.OpenAsync();
+        var comm = _conn.CreateCommand();
 
         comm.CommandText =
         @$"
@@ -84,15 +95,15 @@ public class WizDS : IDataStore<WizDevice>
         comm.Parameters.AddWithValue("$name", item.Name);
 
         int inserted = await comm.ExecuteNonQueryAsync();
-        await conn.CloseAsync();
+        await _conn.CloseAsync();
 
         return inserted == 1;
     }
 
-    public Task<bool> UpdateAsync(WizDevice item)
+    public async Task<bool> UpdateAsync(WizDevice item)
     {
-        await conn.OpenAsync();
-        var comm = conn.CreateCommand();
+        await _conn.OpenAsync();
+        var comm = _conn.CreateCommand();
 
         comm.CommandText =
         @$"
@@ -106,7 +117,7 @@ public class WizDS : IDataStore<WizDevice>
         comm.Parameters.AddWithValue("$mac", item.MAC);
 
         int updated = await comm.ExecuteNonQueryAsync();
-        await conn.CloseAsync();
+        await _conn.CloseAsync();
 
         return updated == 1;
     }

@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace xPowerHub.DataStore
 {
-    internal class SmartThingsDS : IDataStore<SmartThingsDevice>
+    public class SmartThingsDS : IDataStore<SmartThingsDevice>
     {
         private readonly SqliteConnection _conn;
         private IEnumerable<SmartThingsDevice>? _smartCache = null;
-        public SmartThingsDS(string fileName)
+        
+        public SmartThingsDS()
         {
-            _conn = new SqliteConnection("Data Source=" + fileName);
+            _conn = new SqliteConnection(@"Data Source=.\xpower.db");
+            AddTable();
         }
 
         public void RemoveTable()
