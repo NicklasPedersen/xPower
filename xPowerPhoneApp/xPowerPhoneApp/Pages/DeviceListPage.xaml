@@ -22,7 +22,9 @@
                 </LinearGradientBrush>
             </Frame.Background>
             <ScrollView x:Name="StackRef" Grid.Row="1" >
-                <StackLayout BindableLayout.ItemsSource="{Binding Devices}">
+                <StackLayout
+                        AutomationId="automationSeeUnits"
+                        BindableLayout.ItemsSource="{Binding Devices}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <Custom:CustomFrame
@@ -30,7 +32,8 @@
                                 BackgroundColor="{DynamicResource LightPrimaryColor}"
                                 Padding="20,10,20,10"
                                 Margin="2">
-                                <Grid 
+                                <Grid
+                                    AutomationId="automationSeeSingleUnit"
                                     RowSpacing="0" 
                                     ColumnSpacing="0">
                                     <Grid.ColumnDefinitions>
