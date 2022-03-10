@@ -109,18 +109,19 @@ namespace xPowerHub.Managers
             await _smartDS.SaveAsync(new SmartThingsDevice(device.Id, device.Name, device.Key));
         }
 
-        public async Task<bool> ChangeDevice(Device device)
+        public async Task<bool> UpdateDevice(Device device)
         {
-            if (string.IsNullOrWhiteSpace(device.Ip))
+            var dev = await _wizDS.GetAsync(device.Id);
+            if (dev is not null)
+            {
+                var newDev = new WizDevice(device.Ip ?? dev.IP, device.Id, device.Name ?? dev.Name);
+                return await _wizDS.UpdateAsync(newDev);
+            }
+            else
             {
                 var parent = await _smartDS.GetAsync(device.ParentId);
                 var smartDevice = new SmartThingsDevice(device.Id, device.Name, parent.Key);
                 return await _smartDS.UpdateAsync(smartDevice);
-            }
-            else
-            {
-                var smartDevice = new WizDevice(device.Ip, device.Id, device.Name);
-                return await _wizDS.UpdateAsync(smartDevice);
             }
         }
 

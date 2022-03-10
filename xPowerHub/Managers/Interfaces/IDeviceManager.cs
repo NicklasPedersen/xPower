@@ -65,6 +65,6 @@ namespace xPowerHub.Managers.Interfaces
         /// </summary>
         /// <param name="device">The new device to be stored</param>
         /// <returns>Whether the item stored successfully</returns>
-        public Task<bool> ChangeDevice(Device device);
+        public Task<bool> UpdateDevice(Device device);
     }
 }

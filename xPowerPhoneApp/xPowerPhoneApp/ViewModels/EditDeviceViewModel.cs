@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using xPowerPhoneApp.Factorys;
 using xPowerPhoneApp.Interfaces;
+using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Repositorys;
 using xPowerPhoneApp.Repositorys.Interfaces;
 
@@ -36,24 +37,16 @@ namespace xPowerPhoneApp.ViewModels
         private Models.Device _device;
         public ICommand EditNameCommand { get; }
 
-        public EditDeviceViewModel(IChangePage pageChanger, string mac) : base(pageChanger)
+        public EditDeviceViewModel(IChangePage pageChanger, ControlDevice device) : base(pageChanger)
         {
             _deviceRepository = RepositoryFactory.CreateDeviceRepository();
 
-            _device = new Models.Device
-            {
-                Id = mac
-            };
+            Name = device.Name;
+            _device = device;
             EditNameCommand = new Command(() =>
             {
                 _deviceRepository.UpdateName(_device);
                 pageChanger.PopPage();
-            });
-            NewName = "";
-            Task.Run(async () =>
-            {
-                var dev = (await _deviceRepository.GetAllDevices()).Where(x => x.Id == mac).First();
-                Name = dev.Name;
             });
         }
     }
