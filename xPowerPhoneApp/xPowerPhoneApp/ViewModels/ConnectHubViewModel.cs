@@ -18,6 +18,7 @@ namespace xPowerPhoneApp.ViewModels
     {
         private readonly IHubRepository _hubRepo;
         private ObservableCollection<AddDevice> _device = new ObservableCollection<AddDevice>();
+        private string _currentKey;
 
         public ICommand AddCommand { get; set; }
         public ICommand SearchCommand { get; set; }
@@ -49,7 +50,7 @@ namespace xPowerPhoneApp.ViewModels
                 Ip = device.Ip,
                 Id = device.Id,
                 ParentId = device.ParentId,
-                Key = Key,
+                Key = _currentKey,
                 Name = device.Name
             };
 
@@ -62,9 +63,12 @@ namespace xPowerPhoneApp.ViewModels
             Devices[index] = device;
             NotifyPropertyChanged(nameof(Devices));
         }
+        
         private async Task SearchAsync()
         {
             var devices = await _hubRepo.GetHubs(Key);
+            _currentKey = Key;
+            Devices.Clear();
             foreach (var device in devices)
             {
                 Devices.Add(new AddDevice(device));
