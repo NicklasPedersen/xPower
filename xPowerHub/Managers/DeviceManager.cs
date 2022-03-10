@@ -84,9 +84,9 @@ namespace xPowerHub.Managers
                 {
                     smart = await _wizDS.GetAsync(device.Id);
                 }
-                // if status is null we did not get a response from the device
-                // TODO: handle unresponsive devices
-                knownDevices.Add(new KnownStatusDevice(device) { Status = smart.GetCurrentState() ?? false });
+                var state = smart.GetCurrentState();
+                if(state != null)
+                    knownDevices.Add(new KnownStatusDevice(device) { Status = smart.GetCurrentState() ?? false });
             }
             return knownDevices;
         }

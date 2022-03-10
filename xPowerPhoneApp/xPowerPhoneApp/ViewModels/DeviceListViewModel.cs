@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -10,7 +7,6 @@ using xPowerPhoneApp.Factorys;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Pages;
-using xPowerPhoneApp.Repositorys;
 using xPowerPhoneApp.Repositorys.Interfaces;
 
 namespace xPowerPhoneApp.ViewModels
@@ -33,9 +29,9 @@ namespace xPowerPhoneApp.ViewModels
         {
             _deviceRepository = RepositoryFactory.CreateDeviceRepository();
 
-            SwitchStautsCommand = new Command(async (mac) => await SwitchStautsAsync(mac.ToString()));
-            GoToEditDevice = new Command((mac) => {
-                _pageChanger.PushPage(new SetDeviceNamePage(mac as string));
+            SwitchStautsCommand = new Command(async (dev) => await SwitchStautsAsync(dev as ControlDevice));
+            GoToEditDevice = new Command((dev) => {
+                _pageChanger.PushPage(new SetDeviceNamePage(dev as ControlDevice));
             });
         }
 
@@ -52,27 +48,26 @@ namespace xPowerPhoneApp.ViewModels
             devices = await _deviceRepository.GetStatusOnDevices(Devices.ToList());
             for (int j = 0; j < devices.Count; j++)
             {
-                Devices[j] = devices[j];
+                Devices[Devices.IndexOf(Devices.First(d => d.Id == devices[j].Id))] = devices[j];
             }
         }
 
-        public async Task SwitchStautsAsync(string mac)
+        public async Task SwitchStautsAsync(ControlDevice dev)
         {
-            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Id == mac));
-            var device = Devices[index];
+            int index = Devices.IndexOf(dev);
 
-            if (!device.IsStatusKnown) return;
+            if (!dev.IsStatusKnown) return;
 
-            device.Status = !device.Status;
-            Devices[index] = device;
+            dev.Status = !dev.Status;
+            Devices[index] = dev;
             NotifyPropertyChanged(nameof(Devices));
 
-            bool Changed = await _deviceRepository.UpdateStatus(device);
+            bool Changed = await _deviceRepository.UpdateStatus(dev);
             if (!Changed)
             {
-                device.Status = !device.Status;
+                dev.Status = !dev.Status;
             }
-            Devices[index] = device;
+            Devices[index] = dev;
             NotifyPropertyChanged(nameof(Devices));
         }
     }

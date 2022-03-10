@@ -44,16 +44,24 @@ public class WizDeviceCommunicator
 
     public static WizMessage? SendMessageToDevice(WizDevice device, WizMessage msg)
     {
-        using var client = new UdpClient();
-        var endPoint = new IPEndPoint(IPAddress.Parse(device.IP), wizPort);
+        try
+        {
+            using var client = new UdpClient();
+            var endPoint = new IPEndPoint(IPAddress.Parse(device.IP), wizPort);
+            client.Client.ReceiveTimeout = (int)TimeSpan.FromSeconds(1).TotalMilliseconds;
 
-        // Send the command by JSON request
-        byte[] buffer = Encoding.ASCII.GetBytes(msg.ToJSON());
-        client.Send(buffer, buffer.Length, endPoint);
+            // Send the command by JSON request
+            byte[] buffer = Encoding.ASCII.GetBytes(msg.ToJSON());
+            client.Send(buffer, buffer.Length, endPoint);
 
-        // wait for JSON response
-        byte[] responseBuffer = client.Receive(ref endPoint);
-        string response = Encoding.ASCII.GetString(responseBuffer);
-        return WizMessage.FromJSON(response);
+            // wait for JSON response
+            byte[] responseBuffer = client.Receive(ref endPoint);
+            string response = Encoding.ASCII.GetString(responseBuffer);
+            return WizMessage.FromJSON(response);
+        }
+        catch(SocketException _)
+        {
+            return null;
+        }
     }
 }
