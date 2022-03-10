@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -10,7 +7,6 @@ using xPowerPhoneApp.Factorys;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Pages;
-using xPowerPhoneApp.Repositorys;
 using xPowerPhoneApp.Repositorys.Interfaces;
 
 namespace xPowerPhoneApp.ViewModels
@@ -52,7 +48,7 @@ namespace xPowerPhoneApp.ViewModels
             devices = await _deviceRepository.GetStatusOnDevices(Devices.ToList());
             for (int j = 0; j < devices.Count; j++)
             {
-                Devices[j] = devices[j];
+                Devices[Devices.IndexOf(Devices.First(d => d.Id == devices[j].Id))] = devices[j];
             }
         }
 
