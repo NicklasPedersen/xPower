@@ -109,7 +109,7 @@ namespace xPowerHub.Managers
             await _smartDS.SaveAsync(new SmartThingsDevice(device.Id, device.Name, device.Key));
         }
 
-        public async Task<bool> ChangeDevice(Device device)
+        public async Task<bool> UpdateDeviceAsync(Device device)
         {
             if (string.IsNullOrWhiteSpace(device.Ip))
             {
