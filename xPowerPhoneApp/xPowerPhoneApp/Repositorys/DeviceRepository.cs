@@ -51,7 +51,7 @@ namespace xPowerPhoneApp.Repositorys
 
         public async Task<bool> UpdateName(Device device)
         {
-            return await _httpClient.Post("Device/ChangeName", device);
+            return await _httpClient.Post("Device/UpdateDevice", device);
         }
     }
 }
