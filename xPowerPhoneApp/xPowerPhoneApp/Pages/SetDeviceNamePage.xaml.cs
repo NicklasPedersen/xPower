@@ -14,10 +14,10 @@ namespace xPowerPhoneApp.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SetDeviceNamePage : ContentPage, IChangePage
     {
-        public SetDeviceNamePage(string mac)
+        public SetDeviceNamePage(Models.ControlDevice device)
         {
             InitializeComponent();
-            BindingContext = new EditDeviceViewModel(this, mac);
+            BindingContext = new EditDeviceViewModel(this, device);
         }
 
         /// <summary>

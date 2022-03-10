@@ -33,9 +33,9 @@ namespace xPowerPhoneApp.ViewModels
         {
             _deviceRepository = RepositoryFactory.CreateDeviceRepository();
 
-            SwitchStautsCommand = new Command(async (mac) => await SwitchStautsAsync(mac.ToString()));
-            GoToEditDevice = new Command((mac) => {
-                _pageChanger.PushPage(new SetDeviceNamePage(mac as string));
+            SwitchStautsCommand = new Command(async (dev) => await SwitchStautsAsync(dev as ControlDevice));
+            GoToEditDevice = new Command((dev) => {
+                _pageChanger.PushPage(new SetDeviceNamePage(dev as ControlDevice));
             });
         }
 
@@ -56,23 +56,22 @@ namespace xPowerPhoneApp.ViewModels
             }
         }
 
-        public async Task SwitchStautsAsync(string mac)
+        public async Task SwitchStautsAsync(ControlDevice dev)
         {
-            int index = Devices.IndexOf(Devices.FirstOrDefault(d => d.Id == mac));
-            var device = Devices[index];
+            int index = Devices.IndexOf(dev);
 
-            if (!device.IsStatusKnown) return;
+            if (!dev.IsStatusKnown) return;
 
-            device.Status = !device.Status;
-            Devices[index] = device;
+            dev.Status = !dev.Status;
+            Devices[index] = dev;
             NotifyPropertyChanged(nameof(Devices));
 
-            bool Changed = await _deviceRepository.UpdateStatus(device);
+            bool Changed = await _deviceRepository.UpdateStatus(dev);
             if (!Changed)
             {
-                device.Status = !device.Status;
+                dev.Status = !dev.Status;
             }
-            Devices[index] = device;
+            Devices[index] = dev;
             NotifyPropertyChanged(nameof(Devices));
         }
     }

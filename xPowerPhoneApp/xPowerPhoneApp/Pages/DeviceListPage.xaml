@@ -63,12 +63,12 @@
                                         Grid.Column="2"
                                         Text="edit"
                                         Command="{Binding BindingContext.GoToEditDevice, Source={x:Reference StackRef}}"
-                                        CommandParameter="{Binding Id}"
+                                        CommandParameter="{Binding .}"
                                        />
                                 </Grid>
 
                                 <Custom:CustomFrame.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding BindingContext.SwitchStautsCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding Id}"/>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.SwitchStautsCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding .}"/>
                                 </Custom:CustomFrame.GestureRecognizers>
                             </Custom:CustomFrame>
                         </DataTemplate>

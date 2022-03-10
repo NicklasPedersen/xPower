@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace xPowerPhoneApp.Models
 {
-    internal class Device
+    public class Device
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
