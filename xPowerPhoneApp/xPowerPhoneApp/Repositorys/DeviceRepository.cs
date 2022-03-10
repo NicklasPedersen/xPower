@@ -14,15 +14,18 @@ namespace xPowerPhoneApp.Repositorys
 {
     internal class DeviceRepository : IDeviceRepository
     {
-        public DeviceRepository()
+        private readonly SharedHttpClient _httpClient;
+
+        public DeviceRepository(SharedHttpClient httpClient)
         {
+            _httpClient = httpClient;
         }
 
         public async Task<List<ControlDevice>> GetAllDevices()
         {
             List<ControlDevice> devices = null;
 
-            devices = (await SharedHttpClient.Instants.Get<ControlDevice[]>("Device/GetAll")).ToList();
+            devices = (await _httpClient.Get<ControlDevice[]>("Device/GetAll")).ToList();
 
             return devices;
         }
@@ -31,7 +34,7 @@ namespace xPowerPhoneApp.Repositorys
         {
             List<ControlDevice> devices = null;
 
-            devices = (await SharedHttpClient.Instants.Post<ControlDevice[]>("Device/GetStatus", controllDevices.ToArray())).ToList();
+            devices = (await _httpClient.Post<ControlDevice[]>("Device/GetStatus", controllDevices.ToArray())).ToList();
 
             for (int i = 0; i < devices.Count; i++)
             {
@@ -43,12 +46,12 @@ namespace xPowerPhoneApp.Repositorys
 
         public async Task<bool> UpdateStatus(ControlDevice device)
         {
-            return await SharedHttpClient.Instants.Post("Device/ChangeStatus", device);
+            return await _httpClient.Post("Device/ChangeStatus", device);
         }
 
         public async Task<bool> UpdateName(Device device)
         {
-            return await SharedHttpClient.Instants.Post("Device/ChangeName", device);
+            return await _httpClient.Post("Device/ChangeName", device);
         }
     }
 }

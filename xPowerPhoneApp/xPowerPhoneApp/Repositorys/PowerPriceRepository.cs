@@ -12,6 +12,13 @@ namespace xPowerPhoneApp.Repositorys
 {
     internal class PowerPriceRepository : IPowerPriceRepository
     {
+        private readonly SharedHttpClient _httpClient;
+
+        public PowerPriceRepository(SharedHttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public async Task<PowerPrice[]> GetPowerPrice(DateTime date)
         {
             var sqlCall = $"SELECT e.\"HourDK\", e.\"SpotPriceDKK\" " +
@@ -20,7 +27,7 @@ namespace xPowerPhoneApp.Repositorys
                 $"e.\"HourDK\"  > date '{date.ToString("yyyy-MM-dd")}' AND " +
                 $"e.\"HourDK\"  < date  '{date.AddDays(1).ToString("yyyy-MM-dd")}'";
 
-            var outerShell = await SharedHttpClient.PriceInstant.Get<OuterShell>("datastore_search_sql?sql=" + sqlCall);
+            var outerShell = await _httpClient.Get<OuterShell>("datastore_search_sql?sql=" + sqlCall);
             var powerPrices = new List<PowerPrice>();
 
             if (!outerShell.Success) return null;

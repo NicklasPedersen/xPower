@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using xPowerPhoneApp.Factorys;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Repositorys;
 using xPowerPhoneApp.Repositorys.Interfaces;
@@ -33,7 +34,7 @@ namespace xPowerPhoneApp.ViewModels
         private IPowerRepository _powerRepository;
         public StatViewModel(IChangePage pageChanger) : base(pageChanger)
         {
-            _powerRepository = new PowerRepository();
+            _powerRepository = RepositoryFactory.CreatePowerRepository();
             SelectViewCommand = new Command(async (select) => await Task.Run(() => SelectView(int.Parse(select.ToString()))));
             _views = new ContentView[]
             {
