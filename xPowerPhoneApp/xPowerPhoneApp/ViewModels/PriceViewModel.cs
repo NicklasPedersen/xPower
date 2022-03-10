@@ -28,10 +28,11 @@ namespace xPowerPhoneApp.ViewModels
 
         private IPowerRepository _powerRepository;
         private IPowerPriceRepository _powerPriceRepository;
+
         public PriceViewModel(IPowerRepository powerRepository) : base()
         {
             _powerRepository = powerRepository;
-            _powerPriceRepository = new PowerPriceRepository();
+            _powerPriceRepository = RepositoryFactory.CreatePowerPriceRepository();
             Date = DateTime.Now;
         }
 

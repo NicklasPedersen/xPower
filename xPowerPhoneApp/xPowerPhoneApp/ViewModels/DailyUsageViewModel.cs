@@ -22,6 +22,7 @@ namespace xPowerPhoneApp.ViewModels
 
         private DateTime _day;
         private IPowerRepository _powerRepository;
+
         public DailyUsageViewModel(IPowerRepository powerRepository) : base()
         {
             _powerRepository = powerRepository;

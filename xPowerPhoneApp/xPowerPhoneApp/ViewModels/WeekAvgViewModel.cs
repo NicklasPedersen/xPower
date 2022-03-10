@@ -17,6 +17,7 @@ namespace xPowerPhoneApp.ViewModels
         public Chart Chart { get; set; }
 
         private IPowerRepository _powerRepository;
+
         public WeekAvgViewModel(IPowerRepository powerRepository) : base()
         {
             _powerRepository = powerRepository;

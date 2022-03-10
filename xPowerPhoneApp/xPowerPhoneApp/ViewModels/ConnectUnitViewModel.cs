@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using xPowerPhoneApp.Factorys;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Repositorys;
@@ -28,8 +29,9 @@ namespace xPowerPhoneApp.ViewModels
         }
         public ConnectUnitViewModel(IChangePage pageChanger) : base(pageChanger)
         {
+            _smartUnitRepo = RepositoryFactory.CreateSmartUnitRepository();
+
             AddCommand = new Command(async (mac) => await AddAsync(mac.ToString()));
-            _smartUnitRepo = new SmartUnitRepository();
             _ = InitializeAsync();
         }
 

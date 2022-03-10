@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using xPowerPhoneApp.Factorys;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Pages;
@@ -30,11 +31,12 @@ namespace xPowerPhoneApp.ViewModels
 
         public DeviceListViewModel(IChangePage pageChanger) : base(pageChanger)
         {
+            _deviceRepository = RepositoryFactory.CreateDeviceRepository();
+
             SwitchStautsCommand = new Command(async (mac) => await SwitchStautsAsync(mac.ToString()));
             GoToEditDevice = new Command((mac) => {
                 _pageChanger.PushPage(new SetDeviceNamePage(mac as string));
             });
-            _deviceRepository = new DeviceRepository();
         }
 
         public async Task InitializeAsync()
