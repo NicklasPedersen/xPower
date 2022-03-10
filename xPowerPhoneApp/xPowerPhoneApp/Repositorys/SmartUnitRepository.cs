@@ -10,14 +10,21 @@ namespace xPowerPhoneApp.Repositorys
 {
     internal class SmartUnitRepository : ISmartUnitRepository
     {
+        private readonly SharedHttpClient _httpClient;
+
+        public SmartUnitRepository(SharedHttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public async Task<bool> AddDevice(AddDevice device)
         {
-            return await SharedHttpClient.Instants.Post("Unit/Add", device);
+            return await _httpClient.Post("Unit/Add", device);
         }
 
         public async Task<List<AddDevice>> GetDevices()
         {
-            var device = await SharedHttpClient.Instants.Get<AddDevice>("Unit/GetNew");
+            var device = await _httpClient.Get<AddDevice>("Unit/GetNew");
             return new List<AddDevice>() { device };
         }
 

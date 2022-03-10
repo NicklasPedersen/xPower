@@ -9,6 +9,7 @@ using xPowerPhoneApp.Pages;
 using xPowerPhoneApp.Repositorys;
 using xPowerPhoneApp.Repositorys.Mocks;
 using xPowerPhoneApp.Repositorys.Interfaces;
+using xPowerPhoneApp.Factorys;
 
 namespace xPowerPhoneApp.ViewModels
 {
@@ -26,9 +27,10 @@ namespace xPowerPhoneApp.ViewModels
         private Task _getPowerTask;
 
         private IPowerRepository _powerRepository;
+
         public MainViewModel(IChangePage pageChanger) : base(pageChanger)
         {
-            _powerRepository = new PowerRepository();
+            _powerRepository = RepositoryFactory.CreatePowerRepository();
 
             GoToAddDevice = new Command(() => _pageChanger.PushPage(new AddDevicePage()));
             GoToListDevice = new Command(() => _pageChanger.PushPage(new DeviceListPage()));

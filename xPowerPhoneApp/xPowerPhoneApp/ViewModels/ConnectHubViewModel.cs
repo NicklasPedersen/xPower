@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using xPowerPhoneApp.Factorys;
 using xPowerPhoneApp.Interfaces;
 using xPowerPhoneApp.Models;
 using xPowerPhoneApp.Repositorys;
@@ -29,9 +30,10 @@ namespace xPowerPhoneApp.ViewModels
 
         public ConnectHubViewModel(IChangePage pageChanger) : base(pageChanger)
         {
+            _hubRepo = RepositoryFactory.CreateHubRepository();
+
             AddCommand = new Command(async (id) => await AddAsync(id.ToString()));
             SearchCommand = new Command(async () => await SearchAsync());
-            _hubRepo = new HubRepository();
         }
 
         private async Task AddAsync(string id)

@@ -1,5 +1,6 @@
 ﻿using System;
 using Xamarin.Forms;
+using xPowerPhoneApp.Factorys;
 using xPowerPhoneApp.Pages;
 
 namespace xPowerPhoneApp
@@ -8,6 +9,7 @@ namespace xPowerPhoneApp
     {
         public App()
         {
+            RepositoryFactory.UseMock = false;
             InitializeComponent();
 
             MainPage = new NavigationPage(new MainPage());

@@ -11,10 +11,17 @@ namespace xPowerPhoneApp.Repositorys
 {
     internal class HubRepository : IHubRepository
     {
+        private readonly SharedHttpClient _httpClient;
+
+        public HubRepository(SharedHttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public async Task<bool> AddHub(KeyedDevice device)
         {
 
-            return await SharedHttpClient.Instants.Post("hub/Add", device);
+            return await _httpClient.Post("hub/Add", device);
 
         }
 
@@ -22,7 +29,7 @@ namespace xPowerPhoneApp.Repositorys
         {
             List<Device> devices = null;
 
-            devices = (await SharedHttpClient.Instants.Post<Device[]>("hub/GetHubs", key)).ToList();
+            devices = (await _httpClient.Post<Device[]>("hub/GetHubs", key)).ToList();
 
             return devices.ToArray();
         }
