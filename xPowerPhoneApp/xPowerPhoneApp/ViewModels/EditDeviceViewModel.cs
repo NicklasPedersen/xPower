@@ -13,23 +13,22 @@ namespace xPowerPhoneApp.ViewModels
 {
     internal class EditDeviceViewModel : PageViewModel
     {
-        private string _mac;
         public string Mac
         {
-            get => _mac;
-            set { _mac = value; NotifyPropertyChanged(nameof(Mac)); }
+            get => _device.Id;
+            set { _device.Id = value; NotifyPropertyChanged(); }
         }
 
         private string _name;
         public string Name
         {
             get => _name;
-            set { _name = value; NotifyPropertyChanged(nameof(Name)); }
+            set { _name = value; NotifyPropertyChanged(); }
         }
         public string NewName
         {
             get => _device.Name;
-            set { _device.Name = value; NotifyPropertyChanged(nameof(Name)); }
+            set { _device.Name = value; NotifyPropertyChanged(); }
         }
         private IDeviceRepository _deviceRepository { get; } = new DeviceRepository();
 
