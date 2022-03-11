@@ -1,18 +1,19 @@
 ﻿using Microsoft.Data.Sqlite;
 using NUnit.Framework;
+using xPowerHub.DataStore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace xPowerHub.Test
+namespace xPowerHub.Test.DataStore
 {
     [TestFixture]
     internal class WizDSTest
     {
 
-        private DataStore.WizDS ds;
+        private WizDS ds;
         public WizDSTest()
         {
             ds = new("testdb.db");
@@ -42,7 +43,6 @@ namespace xPowerHub.Test
                 yield return item;
             }
         }
-
 
         public async Task InsertAssertSuccess(WizDevice wiz)
         {
