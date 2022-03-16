@@ -166,14 +166,14 @@ namespace xPowerHub.DataStore
             return updated == 1;
         }
 
-        public Task<PowerUsage> GetAsync(string key)
+        public async Task<PowerUsage> GetAsync(string key)
         {
-            throw new NotImplementedException();
+            return await GetAsync(DateTime.Parse(key));
         }
 
-        public Task<IEnumerable<PowerUsage>> GetAllAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<PowerUsage>> GetAllAsync(bool forceRefresh = false)
         {
-            throw new NotImplementedException();
+            return await GetPowerUsageWeekdayAvgAsync();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace xPowerPhoneApp
     {
         public App()
         {
-            RepositoryFactory.UseMock = false;
+            RepositoryFactory.UseMock = true;
             InitializeComponent();
 
             MainPage = new NavigationPage(new MainPage());

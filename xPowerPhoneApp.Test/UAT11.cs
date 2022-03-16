@@ -37,7 +37,7 @@ namespace xPowerPhoneApp.Test
         {
             app.WaitForElement(l => l.Marked("automationNameEntry"), timeout: TimeSpan.FromSeconds(30));
             app.EnterText(e => e.Marked("automationNameEntry"), _name);
-            app.Tap(c => c.Marked("automationEditNameButton"));
+            app.DismissKeyboard();
             app.Tap(c => c.Marked("automationEditNameButton"));
             app.WaitForElement(l => l.Marked("automationDeviceNameLabel"), timeout: TimeSpan.FromSeconds(30));
         }

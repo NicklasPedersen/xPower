@@ -25,7 +25,7 @@ namespace xPowerPhoneApp.Repositorys.Mocks
             await Task.Delay(1);
             var devices = new List<ControlDevice>();
             var random = new Random(); 
-            var count = random.Next(4, 25);
+            var count = random.Next(4, 10);
             for (int i = 0; i < count; i++)
             {
                 devices.Add(new ControlDevice() { Name = _names[random.Next(0,_names.Length)], Id = i.ToString() });
