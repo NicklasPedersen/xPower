@@ -34,7 +34,7 @@ namespace xPowerPhoneApp.Repositorys
 
         public async Task<PowerUsage[]> GetDaysPowerUsage(DateTime dateTime)
         {
-            return await _httpClient.Get<PowerUsage[]>("Power/DayHourlyAvg/"+ dateTime.ToString("dd-MM-yyyy"));
+            return await _httpClient.Get<PowerUsage[]>("Power/DayHourlyAvg/"+ dateTime.ToString("yyyy-MM-dd"));
         }
 
     }
