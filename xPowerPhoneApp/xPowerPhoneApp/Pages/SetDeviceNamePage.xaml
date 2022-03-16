@@ -8,7 +8,18 @@
         <StackLayout
                 BackgroundColor="{DynamicResource LightPrimaryColor}"
                 Padding="20,10,20,10">
-            <Label
+            <StackLayout.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                             EndPoint="1,0">
+                    <GradientStop Color="#fff"
+                          Offset="0"/>
+                    <GradientStop Color="#e6e9ea"
+                          Offset="0.5"/>
+                    <GradientStop Color="#fff"
+                          Offset="1.0"/>
+                </LinearGradientBrush>
+            </StackLayout.Background>
+                <Label
                 FontAttributes="Bold"
                 FontSize="Large"
                 Text="ID" />

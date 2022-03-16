@@ -8,7 +8,8 @@
     <ContentPage.Content>
         <Grid
             Padding="0"
-            RowSpacing="0">
+            RowSpacing="0"
+            Margin="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="6*" />
@@ -23,7 +24,8 @@
             <Frame
                 Grid.Row="1"
                 Padding="0"
-                    HasShadow="False"
+                Margin="0"
+                HasShadow="False"
                 BorderColor="Transparent">
                 <Frame.Background>
                     <LinearGradientBrush StartPoint="0,0"
