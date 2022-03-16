@@ -7,33 +7,32 @@
     <ContentPage.Content>
         <StackLayout
                 BackgroundColor="{DynamicResource LightPrimaryColor}"
-                Padding="20,10,20,10"
-                Margin="2">
+                Padding="20,10,20,10">
             <Label
                 FontAttributes="Bold"
                 FontSize="Large"
                 Text="ID" />
-            <Label Text="{Binding Mac}"
+            <Label Text="{Binding Id}"
                    />
             <Label
                 FontAttributes="Bold"
                 FontSize="Large"
-                Text="Old Name" />
+                Text="Forrige navn" />
             <Label Text="{Binding Name}"
                    />
-            <Label Text="New Name" 
+            <Label Text="Nye navn" 
                 FontSize="Large"
                 FontAttributes="Bold"
                 />
             <Entry
                 AutomationId="automationNameEntry"
                 Text="{Binding NewName}"
-                Placeholder="New Device Name"
+                Placeholder="Nyt navn til enheden"
                 />
             <Button
                 AutomationId="automationEditNameButton"
                 Command="{Binding EditNameCommand}"
-                Text="Change name"
+                Text="Ændre navn"
                 />
 
         </StackLayout>

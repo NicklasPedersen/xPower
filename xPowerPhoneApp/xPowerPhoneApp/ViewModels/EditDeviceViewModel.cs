@@ -15,7 +15,7 @@ namespace xPowerPhoneApp.ViewModels
 {
     internal class EditDeviceViewModel : PageViewModel
     {
-        public string Mac
+        public string Id
         {
             get => _device.Id;
             set { _device.Id = value; NotifyPropertyChanged(); }

@@ -30,42 +30,30 @@
                             <Custom:CustomFrame
                                 CornerRadius="20"
                                 BackgroundColor="{DynamicResource LightPrimaryColor}"
-                                Padding="20,10,20,10"
-                                Margin="2">
-                                <Grid
-                                    AutomationId="automationSeeSingleUnit"
-                                    RowSpacing="0" 
-                                    ColumnSpacing="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="1*"/>
-                                    </Grid.ColumnDefinitions>
+                                Padding="20,10,20,10">
+                                <StackLayout Orientation="Horizontal">
                                     <Label
                                         AutomationId="automationDeviceNameLabel"
-                                        Grid.Column="0"
                                         FontSize="Medium"
+                                        HorizontalOptions="StartAndExpand"
                                         VerticalOptions="Center"
                                         Text="{Binding Name}"/>
                                     <Switch
-                                        Grid.Column="1"
                                         OnColor="{DynamicResource AppPrimaryColor}"
                                         IsToggled="{Binding Status}"
                                         IsEnabled="False"
                                         IsVisible="{Binding IsStatusKnown}"/>
                                     <Label
-                                        Grid.Column="1"
-                                        Text="Unknown"
-                                        HorizontalTextAlignment="End"
+                                        Text="Ukendt"
+                                        VerticalOptions="Center"
                                         IsVisible="{Binding IsStatusKnown, Converter={StaticResource InverseBoolConverter}, Mode=OneWay}"/>
                                     <Button
                                         AutomationId="automationEditButton"
-                                        Grid.Column="2"
-                                        Text="edit"
+                                        Text="Rediger"
                                         Command="{Binding BindingContext.GoToEditDevice, Source={x:Reference StackRef}}"
                                         CommandParameter="{Binding .}"
                                        />
-                                </Grid>
+                                </StackLayout>
 
                                 <Custom:CustomFrame.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding BindingContext.SwitchStautsCommand, Source={x:Reference StackRef}}" CommandParameter="{Binding .}"/>
