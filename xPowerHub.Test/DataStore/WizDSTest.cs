@@ -112,7 +112,7 @@ namespace xPowerHub.Test.DataStore
         }
         // This test ensures that inserting devices with duplicate MAC addresses fails
         [Test]
-        public void InsertAll_ShouldFail()
+        public void InsertAll_ShouldThrow()
         {
             Assert.ThrowsAsync<SqliteException>(async () =>
             {
