@@ -3,6 +3,8 @@ using xPowerHub.DataStore;
 using xPowerHub.Managers;
 using xPowerHub.Managers.Interfaces;
 using xPowerHub.Managers.Test;
+using xPowerHub.Repositories;
+using xPowerHub.Repositories.Interfaces;
 using xPowerHub.Web.services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,9 +27,13 @@ builder.Services.AddScoped<IDataStorePower>(s => new PowerDS(@".\xpower.db"));
 
 builder.Services.AddScoped<IDeviceManager, DeviceManager>();
 builder.Services.AddScoped<IPowerManager, PowerManager>();
+builder.Services.AddScoped<IDeviceConnectionManager, DeviceConnectionManager>();
+
+builder.Services.AddSingleton<IWizRepository, WizRepository>();
 
 // Hosted services
 builder.Services.AddHostedService<PowerUsageService>();
+builder.Services.AddHostedService<DeviceSearchingService>();
 #endif
 
 // Move to config?
