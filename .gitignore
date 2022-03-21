@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # database files
 *.db
+/.idea/.idea.xPower/.idea
