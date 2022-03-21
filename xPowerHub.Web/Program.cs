@@ -3,6 +3,7 @@ using xPowerHub.DataStore;
 using xPowerHub.Managers;
 using xPowerHub.Managers.Interfaces;
 using xPowerHub.Managers.Test;
+using xPowerHub.Models;
 using xPowerHub.Repositories;
 using xPowerHub.Repositories.Interfaces;
 using xPowerHub.Web.services;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IPowerManager, PowerManagerTest>();
 #else
 builder.Services.AddScoped<IDataStore<WizDevice>>(s => new WizDS(@".\xpower.db"));
 builder.Services.AddScoped<IDataStore<SmartThingsDevice>>(s => new SmartThingsDS(@".\xpower.db"));
+builder.Services.AddScoped<IDataStore<AvailableWiz>>(s => new AvailableWizDS(@".\xpower.db"));
 builder.Services.AddScoped<IDataStorePower>(s => new PowerDS(@".\xpower.db"));
 
 builder.Services.AddScoped<IDeviceManager, DeviceManager>();
