@@ -14,10 +14,12 @@ namespace xPowerHub.Web.Controllers
     {
 
         private IDeviceManager _deviceManager;
+        private IDeviceConnectionManager _connectionManager;
 
-        public UnitController(IDeviceManager deviceManager) : base()
+        public UnitController(IDeviceManager deviceManager, IDeviceConnectionManager connectionManager) : base()
         {
             _deviceManager = deviceManager;
+            _connectionManager = connectionManager;
         }
 
         /// <summary>
@@ -37,6 +39,12 @@ namespace xPowerHub.Web.Controllers
         public async Task AddAsync([FromBody] Device device)
         {
             await _deviceManager.AddNewDeviceAsync(device);
+        }
+
+        [HttpGet("GetNewDevices")]
+        public async Task<Device[]> GetNewDevices()
+        {
+            return await _connectionManager.GetDevicesAsync();
         }
     }
 }
